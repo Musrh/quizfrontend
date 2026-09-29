@@ -88,6 +88,7 @@
     }
 
     .choice-button {
+      display: block;
       background: #eef2ff;
       color: #222;
       text-align: left;
@@ -120,19 +121,11 @@
       margin-top: 15px;
     }
 
-    .secondary {
-      background: #64748b;
-    }
-
-    .danger {
-      background: #dc2626;
-    }
-
     .info {
       background: #eff6ff;
       border-radius: 10px;
       padding: 12px;
-      margin-bottom: 15px;
+      margin: 15px 0;
     }
 
     .score-box {
@@ -147,6 +140,7 @@
       font-size: 48px;
       font-weight: bold;
       color: #2563eb;
+      margin: 10px 0;
     }
 
     .video-container {
@@ -195,7 +189,14 @@
     }
 
     .question {
-      margin-bottom: 25px;
+      margin-top: 30px;
+      padding-top: 20px;
+      border-top: 1px solid #e5e7eb;
+    }
+
+    .question:first-child {
+      border-top: 0;
+      padding-top: 0;
     }
 
     .question-number {
@@ -207,6 +208,7 @@
     .question-text {
       font-size: 19px;
       font-weight: bold;
+      line-height: 1.4;
       margin-bottom: 14px;
     }
 
@@ -241,9 +243,21 @@
       padding: 7px 12px;
       border-radius: 20px;
       font-size: 14px;
+      margin-right: 5px;
+    }
+
+    .result-success {
+      color: #15803d;
+      font-weight: bold;
+    }
+
+    .result-fail {
+      color: #b91c1c;
+      font-weight: bold;
     }
 
     @media (max-width: 600px) {
+
       .app {
         padding: 12px;
       }
@@ -263,6 +277,14 @@
       .card {
         padding: 16px;
       }
+
+      .video-title {
+        font-size: 18px;
+      }
+
+      .question-text {
+        font-size: 17px;
+      }
     }
   </style>
 </head>
@@ -271,16 +293,23 @@
 
 <div class="app">
 
+  <!-- ========================================= -->
+  <!-- HEADER -->
+  <!-- ========================================= -->
+
   <header>
     <h1>AI Video Quiz</h1>
     <p>Regarde une video et teste tes connaissances</p>
   </header>
 
-  <!-- ============================= -->
-  <!-- LANGUAGE -->
-  <!-- ============================= -->
 
-  <section id="languageScreen" class="card">
+  <!-- ========================================= -->
+  <!-- CHOIX LANGUE -->
+  <!-- ========================================= -->
+
+  <section
+    id="languageScreen"
+    class="card">
 
     <h2>Choisis ta langue</h2>
 
@@ -303,11 +332,13 @@
   </section>
 
 
-  <!-- ============================= -->
-  <!-- CATEGORY -->
-  <!-- ============================= -->
+  <!-- ========================================= -->
+  <!-- CHOIX CATEGORIE -->
+  <!-- ========================================= -->
 
-  <section id="categoryScreen" class="card hidden">
+  <section
+    id="categoryScreen"
+    class="card hidden">
 
     <h2>Choisis une categorie</h2>
 
@@ -334,41 +365,87 @@
   </section>
 
 
-  <!-- ============================= -->
-  <!-- VIDEO -->
-  <!-- ============================= -->
+  <!-- ========================================= -->
+  <!-- VIDEO + QUIZ -->
+  <!-- ========================================= -->
 
-  <section id="videoScreen" class="card hidden">
+  <section
+    id="gameScreen"
+    class="card hidden">
+
+    <!-- TOP BAR -->
 
     <div class="top-bar">
 
       <div>
-        <span id="languageBadge" class="badge"></span>
-        <span id="categoryBadge" class="badge"></span>
+
+        <span
+          id="languageBadge"
+          class="badge">
+        </span>
+
+        <span
+          id="categoryBadge"
+          class="badge">
+        </span>
+
       </div>
 
       <div>
+
         <strong>
           Points :
           <span id="scoreDisplay">0</span>
         </strong>
+
       </div>
 
     </div>
 
-    <div id="videoLoading" class="loading hidden">
+
+    <!-- LOADING -->
+
+    <div
+      id="videoLoading"
+      class="loading hidden">
+
       Recherche d'une video...
+
     </div>
 
-    <div id="videoError" class="error hidden"></div>
+
+    <!-- ERREUR -->
+
+    <div
+      id="videoError"
+      class="error hidden">
+    </div>
+
+
+    <!-- CONTENU -->
 
     <div id="videoContent">
 
-      <div id="videoTitle" class="video-title"></div>
+      <!-- TITRE -->
 
-      <div id="videoChannel" class="video-channel"></div>
+      <div
+        id="videoTitle"
+        class="video-title">
+      </div>
+
+
+      <!-- CHAINE -->
+
+      <div
+        id="videoChannel"
+        class="video-channel">
+      </div>
+
+
+      <!-- VIDEO YOUTUBE -->
 
       <div class="video-container">
+
         <iframe
           id="youtubePlayer"
           src=""
@@ -376,70 +453,96 @@
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
           allowfullscreen>
         </iframe>
+
       </div>
 
+
+      <!-- MESSAGE -->
+
       <div class="info">
+
         Regarde la video puis clique sur
         <strong>Commencer le quiz</strong>.
+
       </div>
+
+
+      <!-- BOUTON QUIZ -->
 
       <button
         id="startQuizButton"
         class="primary"
         onclick="startQuiz()">
+
         Commencer le quiz
+
       </button>
 
-    </div>
 
-  </section>
+      <!-- ===================================== -->
+      <!-- ZONE QUIZ -->
+      <!-- ===================================== -->
 
-
-  <!-- ============================= -->
-  <!-- QUIZ -->
-  <!-- ============================= -->
-
-  <section id="quizScreen" class="card hidden">
-
-    <div class="top-bar">
-
-      <span class="badge">
-        Quiz
-      </span>
-
-      <strong>
-        Points :
-        <span id="quizScoreDisplay">0</span>
-      </strong>
-
-    </div>
-
-    <div class="progress">
       <div
-        id="progressBar"
-        class="progress-bar">
+        id="quizArea"
+        class="hidden">
+
+        <div class="info">
+
+          La video reste visible au-dessus.
+          Reponds aux 4 questions en regardant
+          la video.
+
+        </div>
+
+
+        <!-- PROGRESSION -->
+
+        <div class="progress">
+
+          <div
+            id="progressBar"
+            class="progress-bar">
+          </div>
+
+        </div>
+
+
+        <!-- QUESTIONS -->
+
+        <div
+          id="questionsContainer">
+        </div>
+
+
+        <!-- VALIDATION -->
+
+        <button
+          id="submitQuizButton"
+          class="primary"
+          onclick="submitQuiz()">
+
+          Valider mes reponses
+
+        </button>
+
       </div>
+
     </div>
-
-    <div id="questionsContainer"></div>
-
-    <button
-      id="submitQuizButton"
-      class="primary"
-      onclick="submitQuiz()">
-      Valider mes reponses
-    </button>
 
   </section>
 
 
-  <!-- ============================= -->
-  <!-- RESULT -->
-  <!-- ============================= -->
+  <!-- ========================================= -->
+  <!-- RESULTAT -->
+  <!-- ========================================= -->
 
-  <section id="resultScreen" class="card hidden">
+  <section
+    id="resultScreen"
+    class="card hidden">
 
     <h2>Resultat</h2>
+
 
     <div class="score-box">
 
@@ -447,35 +550,47 @@
         Score de cette partie
       </div>
 
+
       <div
         id="roundScore"
         class="score-number">
+
         0
+
       </div>
 
-      <div id="resultMessage"></div>
+
+      <div
+        id="resultMessage">
+      </div>
 
     </div>
 
+
     <div class="info">
+
       Score total :
       <strong id="finalTotalScore">
         0
       </strong>
+
     </div>
+
 
     <button
       class="primary"
       onclick="nextVideo()">
+
       Video suivante
+
     </button>
 
   </section>
 
 
-  <!-- ============================= -->
-  <!-- GLOBAL ERROR -->
-  <!-- ============================= -->
+  <!-- ========================================= -->
+  <!-- ERREUR GENERALE -->
+  <!-- ========================================= -->
 
   <section
     id="globalError"
@@ -527,68 +642,103 @@
   // =========================================================
 
   const languageScreen =
-    document.getElementById('languageScreen');
+    document.getElementById(
+      'languageScreen'
+    );
 
   const categoryScreen =
-    document.getElementById('categoryScreen');
+    document.getElementById(
+      'categoryScreen'
+    );
 
-  const videoScreen =
-    document.getElementById('videoScreen');
-
-  const quizScreen =
-    document.getElementById('quizScreen');
+  const gameScreen =
+    document.getElementById(
+      'gameScreen'
+    );
 
   const resultScreen =
-    document.getElementById('resultScreen');
+    document.getElementById(
+      'resultScreen'
+    );
+
+  const quizArea =
+    document.getElementById(
+      'quizArea'
+    );
 
   const videoLoading =
-    document.getElementById('videoLoading');
+    document.getElementById(
+      'videoLoading'
+    );
 
   const videoError =
-    document.getElementById('videoError');
+    document.getElementById(
+      'videoError'
+    );
 
   const videoTitle =
-    document.getElementById('videoTitle');
+    document.getElementById(
+      'videoTitle'
+    );
 
   const videoChannel =
-    document.getElementById('videoChannel');
+    document.getElementById(
+      'videoChannel'
+    );
 
   const youtubePlayer =
-    document.getElementById('youtubePlayer');
+    document.getElementById(
+      'youtubePlayer'
+    );
 
   const questionsContainer =
-    document.getElementById('questionsContainer');
+    document.getElementById(
+      'questionsContainer'
+    );
 
   const progressBar =
-    document.getElementById('progressBar');
+    document.getElementById(
+      'progressBar'
+    );
 
   const scoreDisplay =
-    document.getElementById('scoreDisplay');
-
-  const quizScoreDisplay =
-    document.getElementById('quizScoreDisplay');
+    document.getElementById(
+      'scoreDisplay'
+    );
 
   const roundScore =
-    document.getElementById('roundScore');
+    document.getElementById(
+      'roundScore'
+    );
 
   const finalTotalScore =
-    document.getElementById('finalTotalScore');
+    document.getElementById(
+      'finalTotalScore'
+    );
 
   const resultMessage =
-    document.getElementById('resultMessage');
+    document.getElementById(
+      'resultMessage'
+    );
 
   const languageBadge =
-    document.getElementById('languageBadge');
+    document.getElementById(
+      'languageBadge'
+    );
 
   const categoryBadge =
-    document.getElementById('categoryBadge');
+    document.getElementById(
+      'categoryBadge'
+    );
 
   const globalError =
-    document.getElementById('globalError');
+    document.getElementById(
+      'globalError'
+    );
 
 
   // =========================================================
-  // LANGUES
+  // NOM LANGUE
   // =========================================================
 
   function getLanguageLabel(language) {
@@ -610,7 +760,7 @@
 
 
   // =========================================================
-  // CATEGORIES
+  // NOM CATEGORIE
   // =========================================================
 
   function getCategoryLabel(category) {
@@ -641,14 +791,21 @@
 
   function selectLanguage(language) {
 
-    state.language = language;
+    state.language =
+      language;
 
     languageBadge.textContent =
-      getLanguageLabel(language);
+      getLanguageLabel(
+        language
+      );
 
-    languageScreen.classList.add('hidden');
+    languageScreen.classList.add(
+      'hidden'
+    );
 
-    categoryScreen.classList.remove('hidden');
+    categoryScreen.classList.remove(
+      'hidden'
+    );
 
   }
 
@@ -659,14 +816,21 @@
 
   async function selectCategory(category) {
 
-    state.category = category;
+    state.category =
+      category;
 
     categoryBadge.textContent =
-      getCategoryLabel(category);
+      getCategoryLabel(
+        category
+      );
 
-    categoryScreen.classList.add('hidden');
+    categoryScreen.classList.add(
+      'hidden'
+    );
 
-    videoScreen.classList.remove('hidden');
+    gameScreen.classList.remove(
+      'hidden'
+    );
 
     await loadVideos();
 
@@ -674,49 +838,68 @@
 
 
   // =========================================================
-  // AFFICHER ERREUR
+  // ERREUR VIDEO
   // =========================================================
 
   function showVideoError(message) {
 
-    videoError.textContent = message;
+    videoError.textContent =
+      message;
 
-    videoError.classList.remove('hidden');
+    videoError.classList.remove(
+      'hidden'
+    );
 
   }
 
 
   function hideVideoError() {
 
-    videoError.textContent = '';
+    videoError.textContent =
+      '';
 
-    videoError.classList.add('hidden');
-
-  }
-
-
-  function showGlobalError(message) {
-
-    globalError.textContent = message;
-
-    globalError.classList.remove('hidden');
+    videoError.classList.add(
+      'hidden'
+    );
 
   }
 
 
   // =========================================================
-  // RECHERCHE DES VIDEOS
+  // ERREUR GENERALE
+  // =========================================================
+
+  function showGlobalError(message) {
+
+    globalError.textContent =
+      message;
+
+    globalError.classList.remove(
+      'hidden'
+    );
+
+  }
+
+
+  // =========================================================
+  // RECHERCHER LES VIDEOS
   // =========================================================
 
   async function loadVideos() {
 
-    videoLoading.classList.remove('hidden');
+    videoLoading.classList.remove(
+      'hidden'
+    );
 
     hideVideoError();
 
     document
-      .getElementById('videoContent')
-      .classList.add('hidden');
+      .getElementById(
+        'videoContent'
+      )
+      .classList.add(
+        'hidden'
+      );
 
     try {
 
@@ -737,18 +920,25 @@
         url
       );
 
+
       const response =
         await fetch(url);
 
+
       const data =
         await response.json();
+
 
       console.log(
         'Search response:',
         data
       );
 
-      if (!response.ok || !data.ok) {
+
+      if (
+        !response.ok ||
+        !data.ok
+      ) {
 
         throw new Error(
           data.error ||
@@ -757,8 +947,11 @@
 
       }
 
+
       if (
-        !Array.isArray(data.videos) ||
+        !Array.isArray(
+          data.videos
+        ) ||
         data.videos.length === 0
       ) {
 
@@ -767,6 +960,7 @@
         );
 
       }
+
 
       state.videos =
         data.videos.filter(
@@ -783,6 +977,7 @@
           }
         );
 
+
       if (
         state.videos.length === 0
       ) {
@@ -792,6 +987,7 @@
         );
 
       }
+
 
       chooseVideo();
 
@@ -809,7 +1005,9 @@
 
     } finally {
 
-      videoLoading.classList.add('hidden');
+      videoLoading.classList.add(
+        'hidden'
+      );
 
     }
 
@@ -835,18 +1033,22 @@
 
     }
 
+
     const index =
       Math.floor(
         Math.random() *
         state.videos.length
       );
 
+
     state.currentVideo =
       state.videos[index];
+
 
     state.viewedVideos.add(
       state.currentVideo.videoId
     );
+
 
     displayVideo();
 
@@ -859,23 +1061,36 @@
 
   function displayVideo() {
 
-    if (!state.currentVideo) {
+    if (
+      !state.currentVideo
+    ) {
+
       return;
+
     }
+
 
     hideVideoError();
 
+
     document
-      .getElementById('videoContent')
-      .classList.remove('hidden');
+      .getElementById(
+        'videoContent'
+      )
+      .classList.remove(
+        'hidden'
+      );
+
 
     videoTitle.textContent =
       state.currentVideo.title ||
       'Video YouTube';
 
+
     videoChannel.textContent =
       state.currentVideo.channelTitle ||
       '';
+
 
     youtubePlayer.src =
       'https://www.youtube.com/embed/' +
@@ -883,8 +1098,16 @@
         state.currentVideo.videoId
       );
 
+
+    quizArea.classList.add(
+      'hidden'
+    );
+
+
     document
-      .getElementById('startQuizButton')
+      .getElementById(
+        'startQuizButton'
+      )
       .disabled = false;
 
   }
@@ -896,7 +1119,9 @@
 
   async function startQuiz() {
 
-    if (!state.currentVideo) {
+    if (
+      !state.currentVideo
+    ) {
 
       showGlobalError(
         'Aucune video selectionnee.'
@@ -906,17 +1131,23 @@
 
     }
 
+
     const button =
       document.getElementById(
         'startQuizButton'
       );
 
-    button.disabled = true;
+
+    button.disabled =
+      true;
+
 
     button.textContent =
       'Preparation du quiz...';
 
+
     hideVideoError();
+
 
     try {
 
@@ -932,21 +1163,26 @@
           state.language
         );
 
+
       console.log(
         'Loading questions:',
         url
       );
 
+
       const response =
         await fetch(url);
 
+
       const data =
         await response.json();
+
 
       console.log(
         'Questions response:',
         data
       );
+
 
       if (
         !response.ok ||
@@ -960,8 +1196,11 @@
 
       }
 
+
       if (
-        !Array.isArray(data.questions) ||
+        !Array.isArray(
+          data.questions
+        ) ||
         data.questions.length !== 4
       ) {
 
@@ -971,26 +1210,39 @@
 
       }
 
+
       state.questions =
         data.questions;
+
 
       state.answers =
         new Array(
           state.questions.length
         ).fill(null);
 
+
       state.submitted =
         false;
 
-      videoScreen.classList.add(
-        'hidden'
-      );
-
-      quizScreen.classList.remove(
-        'hidden'
-      );
 
       renderQuiz();
+
+
+      quizArea.classList.remove(
+        'hidden'
+      );
+
+
+      button.classList.add(
+        'hidden'
+      );
+
+
+      quizArea.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+      });
+
 
     } catch (error) {
 
@@ -999,12 +1251,15 @@
         error
       );
 
+
       showVideoError(
         error.message ||
         'Erreur pendant la generation du quiz.'
       );
 
-      button.disabled = false;
+
+      button.disabled =
+        false;
 
     } finally {
 
@@ -1025,6 +1280,7 @@
     questionsContainer.innerHTML =
       '';
 
+
     for (
       let i = 0;
       i < state.questions.length;
@@ -1034,21 +1290,26 @@
       const question =
         state.questions[i];
 
+
       const questionDiv =
         document.createElement(
           'div'
         );
 
+
       questionDiv.className =
         'question';
+
 
       const numberDiv =
         document.createElement(
           'div'
         );
 
+
       numberDiv.className =
         'question-number';
+
 
       numberDiv.textContent =
         'Question ' +
@@ -1056,20 +1317,25 @@
         ' / ' +
         state.questions.length;
 
+
       const textDiv =
         document.createElement(
           'div'
         );
 
+
       textDiv.className =
         'question-text';
+
 
       textDiv.textContent =
         question.question;
 
+
       questionDiv.appendChild(
         numberDiv
       );
+
 
       questionDiv.appendChild(
         textDiv
@@ -1087,17 +1353,22 @@
             'button'
           );
 
+
         choiceButton.className =
           'choice-button';
+
 
         choiceButton.textContent =
           question.choices[j];
 
+
         choiceButton.dataset.question =
           String(i);
 
+
         choiceButton.dataset.choice =
           String(j);
+
 
         choiceButton.onclick =
           function() {
@@ -1109,17 +1380,20 @@
 
           };
 
+
         questionDiv.appendChild(
           choiceButton
         );
 
       }
 
+
       questionsContainer.appendChild(
         questionDiv
       );
 
     }
+
 
     updateProgress();
 
@@ -1135,13 +1409,19 @@
     choiceIndex
   ) {
 
-    if (state.submitted) {
+    if (
+      state.submitted
+    ) {
+
       return;
+
     }
+
 
     state.answers[
       questionIndex
     ] = choiceIndex;
+
 
     const buttons =
       document.querySelectorAll(
@@ -1149,6 +1429,7 @@
         questionIndex +
         '"]'
       );
+
 
     buttons.forEach(
       function(button) {
@@ -1160,6 +1441,7 @@
       }
     );
 
+
     const selected =
       document.querySelector(
         '[data-question="' +
@@ -1169,6 +1451,7 @@
         '"]'
       );
 
+
     if (selected) {
 
       selected.classList.add(
@@ -1176,6 +1459,7 @@
       );
 
     }
+
 
     updateProgress();
 
@@ -1191,12 +1475,16 @@
     const answered =
       state.answers.filter(
         function(answer) {
+
           return answer !== null;
+
         }
       ).length;
 
+
     const total =
       state.questions.length;
+
 
     const percentage =
       total > 0
@@ -1206,6 +1494,7 @@
           ) * 100
         : 0;
 
+
     progressBar.style.width =
       percentage + '%';
 
@@ -1213,21 +1502,29 @@
 
 
   // =========================================================
-  // VALIDER QUIZ
+  // VALIDATION DU QUIZ
   // =========================================================
 
   function submitQuiz() {
 
-    if (state.submitted) {
+    if (
+      state.submitted
+    ) {
+
       return;
+
     }
+
 
     const unanswered =
       state.answers.some(
         function(answer) {
+
           return answer === null;
+
         }
       );
+
 
     if (unanswered) {
 
@@ -1239,9 +1536,14 @@
 
     }
 
-    state.submitted = true;
 
-    let correct = 0;
+    state.submitted =
+      true;
+
+
+    let correct =
+      0;
+
 
     for (
       let i = 0;
@@ -1252,8 +1554,10 @@
       const question =
         state.questions[i];
 
+
       const answer =
         state.answers[i];
+
 
       if (
         answer ===
@@ -1264,6 +1568,7 @@
 
       }
 
+
       showQuestionCorrection(
         i,
         answer,
@@ -1272,36 +1577,59 @@
 
     }
 
-    let points = 0;
 
-    if (correct === 4) {
-      points = 1;
+    /*
+     * REGLE DU JEU :
+     *
+     * 4/4 = +1 point
+     * moins de 4/4 = 0 point
+     */
+
+    let points =
+      0;
+
+
+    if (
+      correct === 4
+    ) {
+
+      points =
+        1;
+
     }
 
-    state.totalScore += points;
+
+    state.totalScore +=
+      points;
+
 
     scoreDisplay.textContent =
       String(
         state.totalScore
       );
 
-    quizScoreDisplay.textContent =
-      String(
-        state.totalScore
-      );
 
     roundScore.textContent =
-      String(points);
+      String(
+        points
+      );
+
 
     finalTotalScore.textContent =
       String(
         state.totalScore
       );
 
-    if (correct === 4) {
+
+    if (
+      correct === 4
+    ) {
 
       resultMessage.textContent =
         'Bravo ! 4/4. Tu gagnes 1 point.';
+
+      resultMessage.className =
+        'result-success';
 
     } else {
 
@@ -1309,7 +1637,11 @@
         correct +
         '/4 bonnes reponses. Aucun point pour cette partie.';
 
+      resultMessage.className =
+        'result-fail';
+
     }
+
 
     document
       .getElementById(
@@ -1317,26 +1649,40 @@
       )
       .disabled = true;
 
+
+    /*
+     * On laisse quelques secondes
+     * pour voir la correction,
+     * puis on affiche le resultat.
+     */
+
     setTimeout(
       function() {
 
-        quizScreen.classList.add(
+        gameScreen.classList.add(
           'hidden'
         );
+
 
         resultScreen.classList.remove(
           'hidden'
         );
 
+
+        window.scrollTo({
+          top: 0,
+          behavior: 'smooth'
+        });
+
       },
-      1000
+      1500
     );
 
   }
 
 
   // =========================================================
-  // CORRECTION
+  // AFFICHER CORRECTION
   // =========================================================
 
   function showQuestionCorrection(
@@ -1352,6 +1698,7 @@
         '"]'
       );
 
+
     buttons.forEach(
       function(button) {
 
@@ -1360,9 +1707,11 @@
             button.dataset.choice
           );
 
+
         button.classList.remove(
           'selected'
         );
+
 
         if (
           choice ===
@@ -1374,6 +1723,7 @@
           );
 
         }
+
 
         if (
           choice ===
@@ -1404,15 +1754,63 @@
       'hidden'
     );
 
-    videoScreen.classList.remove(
+
+    gameScreen.classList.remove(
       'hidden'
     );
 
-    state.currentVideo = null;
 
-    youtubePlayer.src = '';
+    quizArea.classList.add(
+      'hidden'
+    );
+
+
+    state.currentVideo =
+      null;
+
+
+    state.questions =
+      [];
+
+
+    state.answers =
+      [];
+
+
+    state.submitted =
+      false;
+
+
+    youtubePlayer.src =
+      '';
+
+
+    const startButton =
+      document.getElementById(
+        'startQuizButton'
+      );
+
+
+    startButton.classList.remove(
+      'hidden'
+    );
+
+
+    startButton.disabled =
+      false;
+
+
+    startButton.textContent =
+      'Commencer le quiz';
+
 
     await loadVideos();
+
+
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
 
   }
 
@@ -1422,9 +1820,6 @@
   // =========================================================
 
   scoreDisplay.textContent =
-    '0';
-
-  quizScoreDisplay.textContent =
     '0';
 
 </script>
