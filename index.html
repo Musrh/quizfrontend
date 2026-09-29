@@ -55,18 +55,6 @@
       margin-top: 0;
     }
 
-    .language-grid,
-    .category-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
-      margin-top: 18px;
-    }
-
-    .category-grid {
-      grid-template-columns: repeat(2, 1fr);
-    }
-
     button {
       border: 0;
       border-radius: 10px;
@@ -85,6 +73,18 @@
     button:disabled {
       opacity: 0.5;
       cursor: not-allowed;
+    }
+
+    .language-grid,
+    .category-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .category-grid {
+      grid-template-columns: repeat(2, 1fr);
     }
 
     .choice-button {
@@ -119,6 +119,19 @@
     .primary {
       width: 100%;
       margin-top: 15px;
+    }
+
+    .secondary {
+      background: #64748b;
+    }
+
+    .back-button {
+      background: #64748b;
+      margin-bottom: 18px;
+    }
+
+    .back-button:hover {
+      background: #475569;
     }
 
     .info {
@@ -167,11 +180,28 @@
       font-size: 20px;
       font-weight: bold;
       margin-bottom: 8px;
+      line-height: 1.4;
     }
 
     .video-channel {
       color: #666;
       margin-bottom: 15px;
+    }
+
+    .video-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 15px;
+    }
+
+    .meta-badge {
+      display: inline-block;
+      background: #f1f5f9;
+      color: #475569;
+      padding: 6px 10px;
+      border-radius: 20px;
+      font-size: 13px;
     }
 
     .loading {
@@ -256,6 +286,90 @@
       font-weight: bold;
     }
 
+    /* =========================================
+       EVALUATION
+       ========================================= */
+
+    .evaluation-card {
+      margin-top: 25px;
+      padding: 20px;
+      background: #f8fafc;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+    }
+
+    .evaluation-title {
+      text-align: center;
+      font-size: 19px;
+      font-weight: bold;
+      margin-bottom: 15px;
+    }
+
+    .evaluation-buttons {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .evaluation-button {
+      background: #fff;
+      color: #222;
+      border: 2px solid #e2e8f0;
+      padding: 15px;
+      font-size: 16px;
+    }
+
+    .evaluation-button:hover {
+      background: #f1f5f9;
+    }
+
+    .evaluation-button.like.selected {
+      border-color: #16a34a;
+      background: #dcfce7;
+    }
+
+    .evaluation-button.dislike.selected {
+      border-color: #dc2626;
+      background: #fee2e2;
+    }
+
+    .length-question {
+      margin-top: 20px;
+      text-align: center;
+      font-weight: bold;
+    }
+
+    .length-buttons {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .length-button {
+      background: #fff;
+      color: #334155;
+      border: 2px solid #e2e8f0;
+      padding: 11px 8px;
+      font-size: 14px;
+    }
+
+    .length-button.selected {
+      border-color: #2563eb;
+      background: #dbeafe;
+    }
+
+    .evaluation-thanks {
+      text-align: center;
+      margin-top: 15px;
+      color: #15803d;
+      font-weight: bold;
+    }
+
+    .navigation-area {
+      margin-bottom: 10px;
+    }
+
     @media (max-width: 600px) {
 
       .app {
@@ -285,6 +399,14 @@
       .question-text {
         font-size: 17px;
       }
+
+      .evaluation-buttons {
+        grid-template-columns: 1fr;
+      }
+
+      .length-buttons {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
@@ -293,37 +415,40 @@
 
 <div class="app">
 
-  <!-- ========================================= -->
-  <!-- HEADER -->
-  <!-- ========================================= -->
-
   <header>
     <h1>AI Video Quiz</h1>
     <p>Regarde une video et teste tes connaissances</p>
   </header>
 
 
-  <!-- ========================================= -->
-  <!-- CHOIX LANGUE -->
-  <!-- ========================================= -->
+  <!-- =========================================
+       LANGUAGE
+       ========================================= -->
 
   <section
     id="languageScreen"
-    class="card">
+    class="card"
+  >
 
     <h2>Choisis ta langue</h2>
 
     <div class="language-grid">
 
-      <button onclick="selectLanguage('fr')">
+      <button
+        onclick="selectLanguage('fr')"
+      >
         Francais
       </button>
 
-      <button onclick="selectLanguage('en')">
+      <button
+        onclick="selectLanguage('en')"
+      >
         English
       </button>
 
-      <button onclick="selectLanguage('ar')">
+      <button
+        onclick="selectLanguage('ar')"
+      >
         العربية
       </button>
 
@@ -332,31 +457,51 @@
   </section>
 
 
-  <!-- ========================================= -->
-  <!-- CHOIX CATEGORIE -->
-  <!-- ========================================= -->
+  <!-- =========================================
+       CATEGORY
+       ========================================= -->
 
   <section
     id="categoryScreen"
-    class="card hidden">
+    class="card hidden"
+  >
+
+    <div class="navigation-area">
+
+      <button
+        class="back-button"
+        onclick="goBackToLanguage()"
+      >
+        ← Retour
+      </button>
+
+    </div>
 
     <h2>Choisis une categorie</h2>
 
     <div class="category-grid">
 
-      <button onclick="selectCategory('sport')">
+      <button
+        onclick="selectCategory('sport')"
+      >
         Sport
       </button>
 
-      <button onclick="selectCategory('sciences')">
+      <button
+        onclick="selectCategory('sciences')"
+      >
         Sciences
       </button>
 
-      <button onclick="selectCategory('art culinaire')">
+      <button
+        onclick="selectCategory('art culinaire')"
+      >
         Art culinaire
       </button>
 
-      <button onclick="selectCategory('culture générale')">
+      <button
+        onclick="selectCategory('culture générale')"
+      >
         Culture generale
       </button>
 
@@ -365,15 +510,14 @@
   </section>
 
 
-  <!-- ========================================= -->
-  <!-- VIDEO + QUIZ -->
-  <!-- ========================================= -->
+  <!-- =========================================
+       GAME
+       ========================================= -->
 
   <section
     id="gameScreen"
-    class="card hidden">
-
-    <!-- TOP BAR -->
+    class="card hidden"
+  >
 
     <div class="top-bar">
 
@@ -381,13 +525,13 @@
 
         <span
           id="languageBadge"
-          class="badge">
-        </span>
+          class="badge"
+        ></span>
 
         <span
           id="categoryBadge"
-          class="badge">
-        </span>
+          class="badge"
+        ></span>
 
       </div>
 
@@ -403,46 +547,50 @@
     </div>
 
 
-    <!-- LOADING -->
+    <button
+      id="backToCategoriesButton"
+      class="back-button"
+      onclick="goBackToCategories()"
+    >
+      ← Retour aux categories
+    </button>
+
 
     <div
       id="videoLoading"
-      class="loading hidden">
-
+      class="loading hidden"
+    >
       Recherche d'une video...
-
     </div>
 
-
-    <!-- ERREUR -->
 
     <div
       id="videoError"
-      class="error hidden">
-    </div>
+      class="error hidden"
+    ></div>
 
 
-    <!-- CONTENU -->
-
-    <div id="videoContent">
-
-      <!-- TITRE -->
+    <div
+      id="videoContent"
+    >
 
       <div
         id="videoTitle"
-        class="video-title">
-      </div>
+        class="video-title"
+      ></div>
 
-
-      <!-- CHAINE -->
 
       <div
         id="videoChannel"
-        class="video-channel">
-      </div>
+        class="video-channel"
+      ></div>
 
 
-      <!-- VIDEO YOUTUBE -->
+      <div
+        id="videoMeta"
+        class="video-meta"
+      ></div>
+
 
       <div class="video-container">
 
@@ -457,8 +605,6 @@
       </div>
 
 
-      <!-- MESSAGE -->
-
       <div class="info">
 
         Regarde la video puis clique sur
@@ -467,25 +613,23 @@
       </div>
 
 
-      <!-- BOUTON QUIZ -->
-
       <button
         id="startQuizButton"
         class="primary"
-        onclick="startQuiz()">
-
+        onclick="startQuiz()"
+      >
         Commencer le quiz
-
       </button>
 
 
-      <!-- ===================================== -->
-      <!-- ZONE QUIZ -->
-      <!-- ===================================== -->
+      <!-- =====================================
+           QUIZ
+           ===================================== -->
 
       <div
         id="quizArea"
-        class="hidden">
+        class="hidden"
+      >
 
         <div class="info">
 
@@ -496,34 +640,27 @@
         </div>
 
 
-        <!-- PROGRESSION -->
-
         <div class="progress">
 
           <div
             id="progressBar"
-            class="progress-bar">
-          </div>
+            class="progress-bar"
+          ></div>
 
         </div>
 
-
-        <!-- QUESTIONS -->
 
         <div
-          id="questionsContainer">
-        </div>
+          id="questionsContainer"
+        ></div>
 
-
-        <!-- VALIDATION -->
 
         <button
           id="submitQuizButton"
           class="primary"
-          onclick="submitQuiz()">
-
+          onclick="submitQuiz()"
+        >
           Valider mes reponses
-
         </button>
 
       </div>
@@ -533,13 +670,22 @@
   </section>
 
 
-  <!-- ========================================= -->
-  <!-- RESULTAT -->
-  <!-- ========================================= -->
+  <!-- =========================================
+       RESULT
+       ========================================= -->
 
   <section
     id="resultScreen"
-    class="card hidden">
+    class="card hidden"
+  >
+
+    <button
+      class="back-button"
+      onclick="goBackToQuiz()"
+    >
+      ← Retour au quiz
+    </button>
+
 
     <h2>Resultat</h2>
 
@@ -550,19 +696,14 @@
         Score de cette partie
       </div>
 
-
       <div
         id="roundScore"
-        class="score-number">
-
+        class="score-number"
+      >
         0
-
       </div>
 
-
-      <div
-        id="resultMessage">
-      </div>
+      <div id="resultMessage"></div>
 
     </div>
 
@@ -577,159 +718,283 @@
     </div>
 
 
+    <!-- =====================================
+         EVALUATION
+         ===================================== -->
+
+    <div
+      id="evaluationCard"
+      class="evaluation-card"
+    >
+
+      <div class="evaluation-title">
+        Que penses-tu de cette video ?
+      </div>
+
+
+      <div class="evaluation-buttons">
+
+        <button
+          id="likeButton"
+          class="evaluation-button like"
+          onclick="rateVideo('like')"
+        >
+          👍 Interessante
+        </button>
+
+
+        <button
+          id="dislikeButton"
+          class="evaluation-button dislike"
+          onclick="rateVideo('dislike')"
+        >
+          👎 Pas interessante
+        </button>
+
+      </div>
+
+
+      <div class="length-question">
+        La video etait-elle trop longue ?
+      </div>
+
+
+      <div class="length-buttons">
+
+        <button
+          id="lengthNo"
+          class="length-button"
+          onclick="rateVideoLength('no')"
+        >
+          Non
+        </button>
+
+        <button
+          id="lengthMedium"
+          class="length-button"
+          onclick="rateVideoLength('medium')"
+        >
+          Un peu
+        </button>
+
+        <button
+          id="lengthYes"
+          class="length-button"
+          onclick="rateVideoLength('yes')"
+        >
+          Oui
+        </button>
+
+      </div>
+
+
+      <div
+        id="evaluationThanks"
+        class="evaluation-thanks hidden"
+      >
+        Merci pour ton evaluation !
+      </div>
+
+    </div>
+
+
     <button
       class="primary"
-      onclick="nextVideo()">
-
+      onclick="nextVideo()"
+    >
       Video suivante
+    </button>
 
+
+    <button
+      class="primary secondary"
+      onclick="goBackToCategories()"
+    >
+      Retour aux categories
     </button>
 
   </section>
 
 
-  <!-- ========================================= -->
-  <!-- ERREUR GENERALE -->
-  <!-- ========================================= -->
-
   <section
     id="globalError"
-    class="error hidden">
-  </section>
+    class="error hidden"
+  ></section>
 
 </div>
 
 
 <script>
 
-  // =========================================================
-  // CONFIGURATION
-  // =========================================================
-
   const API_BASE =
     'https://ai-video-quiz-backend-production.up.railway.app';
 
 
-  // =========================================================
-  // ETAT DU JEU
-  // =========================================================
+  // =====================================================
+  // STATE
+  // =====================================================
 
   const state = {
 
-    language: null,
+    screen:
+      'language',
 
-    category: null,
+    language:
+      null,
 
-    videos: [],
+    category:
+      null,
 
-    currentVideo: null,
+    videos:
+      [],
 
-    questions: [],
+    currentVideo:
+      null,
 
-    answers: [],
+    questions:
+      [],
 
-    totalScore: 0,
+    answers:
+      [],
 
-    viewedVideos: new Set(),
+    totalScore:
+      0,
 
-    submitted: false
+    viewedVideos:
+      new Set(),
+
+    submitted:
+      false,
+
+    evaluation:
+      {
+        like:
+          null,
+
+        length:
+          null
+      }
 
   };
 
 
-  // =========================================================
+  // =====================================================
   // ELEMENTS
-  // =========================================================
+  // =====================================================
 
   const languageScreen =
     document.getElementById(
       'languageScreen'
     );
 
+
   const categoryScreen =
     document.getElementById(
       'categoryScreen'
     );
+
 
   const gameScreen =
     document.getElementById(
       'gameScreen'
     );
 
+
   const resultScreen =
     document.getElementById(
       'resultScreen'
     );
+
 
   const quizArea =
     document.getElementById(
       'quizArea'
     );
 
+
   const videoLoading =
     document.getElementById(
       'videoLoading'
     );
+
 
   const videoError =
     document.getElementById(
       'videoError'
     );
 
+
   const videoTitle =
     document.getElementById(
       'videoTitle'
     );
+
 
   const videoChannel =
     document.getElementById(
       'videoChannel'
     );
 
+
+  const videoMeta =
+    document.getElementById(
+      'videoMeta'
+    );
+
+
   const youtubePlayer =
     document.getElementById(
       'youtubePlayer'
     );
+
 
   const questionsContainer =
     document.getElementById(
       'questionsContainer'
     );
 
+
   const progressBar =
     document.getElementById(
       'progressBar'
     );
+
 
   const scoreDisplay =
     document.getElementById(
       'scoreDisplay'
     );
 
+
   const roundScore =
     document.getElementById(
       'roundScore'
     );
+
 
   const finalTotalScore =
     document.getElementById(
       'finalTotalScore'
     );
 
+
   const resultMessage =
     document.getElementById(
       'resultMessage'
     );
+
 
   const languageBadge =
     document.getElementById(
       'languageBadge'
     );
 
+
   const categoryBadge =
     document.getElementById(
       'categoryBadge'
     );
+
 
   const globalError =
     document.getElementById(
@@ -737,11 +1002,13 @@
     );
 
 
-  // =========================================================
-  // NOM LANGUE
-  // =========================================================
+  // =====================================================
+  // LANGUAGE LABEL
+  // =====================================================
 
-  function getLanguageLabel(language) {
+  function getLanguageLabel(
+    language
+  ) {
 
     if (language === 'fr') {
       return 'Francais';
@@ -756,14 +1023,17 @@
     }
 
     return language;
+
   }
 
 
-  // =========================================================
-  // NOM CATEGORIE
-  // =========================================================
+  // =====================================================
+  // CATEGORY LABEL
+  // =====================================================
 
-  function getCategoryLabel(category) {
+  function getCategoryLabel(
+    category
+  ) {
 
     if (category === 'sport') {
       return 'Sport';
@@ -777,71 +1047,291 @@
       return 'Art culinaire';
     }
 
-    if (category === 'culture générale') {
+    if (
+      category ===
+      'culture générale'
+    ) {
       return 'Culture generale';
     }
 
     return category;
+
   }
 
 
-  // =========================================================
-  // CHOIX LANGUE
-  // =========================================================
+  // =====================================================
+  // SHOW SCREEN
+  // =====================================================
 
-  function selectLanguage(language) {
+  function showScreen(
+    screen
+  ) {
+
+    languageScreen.classList.add(
+      'hidden'
+    );
+
+    categoryScreen.classList.add(
+      'hidden'
+    );
+
+    gameScreen.classList.add(
+      'hidden'
+    );
+
+    resultScreen.classList.add(
+      'hidden'
+    );
+
+
+    if (screen === 'language') {
+
+      languageScreen.classList.remove(
+        'hidden'
+      );
+
+    }
+
+
+    if (screen === 'category') {
+
+      categoryScreen.classList.remove(
+        'hidden'
+      );
+
+    }
+
+
+    if (screen === 'game') {
+
+      gameScreen.classList.remove(
+        'hidden'
+      );
+
+    }
+
+
+    if (screen === 'result') {
+
+      resultScreen.classList.remove(
+        'hidden'
+      );
+
+    }
+
+
+    state.screen =
+      screen;
+
+
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+
+  }
+
+
+  // =====================================================
+  // LANGUAGE
+  // =====================================================
+
+  function selectLanguage(
+    language
+  ) {
 
     state.language =
       language;
+
 
     languageBadge.textContent =
       getLanguageLabel(
         language
       );
 
-    languageScreen.classList.add(
-      'hidden'
-    );
 
-    categoryScreen.classList.remove(
-      'hidden'
+    showScreen(
+      'category'
     );
 
   }
 
 
-  // =========================================================
-  // CHOIX CATEGORIE
-  // =========================================================
+  // =====================================================
+  // BACK TO LANGUAGE
+  // =====================================================
 
-  async function selectCategory(category) {
+  function goBackToLanguage() {
+
+    state.category =
+      null;
+
+    state.videos =
+      [];
+
+    state.currentVideo =
+      null;
+
+
+    showScreen(
+      'language'
+    );
+
+  }
+
+
+  // =====================================================
+  // CATEGORY
+  // =====================================================
+
+  async function selectCategory(
+    category
+  ) {
 
     state.category =
       category;
+
 
     categoryBadge.textContent =
       getCategoryLabel(
         category
       );
 
-    categoryScreen.classList.add(
-      'hidden'
+
+    showScreen(
+      'game'
     );
 
-    gameScreen.classList.remove(
-      'hidden'
-    );
 
     await loadVideos();
 
   }
 
 
-  // =========================================================
-  // ERREUR VIDEO
-  // =========================================================
+  // =====================================================
+  // BACK TO CATEGORIES
+  // =====================================================
 
-  function showVideoError(message) {
+  function goBackToCategories() {
+
+    youtubePlayer.src =
+      '';
+
+
+    state.currentVideo =
+      null;
+
+    state.questions =
+      [];
+
+    state.answers =
+      [];
+
+    state.submitted =
+      false;
+
+
+    quizArea.classList.add(
+      'hidden'
+    );
+
+
+    showScreen(
+      'category'
+    );
+
+  }
+
+
+  // =====================================================
+  // BACK TO QUIZ
+  // =====================================================
+
+  function goBackToQuiz() {
+
+    if (
+      !state.currentVideo
+    ) {
+
+      goBackToCategories();
+
+      return;
+
+    }
+
+
+    showScreen(
+      'game'
+    );
+
+
+    quizArea.classList.remove(
+      'hidden'
+    );
+
+
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+
+  }
+
+
+  // =====================================================
+  // BROWSER / ANDROID BACK BUTTON
+  // =====================================================
+
+  window.addEventListener(
+    'popstate',
+    function() {
+
+      if (
+        state.screen ===
+        'category'
+      ) {
+
+        goBackToLanguage();
+
+        return;
+
+      }
+
+
+      if (
+        state.screen ===
+        'game'
+      ) {
+
+        goBackToCategories();
+
+        return;
+
+      }
+
+
+      if (
+        state.screen ===
+        'result'
+      ) {
+
+        goBackToQuiz();
+
+        return;
+
+      }
+
+    }
+  );
+
+
+  // =====================================================
+  // ERROR
+  // =====================================================
+
+  function showVideoError(
+    message
+  ) {
 
     videoError.textContent =
       message;
@@ -865,11 +1355,9 @@
   }
 
 
-  // =========================================================
-  // ERREUR GENERALE
-  // =========================================================
-
-  function showGlobalError(message) {
+  function showGlobalError(
+    message
+  ) {
 
     globalError.textContent =
       message;
@@ -881,9 +1369,9 @@
   }
 
 
-  // =========================================================
-  // RECHERCHER LES VIDEOS
-  // =========================================================
+  // =====================================================
+  // LOAD VIDEOS
+  // =====================================================
 
   async function loadVideos() {
 
@@ -893,6 +1381,7 @@
 
     hideVideoError();
 
+
     document
       .getElementById(
         'videoContent'
@@ -900,6 +1389,7 @@
       .classList.add(
         'hidden'
       );
+
 
     try {
 
@@ -915,6 +1405,7 @@
           state.category
         );
 
+
       console.log(
         'Searching videos:',
         url
@@ -922,7 +1413,9 @@
 
 
       const response =
-        await fetch(url);
+        await fetch(
+          url
+        );
 
 
       const data =
@@ -991,6 +1484,7 @@
 
       chooseVideo();
 
+
     } catch (error) {
 
       console.error(
@@ -998,10 +1492,12 @@
         error
       );
 
+
       showVideoError(
         error.message ||
         'Impossible de charger les videos.'
       );
+
 
     } finally {
 
@@ -1014,9 +1510,9 @@
   }
 
 
-  // =========================================================
-  // CHOISIR UNE VIDEO
-  // =========================================================
+  // =====================================================
+  // CHOOSE VIDEO
+  // =====================================================
 
   function chooseVideo() {
 
@@ -1055,9 +1551,9 @@
   }
 
 
-  // =========================================================
-  // AFFICHER VIDEO
-  // =========================================================
+  // =====================================================
+  // DISPLAY VIDEO
+  // =====================================================
 
   function displayVideo() {
 
@@ -1092,6 +1588,59 @@
       '';
 
 
+    // -----------------------------------------------------
+    // VIDEO META
+    // -----------------------------------------------------
+
+    videoMeta.innerHTML =
+      '';
+
+
+    if (
+      state.currentVideo.durationFormatted
+    ) {
+
+      const durationBadge =
+        document.createElement(
+          'span'
+        );
+
+      durationBadge.className =
+        'meta-badge';
+
+      durationBadge.textContent =
+        'Duree : ' +
+        state.currentVideo.durationFormatted;
+
+      videoMeta.appendChild(
+        durationBadge
+      );
+
+    }
+
+
+    if (
+      state.currentVideo.captionAvailable
+    ) {
+
+      const captionBadge =
+        document.createElement(
+          'span'
+        );
+
+      captionBadge.className =
+        'meta-badge';
+
+      captionBadge.textContent =
+        'Sous-titres disponibles';
+
+      videoMeta.appendChild(
+        captionBadge
+      );
+
+    }
+
+
     youtubePlayer.src =
       'https://www.youtube.com/embed/' +
       encodeURIComponent(
@@ -1104,18 +1653,30 @@
     );
 
 
-    document
-      .getElementById(
+    const startButton =
+      document.getElementById(
         'startQuizButton'
-      )
-      .disabled = false;
+      );
+
+
+    startButton.classList.remove(
+      'hidden'
+    );
+
+
+    startButton.disabled =
+      false;
+
+
+    startButton.textContent =
+      'Commencer le quiz';
 
   }
 
 
-  // =========================================================
-  // DEMARRER LE QUIZ
-  // =========================================================
+  // =====================================================
+  // START QUIZ
+  // =====================================================
 
   async function startQuiz() {
 
@@ -1171,7 +1732,9 @@
 
 
       const response =
-        await fetch(url);
+        await fetch(
+          url
+        );
 
 
       const data =
@@ -1261,6 +1824,7 @@
       button.disabled =
         false;
 
+
     } finally {
 
       button.textContent =
@@ -1271,9 +1835,9 @@
   }
 
 
-  // =========================================================
-  // AFFICHER QUESTIONS
-  // =========================================================
+  // =====================================================
+  // RENDER QUIZ
+  // =====================================================
 
   function renderQuiz() {
 
@@ -1400,9 +1964,9 @@
   }
 
 
-  // =========================================================
-  // SELECTION REPONSE
-  // =========================================================
+  // =====================================================
+  // SELECT ANSWER
+  // =====================================================
 
   function selectAnswer(
     questionIndex,
@@ -1420,7 +1984,8 @@
 
     state.answers[
       questionIndex
-    ] = choiceIndex;
+    ] =
+      choiceIndex;
 
 
     const buttons =
@@ -1466,9 +2031,9 @@
   }
 
 
-  // =========================================================
-  // PROGRESSION
-  // =========================================================
+  // =====================================================
+  // PROGRESS
+  // =====================================================
 
   function updateProgress() {
 
@@ -1476,7 +2041,9 @@
       state.answers.filter(
         function(answer) {
 
-          return answer !== null;
+          return (
+            answer !== null
+          );
 
         }
       ).length;
@@ -1501,9 +2068,9 @@
   }
 
 
-  // =========================================================
-  // VALIDATION DU QUIZ
-  // =========================================================
+  // =====================================================
+  // SUBMIT QUIZ
+  // =====================================================
 
   function submitQuiz() {
 
@@ -1520,7 +2087,9 @@
       state.answers.some(
         function(answer) {
 
-          return answer === null;
+          return (
+            answer === null
+          );
 
         }
       );
@@ -1578,13 +2147,6 @@
     }
 
 
-    /*
-     * REGLE DU JEU :
-     *
-     * 4/4 = +1 point
-     * moins de 4/4 = 0 point
-     */
-
     let points =
       0;
 
@@ -1628,6 +2190,7 @@
       resultMessage.textContent =
         'Bravo ! 4/4. Tu gagnes 1 point.';
 
+
       resultMessage.className =
         'result-success';
 
@@ -1636,6 +2199,7 @@
       resultMessage.textContent =
         correct +
         '/4 bonnes reponses. Aucun point pour cette partie.';
+
 
       resultMessage.className =
         'result-fail';
@@ -1647,32 +2211,19 @@
       .getElementById(
         'submitQuizButton'
       )
-      .disabled = true;
+      .disabled =
+      true;
 
-
-    /*
-     * On laisse quelques secondes
-     * pour voir la correction,
-     * puis on affiche le resultat.
-     */
 
     setTimeout(
       function() {
 
-        gameScreen.classList.add(
-          'hidden'
+        prepareEvaluation();
+
+
+        showScreen(
+          'result'
         );
-
-
-        resultScreen.classList.remove(
-          'hidden'
-        );
-
-
-        window.scrollTo({
-          top: 0,
-          behavior: 'smooth'
-        });
 
       },
       1500
@@ -1681,9 +2232,9 @@
   }
 
 
-  // =========================================================
-  // AFFICHER CORRECTION
-  // =========================================================
+  // =====================================================
+  // QUESTION CORRECTION
+  // =====================================================
 
   function showQuestionCorrection(
     questionIndex,
@@ -1726,10 +2277,8 @@
 
 
         if (
-          choice ===
-          userAnswer &&
-          choice !==
-          correctAnswer
+          choice === userAnswer &&
+          choice !== correctAnswer
         ) {
 
           button.classList.add(
@@ -1744,9 +2293,442 @@
   }
 
 
-  // =========================================================
-  // VIDEO SUIVANTE
-  // =========================================================
+  // =====================================================
+  // PREPARE EVALUATION
+  // =====================================================
+
+  function prepareEvaluation() {
+
+    state.evaluation = {
+
+      like:
+        null,
+
+      length:
+        null
+
+    };
+
+
+    document
+      .getElementById(
+        'likeButton'
+      )
+      .classList.remove(
+        'selected'
+      );
+
+
+    document
+      .getElementById(
+        'dislikeButton'
+      )
+      .classList.remove(
+        'selected'
+      );
+
+
+    document
+      .getElementById(
+        'lengthNo'
+      )
+      .classList.remove(
+        'selected'
+      );
+
+
+    document
+      .getElementById(
+        'lengthMedium'
+      )
+      .classList.remove(
+        'selected'
+      );
+
+
+    document
+      .getElementById(
+        'lengthYes'
+      )
+      .classList.remove(
+        'selected'
+      );
+
+
+    document
+      .getElementById(
+        'evaluationThanks'
+      )
+      .classList.add(
+        'hidden'
+      );
+
+  }
+
+
+  // =====================================================
+  // RATE VIDEO
+  // =====================================================
+
+  function rateVideo(
+    rating
+  ) {
+
+    if (
+      !state.currentVideo
+    ) {
+
+      return;
+
+    }
+
+
+    state.evaluation.like =
+      rating;
+
+
+    document
+      .getElementById(
+        'likeButton'
+      )
+      .classList.remove(
+        'selected'
+      );
+
+
+    document
+      .getElementById(
+        'dislikeButton'
+      )
+      .classList.remove(
+        'selected'
+      );
+
+
+    if (
+      rating === 'like'
+    ) {
+
+      document
+        .getElementById(
+          'likeButton'
+        )
+        .classList.add(
+          'selected'
+        );
+
+    }
+
+
+    if (
+      rating === 'dislike'
+    ) {
+
+      document
+        .getElementById(
+          'dislikeButton'
+        )
+        .classList.add(
+          'selected'
+        );
+
+    }
+
+
+    saveLocalEvaluation();
+
+
+    showEvaluationThanks();
+
+  }
+
+
+  // =====================================================
+  // RATE LENGTH
+  // =====================================================
+
+  function rateVideoLength(
+    length
+  ) {
+
+    if (
+      !state.currentVideo
+    ) {
+
+      return;
+
+    }
+
+
+    state.evaluation.length =
+      length;
+
+
+    document
+      .getElementById(
+        'lengthNo'
+      )
+      .classList.remove(
+        'selected'
+      );
+
+
+    document
+      .getElementById(
+        'lengthMedium'
+      )
+      .classList.remove(
+        'selected'
+      );
+
+
+    document
+      .getElementById(
+        'lengthYes'
+      )
+      .classList.remove(
+        'selected'
+      );
+
+
+    if (
+      length === 'no'
+    ) {
+
+      document
+        .getElementById(
+          'lengthNo'
+        )
+        .classList.add(
+          'selected'
+        );
+
+    }
+
+
+    if (
+      length === 'medium'
+    ) {
+
+      document
+        .getElementById(
+          'lengthMedium'
+        )
+        .classList.add(
+          'selected'
+        );
+
+    }
+
+
+    if (
+      length === 'yes'
+    ) {
+
+      document
+        .getElementById(
+          'lengthYes'
+        )
+        .classList.add(
+          'selected'
+        );
+
+    }
+
+
+    saveLocalEvaluation();
+
+
+    showEvaluationThanks();
+
+  }
+
+
+  // =====================================================
+  // EVALUATION MESSAGE
+  // =====================================================
+
+  function showEvaluationThanks() {
+
+    document
+      .getElementById(
+        'evaluationThanks'
+      )
+      .classList.remove(
+        'hidden'
+      );
+
+  }
+
+
+  // =====================================================
+  // LOCAL EVALUATION
+  // =====================================================
+
+  function saveLocalEvaluation() {
+
+    if (
+      !state.currentVideo
+    ) {
+
+      return;
+
+    }
+
+
+    const videoId =
+      state.currentVideo.videoId;
+
+
+    let evaluations = {};
+
+
+    try {
+
+      evaluations =
+        JSON.parse(
+          localStorage.getItem(
+            'aivq_video_evaluations'
+          ) || '{}'
+        );
+
+    } catch (error) {
+
+      evaluations =
+        {};
+
+    }
+
+
+    if (
+      !evaluations[videoId]
+    ) {
+
+      evaluations[videoId] = {
+
+        videoId:
+          videoId,
+
+        title:
+          state.currentVideo.title ||
+          '',
+
+        category:
+          state.category,
+
+        language:
+          state.language,
+
+        likes:
+          0,
+
+        dislikes:
+          0,
+
+        tooLong:
+          0,
+
+        acceptableLength:
+          0,
+
+        goodLength:
+          0,
+
+        updatedAt:
+          Date.now()
+
+      };
+
+    }
+
+
+    const item =
+      evaluations[videoId];
+
+
+    /*
+     * On evite de compter plusieurs fois
+     * le meme clic.
+     */
+
+    if (
+      state.evaluation.like ===
+      'like'
+    ) {
+
+      item.likes = 1;
+
+    }
+
+
+    if (
+      state.evaluation.like ===
+      'dislike'
+    ) {
+
+      item.dislikes = 1;
+
+    }
+
+
+    if (
+      state.evaluation.length ===
+      'yes'
+    ) {
+
+      item.tooLong = 1;
+
+    }
+
+
+    if (
+      state.evaluation.length ===
+      'medium'
+    ) {
+
+      item.acceptableLength = 1;
+
+    }
+
+
+    if (
+      state.evaluation.length ===
+      'no'
+    ) {
+
+      item.goodLength = 1;
+
+    }
+
+
+    item.updatedAt =
+      Date.now();
+
+
+    try {
+
+      localStorage.setItem(
+        'aivq_video_evaluations',
+        JSON.stringify(
+          evaluations
+        )
+      );
+
+    } catch (error) {
+
+      console.error(
+        'Unable to save local evaluation:',
+        error
+      );
+
+    }
+
+  }
+
+
+  // =====================================================
+  // NEXT VIDEO
+  // =====================================================
 
   async function nextVideo() {
 
@@ -1779,6 +2761,17 @@
 
     state.submitted =
       false;
+
+
+    state.evaluation = {
+
+      like:
+        null,
+
+      length:
+        null
+
+    };
 
 
     youtubePlayer.src =
@@ -1815,9 +2808,9 @@
   }
 
 
-  // =========================================================
-  // INITIALISATION
-  // =========================================================
+  // =====================================================
+  // INITIAL SCORE
+  // =====================================================
 
   scoreDisplay.textContent =
     '0';
