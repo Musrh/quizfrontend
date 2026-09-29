@@ -1,0 +1,1433 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>AI Video Quiz</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f4f6f8;
+      color: #222;
+    }
+
+    .app {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+
+    header h1 {
+      margin: 0 0 8px;
+      font-size: 32px;
+    }
+
+    header p {
+      margin: 0;
+      color: #666;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 14px;
+      padding: 22px;
+      margin-bottom: 20px;
+      box-shadow: 0 3px 15px rgba(0, 0, 0, 0.08);
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    h2 {
+      margin-top: 0;
+    }
+
+    .language-grid,
+    .category-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .category-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    button {
+      border: 0;
+      border-radius: 10px;
+      padding: 14px 18px;
+      font-size: 16px;
+      cursor: pointer;
+      background: #2563eb;
+      color: white;
+      transition: 0.2s;
+    }
+
+    button:hover {
+      opacity: 0.9;
+    }
+
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .choice-button {
+      background: #eef2ff;
+      color: #222;
+      text-align: left;
+      border: 2px solid transparent;
+      width: 100%;
+      margin-bottom: 10px;
+    }
+
+    .choice-button:hover {
+      background: #e0e7ff;
+    }
+
+    .choice-button.selected {
+      border-color: #2563eb;
+      background: #dbeafe;
+    }
+
+    .choice-button.correct {
+      border-color: #16a34a;
+      background: #dcfce7;
+    }
+
+    .choice-button.wrong {
+      border-color: #dc2626;
+      background: #fee2e2;
+    }
+
+    .primary {
+      width: 100%;
+      margin-top: 15px;
+    }
+
+    .secondary {
+      background: #64748b;
+    }
+
+    .danger {
+      background: #dc2626;
+    }
+
+    .info {
+      background: #eff6ff;
+      border-radius: 10px;
+      padding: 12px;
+      margin-bottom: 15px;
+    }
+
+    .score-box {
+      text-align: center;
+      padding: 25px;
+      border-radius: 12px;
+      background: #f8fafc;
+      margin: 20px 0;
+    }
+
+    .score-number {
+      font-size: 48px;
+      font-weight: bold;
+      color: #2563eb;
+    }
+
+    .video-container {
+      position: relative;
+      width: 100%;
+      padding-bottom: 56.25%;
+      height: 0;
+      overflow: hidden;
+      border-radius: 12px;
+      background: #000;
+      margin: 15px 0;
+    }
+
+    .video-container iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+
+    .video-title {
+      font-size: 20px;
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+
+    .video-channel {
+      color: #666;
+      margin-bottom: 15px;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 30px;
+      color: #555;
+    }
+
+    .error {
+      background: #fee2e2;
+      color: #991b1b;
+      padding: 15px;
+      border-radius: 10px;
+      margin-bottom: 15px;
+    }
+
+    .question {
+      margin-bottom: 25px;
+    }
+
+    .question-number {
+      color: #2563eb;
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+
+    .question-text {
+      font-size: 19px;
+      font-weight: bold;
+      margin-bottom: 14px;
+    }
+
+    .progress {
+      height: 8px;
+      background: #e5e7eb;
+      border-radius: 10px;
+      overflow: hidden;
+      margin: 15px 0 25px;
+    }
+
+    .progress-bar {
+      height: 100%;
+      width: 0%;
+      background: #2563eb;
+      transition: width 0.3s;
+    }
+
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .badge {
+      display: inline-block;
+      background: #e0e7ff;
+      color: #3730a3;
+      padding: 7px 12px;
+      border-radius: 20px;
+      font-size: 14px;
+    }
+
+    @media (max-width: 600px) {
+      .app {
+        padding: 12px;
+      }
+
+      header h1 {
+        font-size: 26px;
+      }
+
+      .language-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .category-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .card {
+        padding: 16px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="app">
+
+  <header>
+    <h1>AI Video Quiz</h1>
+    <p>Regarde une video et teste tes connaissances</p>
+  </header>
+
+  <!-- ============================= -->
+  <!-- LANGUAGE -->
+  <!-- ============================= -->
+
+  <section id="languageScreen" class="card">
+
+    <h2>Choisis ta langue</h2>
+
+    <div class="language-grid">
+
+      <button onclick="selectLanguage('fr')">
+        Francais
+      </button>
+
+      <button onclick="selectLanguage('en')">
+        English
+      </button>
+
+      <button onclick="selectLanguage('ar')">
+        العربية
+      </button>
+
+    </div>
+
+  </section>
+
+
+  <!-- ============================= -->
+  <!-- CATEGORY -->
+  <!-- ============================= -->
+
+  <section id="categoryScreen" class="card hidden">
+
+    <h2>Choisis une categorie</h2>
+
+    <div class="category-grid">
+
+      <button onclick="selectCategory('sport')">
+        Sport
+      </button>
+
+      <button onclick="selectCategory('sciences')">
+        Sciences
+      </button>
+
+      <button onclick="selectCategory('art culinaire')">
+        Art culinaire
+      </button>
+
+      <button onclick="selectCategory('culture générale')">
+        Culture generale
+      </button>
+
+    </div>
+
+  </section>
+
+
+  <!-- ============================= -->
+  <!-- VIDEO -->
+  <!-- ============================= -->
+
+  <section id="videoScreen" class="card hidden">
+
+    <div class="top-bar">
+
+      <div>
+        <span id="languageBadge" class="badge"></span>
+        <span id="categoryBadge" class="badge"></span>
+      </div>
+
+      <div>
+        <strong>
+          Points :
+          <span id="scoreDisplay">0</span>
+        </strong>
+      </div>
+
+    </div>
+
+    <div id="videoLoading" class="loading hidden">
+      Recherche d'une video...
+    </div>
+
+    <div id="videoError" class="error hidden"></div>
+
+    <div id="videoContent">
+
+      <div id="videoTitle" class="video-title"></div>
+
+      <div id="videoChannel" class="video-channel"></div>
+
+      <div class="video-container">
+        <iframe
+          id="youtubePlayer"
+          src=""
+          title="YouTube video player"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowfullscreen>
+        </iframe>
+      </div>
+
+      <div class="info">
+        Regarde la video puis clique sur
+        <strong>Commencer le quiz</strong>.
+      </div>
+
+      <button
+        id="startQuizButton"
+        class="primary"
+        onclick="startQuiz()">
+        Commencer le quiz
+      </button>
+
+    </div>
+
+  </section>
+
+
+  <!-- ============================= -->
+  <!-- QUIZ -->
+  <!-- ============================= -->
+
+  <section id="quizScreen" class="card hidden">
+
+    <div class="top-bar">
+
+      <span class="badge">
+        Quiz
+      </span>
+
+      <strong>
+        Points :
+        <span id="quizScoreDisplay">0</span>
+      </strong>
+
+    </div>
+
+    <div class="progress">
+      <div
+        id="progressBar"
+        class="progress-bar">
+      </div>
+    </div>
+
+    <div id="questionsContainer"></div>
+
+    <button
+      id="submitQuizButton"
+      class="primary"
+      onclick="submitQuiz()">
+      Valider mes reponses
+    </button>
+
+  </section>
+
+
+  <!-- ============================= -->
+  <!-- RESULT -->
+  <!-- ============================= -->
+
+  <section id="resultScreen" class="card hidden">
+
+    <h2>Resultat</h2>
+
+    <div class="score-box">
+
+      <div>
+        Score de cette partie
+      </div>
+
+      <div
+        id="roundScore"
+        class="score-number">
+        0
+      </div>
+
+      <div id="resultMessage"></div>
+
+    </div>
+
+    <div class="info">
+      Score total :
+      <strong id="finalTotalScore">
+        0
+      </strong>
+    </div>
+
+    <button
+      class="primary"
+      onclick="nextVideo()">
+      Video suivante
+    </button>
+
+  </section>
+
+
+  <!-- ============================= -->
+  <!-- GLOBAL ERROR -->
+  <!-- ============================= -->
+
+  <section
+    id="globalError"
+    class="error hidden">
+  </section>
+
+</div>
+
+
+<script>
+
+  // =========================================================
+  // CONFIGURATION
+  // =========================================================
+
+  const API_BASE =
+    'https://ai-video-quiz-backend-production.up.railway.app';
+
+
+  // =========================================================
+  // ETAT DU JEU
+  // =========================================================
+
+  const state = {
+
+    language: null,
+
+    category: null,
+
+    videos: [],
+
+    currentVideo: null,
+
+    questions: [],
+
+    answers: [],
+
+    totalScore: 0,
+
+    viewedVideos: new Set(),
+
+    submitted: false
+
+  };
+
+
+  // =========================================================
+  // ELEMENTS
+  // =========================================================
+
+  const languageScreen =
+    document.getElementById('languageScreen');
+
+  const categoryScreen =
+    document.getElementById('categoryScreen');
+
+  const videoScreen =
+    document.getElementById('videoScreen');
+
+  const quizScreen =
+    document.getElementById('quizScreen');
+
+  const resultScreen =
+    document.getElementById('resultScreen');
+
+  const videoLoading =
+    document.getElementById('videoLoading');
+
+  const videoError =
+    document.getElementById('videoError');
+
+  const videoTitle =
+    document.getElementById('videoTitle');
+
+  const videoChannel =
+    document.getElementById('videoChannel');
+
+  const youtubePlayer =
+    document.getElementById('youtubePlayer');
+
+  const questionsContainer =
+    document.getElementById('questionsContainer');
+
+  const progressBar =
+    document.getElementById('progressBar');
+
+  const scoreDisplay =
+    document.getElementById('scoreDisplay');
+
+  const quizScoreDisplay =
+    document.getElementById('quizScoreDisplay');
+
+  const roundScore =
+    document.getElementById('roundScore');
+
+  const finalTotalScore =
+    document.getElementById('finalTotalScore');
+
+  const resultMessage =
+    document.getElementById('resultMessage');
+
+  const languageBadge =
+    document.getElementById('languageBadge');
+
+  const categoryBadge =
+    document.getElementById('categoryBadge');
+
+  const globalError =
+    document.getElementById('globalError');
+
+
+  // =========================================================
+  // LANGUES
+  // =========================================================
+
+  function getLanguageLabel(language) {
+
+    if (language === 'fr') {
+      return 'Francais';
+    }
+
+    if (language === 'en') {
+      return 'English';
+    }
+
+    if (language === 'ar') {
+      return 'العربية';
+    }
+
+    return language;
+  }
+
+
+  // =========================================================
+  // CATEGORIES
+  // =========================================================
+
+  function getCategoryLabel(category) {
+
+    if (category === 'sport') {
+      return 'Sport';
+    }
+
+    if (category === 'sciences') {
+      return 'Sciences';
+    }
+
+    if (category === 'art culinaire') {
+      return 'Art culinaire';
+    }
+
+    if (category === 'culture générale') {
+      return 'Culture generale';
+    }
+
+    return category;
+  }
+
+
+  // =========================================================
+  // CHOIX LANGUE
+  // =========================================================
+
+  function selectLanguage(language) {
+
+    state.language = language;
+
+    languageBadge.textContent =
+      getLanguageLabel(language);
+
+    languageScreen.classList.add('hidden');
+
+    categoryScreen.classList.remove('hidden');
+
+  }
+
+
+  // =========================================================
+  // CHOIX CATEGORIE
+  // =========================================================
+
+  async function selectCategory(category) {
+
+    state.category = category;
+
+    categoryBadge.textContent =
+      getCategoryLabel(category);
+
+    categoryScreen.classList.add('hidden');
+
+    videoScreen.classList.remove('hidden');
+
+    await loadVideos();
+
+  }
+
+
+  // =========================================================
+  // AFFICHER ERREUR
+  // =========================================================
+
+  function showVideoError(message) {
+
+    videoError.textContent = message;
+
+    videoError.classList.remove('hidden');
+
+  }
+
+
+  function hideVideoError() {
+
+    videoError.textContent = '';
+
+    videoError.classList.add('hidden');
+
+  }
+
+
+  function showGlobalError(message) {
+
+    globalError.textContent = message;
+
+    globalError.classList.remove('hidden');
+
+  }
+
+
+  // =========================================================
+  // RECHERCHE DES VIDEOS
+  // =========================================================
+
+  async function loadVideos() {
+
+    videoLoading.classList.remove('hidden');
+
+    hideVideoError();
+
+    document
+      .getElementById('videoContent')
+      .classList.add('hidden');
+
+    try {
+
+      const url =
+        API_BASE +
+        '/api/youtube/search' +
+        '?language=' +
+        encodeURIComponent(
+          state.language
+        ) +
+        '&category=' +
+        encodeURIComponent(
+          state.category
+        );
+
+      console.log(
+        'Searching videos:',
+        url
+      );
+
+      const response =
+        await fetch(url);
+
+      const data =
+        await response.json();
+
+      console.log(
+        'Search response:',
+        data
+      );
+
+      if (!response.ok || !data.ok) {
+
+        throw new Error(
+          data.error ||
+          'La recherche des videos a echoue.'
+        );
+
+      }
+
+      if (
+        !Array.isArray(data.videos) ||
+        data.videos.length === 0
+      ) {
+
+        throw new Error(
+          'Aucune video compatible n a ete trouvee.'
+        );
+
+      }
+
+      state.videos =
+        data.videos.filter(
+          function(video) {
+
+            return (
+              video &&
+              video.videoId &&
+              !state.viewedVideos.has(
+                video.videoId
+              )
+            );
+
+          }
+        );
+
+      if (
+        state.videos.length === 0
+      ) {
+
+        throw new Error(
+          'Toutes les videos trouvees ont deja ete utilisees.'
+        );
+
+      }
+
+      chooseVideo();
+
+    } catch (error) {
+
+      console.error(
+        'loadVideos error:',
+        error
+      );
+
+      showVideoError(
+        error.message ||
+        'Impossible de charger les videos.'
+      );
+
+    } finally {
+
+      videoLoading.classList.add('hidden');
+
+    }
+
+  }
+
+
+  // =========================================================
+  // CHOISIR UNE VIDEO
+  // =========================================================
+
+  function chooseVideo() {
+
+    if (
+      !state.videos ||
+      state.videos.length === 0
+    ) {
+
+      showVideoError(
+        'Aucune autre video disponible.'
+      );
+
+      return;
+
+    }
+
+    const index =
+      Math.floor(
+        Math.random() *
+        state.videos.length
+      );
+
+    state.currentVideo =
+      state.videos[index];
+
+    state.viewedVideos.add(
+      state.currentVideo.videoId
+    );
+
+    displayVideo();
+
+  }
+
+
+  // =========================================================
+  // AFFICHER VIDEO
+  // =========================================================
+
+  function displayVideo() {
+
+    if (!state.currentVideo) {
+      return;
+    }
+
+    hideVideoError();
+
+    document
+      .getElementById('videoContent')
+      .classList.remove('hidden');
+
+    videoTitle.textContent =
+      state.currentVideo.title ||
+      'Video YouTube';
+
+    videoChannel.textContent =
+      state.currentVideo.channelTitle ||
+      '';
+
+    youtubePlayer.src =
+      'https://www.youtube.com/embed/' +
+      encodeURIComponent(
+        state.currentVideo.videoId
+      );
+
+    document
+      .getElementById('startQuizButton')
+      .disabled = false;
+
+  }
+
+
+  // =========================================================
+  // DEMARRER LE QUIZ
+  // =========================================================
+
+  async function startQuiz() {
+
+    if (!state.currentVideo) {
+
+      showGlobalError(
+        'Aucune video selectionnee.'
+      );
+
+      return;
+
+    }
+
+    const button =
+      document.getElementById(
+        'startQuizButton'
+      );
+
+    button.disabled = true;
+
+    button.textContent =
+      'Preparation du quiz...';
+
+    hideVideoError();
+
+    try {
+
+      const url =
+        API_BASE +
+        '/api/youtube/questions' +
+        '?videoId=' +
+        encodeURIComponent(
+          state.currentVideo.videoId
+        ) +
+        '&language=' +
+        encodeURIComponent(
+          state.language
+        );
+
+      console.log(
+        'Loading questions:',
+        url
+      );
+
+      const response =
+        await fetch(url);
+
+      const data =
+        await response.json();
+
+      console.log(
+        'Questions response:',
+        data
+      );
+
+      if (
+        !response.ok ||
+        !data.ok
+      ) {
+
+        throw new Error(
+          data.error ||
+          'Impossible de generer le quiz.'
+        );
+
+      }
+
+      if (
+        !Array.isArray(data.questions) ||
+        data.questions.length !== 4
+      ) {
+
+        throw new Error(
+          'Le serveur doit retourner exactement 4 questions.'
+        );
+
+      }
+
+      state.questions =
+        data.questions;
+
+      state.answers =
+        new Array(
+          state.questions.length
+        ).fill(null);
+
+      state.submitted =
+        false;
+
+      videoScreen.classList.add(
+        'hidden'
+      );
+
+      quizScreen.classList.remove(
+        'hidden'
+      );
+
+      renderQuiz();
+
+    } catch (error) {
+
+      console.error(
+        'startQuiz error:',
+        error
+      );
+
+      showVideoError(
+        error.message ||
+        'Erreur pendant la generation du quiz.'
+      );
+
+      button.disabled = false;
+
+    } finally {
+
+      button.textContent =
+        'Commencer le quiz';
+
+    }
+
+  }
+
+
+  // =========================================================
+  // AFFICHER QUESTIONS
+  // =========================================================
+
+  function renderQuiz() {
+
+    questionsContainer.innerHTML =
+      '';
+
+    for (
+      let i = 0;
+      i < state.questions.length;
+      i++
+    ) {
+
+      const question =
+        state.questions[i];
+
+      const questionDiv =
+        document.createElement(
+          'div'
+        );
+
+      questionDiv.className =
+        'question';
+
+      const numberDiv =
+        document.createElement(
+          'div'
+        );
+
+      numberDiv.className =
+        'question-number';
+
+      numberDiv.textContent =
+        'Question ' +
+        (i + 1) +
+        ' / ' +
+        state.questions.length;
+
+      const textDiv =
+        document.createElement(
+          'div'
+        );
+
+      textDiv.className =
+        'question-text';
+
+      textDiv.textContent =
+        question.question;
+
+      questionDiv.appendChild(
+        numberDiv
+      );
+
+      questionDiv.appendChild(
+        textDiv
+      );
+
+
+      for (
+        let j = 0;
+        j < question.choices.length;
+        j++
+      ) {
+
+        const choiceButton =
+          document.createElement(
+            'button'
+          );
+
+        choiceButton.className =
+          'choice-button';
+
+        choiceButton.textContent =
+          question.choices[j];
+
+        choiceButton.dataset.question =
+          String(i);
+
+        choiceButton.dataset.choice =
+          String(j);
+
+        choiceButton.onclick =
+          function() {
+
+            selectAnswer(
+              i,
+              j
+            );
+
+          };
+
+        questionDiv.appendChild(
+          choiceButton
+        );
+
+      }
+
+      questionsContainer.appendChild(
+        questionDiv
+      );
+
+    }
+
+    updateProgress();
+
+  }
+
+
+  // =========================================================
+  // SELECTION REPONSE
+  // =========================================================
+
+  function selectAnswer(
+    questionIndex,
+    choiceIndex
+  ) {
+
+    if (state.submitted) {
+      return;
+    }
+
+    state.answers[
+      questionIndex
+    ] = choiceIndex;
+
+    const buttons =
+      document.querySelectorAll(
+        '[data-question="' +
+        questionIndex +
+        '"]'
+      );
+
+    buttons.forEach(
+      function(button) {
+
+        button.classList.remove(
+          'selected'
+        );
+
+      }
+    );
+
+    const selected =
+      document.querySelector(
+        '[data-question="' +
+        questionIndex +
+        '"][data-choice="' +
+        choiceIndex +
+        '"]'
+      );
+
+    if (selected) {
+
+      selected.classList.add(
+        'selected'
+      );
+
+    }
+
+    updateProgress();
+
+  }
+
+
+  // =========================================================
+  // PROGRESSION
+  // =========================================================
+
+  function updateProgress() {
+
+    const answered =
+      state.answers.filter(
+        function(answer) {
+          return answer !== null;
+        }
+      ).length;
+
+    const total =
+      state.questions.length;
+
+    const percentage =
+      total > 0
+        ? (
+            answered /
+            total
+          ) * 100
+        : 0;
+
+    progressBar.style.width =
+      percentage + '%';
+
+  }
+
+
+  // =========================================================
+  // VALIDER QUIZ
+  // =========================================================
+
+  function submitQuiz() {
+
+    if (state.submitted) {
+      return;
+    }
+
+    const unanswered =
+      state.answers.some(
+        function(answer) {
+          return answer === null;
+        }
+      );
+
+    if (unanswered) {
+
+      alert(
+        'Tu dois repondre aux 4 questions avant de valider.'
+      );
+
+      return;
+
+    }
+
+    state.submitted = true;
+
+    let correct = 0;
+
+    for (
+      let i = 0;
+      i < state.questions.length;
+      i++
+    ) {
+
+      const question =
+        state.questions[i];
+
+      const answer =
+        state.answers[i];
+
+      if (
+        answer ===
+        question.correctAnswer
+      ) {
+
+        correct++;
+
+      }
+
+      showQuestionCorrection(
+        i,
+        answer,
+        question.correctAnswer
+      );
+
+    }
+
+    let points = 0;
+
+    if (correct === 4) {
+      points = 1;
+    }
+
+    state.totalScore += points;
+
+    scoreDisplay.textContent =
+      String(
+        state.totalScore
+      );
+
+    quizScoreDisplay.textContent =
+      String(
+        state.totalScore
+      );
+
+    roundScore.textContent =
+      String(points);
+
+    finalTotalScore.textContent =
+      String(
+        state.totalScore
+      );
+
+    if (correct === 4) {
+
+      resultMessage.textContent =
+        'Bravo ! 4/4. Tu gagnes 1 point.';
+
+    } else {
+
+      resultMessage.textContent =
+        correct +
+        '/4 bonnes reponses. Aucun point pour cette partie.';
+
+    }
+
+    document
+      .getElementById(
+        'submitQuizButton'
+      )
+      .disabled = true;
+
+    setTimeout(
+      function() {
+
+        quizScreen.classList.add(
+          'hidden'
+        );
+
+        resultScreen.classList.remove(
+          'hidden'
+        );
+
+      },
+      1000
+    );
+
+  }
+
+
+  // =========================================================
+  // CORRECTION
+  // =========================================================
+
+  function showQuestionCorrection(
+    questionIndex,
+    userAnswer,
+    correctAnswer
+  ) {
+
+    const buttons =
+      document.querySelectorAll(
+        '[data-question="' +
+        questionIndex +
+        '"]'
+      );
+
+    buttons.forEach(
+      function(button) {
+
+        const choice =
+          Number(
+            button.dataset.choice
+          );
+
+        button.classList.remove(
+          'selected'
+        );
+
+        if (
+          choice ===
+          correctAnswer
+        ) {
+
+          button.classList.add(
+            'correct'
+          );
+
+        }
+
+        if (
+          choice ===
+          userAnswer &&
+          choice !==
+          correctAnswer
+        ) {
+
+          button.classList.add(
+            'wrong'
+          );
+
+        }
+
+      }
+    );
+
+  }
+
+
+  // =========================================================
+  // VIDEO SUIVANTE
+  // =========================================================
+
+  async function nextVideo() {
+
+    resultScreen.classList.add(
+      'hidden'
+    );
+
+    videoScreen.classList.remove(
+      'hidden'
+    );
+
+    state.currentVideo = null;
+
+    youtubePlayer.src = '';
+
+    await loadVideos();
+
+  }
+
+
+  // =========================================================
+  // INITIALISATION
+  // =========================================================
+
+  scoreDisplay.textContent =
+    '0';
+
+  quizScoreDisplay.textContent =
+    '0';
+
+</script>
+
+</body>
+</html>
