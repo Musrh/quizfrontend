@@ -470,6 +470,155 @@
         grid-template-columns: 1fr;
       }
     }
+
+
+    /* =========================================
+       PROFESSIONAL VISUAL DESIGN
+       ========================================= */
+    :root {
+      --primary: #4f46e5;
+      --primary-dark: #3730a3;
+      --accent: #06b6d4;
+      --ink: #0f172a;
+      --muted: #64748b;
+      --surface: rgba(255,255,255,.96);
+      --line: #e2e8f0;
+      --soft: #eef2ff;
+      --success: #16a34a;
+    }
+
+    body {
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 10% 0%, rgba(79,70,229,.16), transparent 30%),
+        radial-gradient(circle at 90% 10%, rgba(6,182,212,.13), transparent 28%),
+        linear-gradient(180deg, #f8fafc 0%, #eef2ff 100%);
+      min-height: 100vh;
+    }
+
+    .app {
+      max-width: 1040px;
+      padding: 24px 18px 50px;
+    }
+
+    header {
+      padding: 10px 0 20px;
+      margin-bottom: 8px;
+    }
+
+    header h1 {
+      font-size: clamp(30px, 6vw, 48px);
+      letter-spacing: -1.5px;
+      background: linear-gradient(135deg, #312e81, #4f46e5 50%, #0891b2);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    header p { color: var(--muted); font-size: 16px; }
+
+    .card {
+      border: 1px solid rgba(226,232,240,.9);
+      border-radius: 22px;
+      padding: clamp(20px, 4vw, 34px);
+      background: var(--surface);
+      box-shadow: 0 18px 55px rgba(15,23,42,.09);
+      backdrop-filter: blur(12px);
+    }
+
+    button {
+      border-radius: 13px;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--primary), #6366f1);
+      box-shadow: 0 7px 18px rgba(79,70,229,.18);
+    }
+    button:hover { transform: translateY(-1px); opacity: 1; }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      padding: clamp(24px, 5vw, 48px);
+      background: linear-gradient(135deg, #111827 0%, #312e81 52%, #155e75 100%);
+      color: #fff;
+      border: 0;
+    }
+    .hero:after {
+      content: "";
+      position: absolute;
+      width: 260px;
+      height: 260px;
+      right: -90px;
+      top: -90px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.09);
+    }
+    .hero-kicker {
+      display: inline-flex;
+      padding: 7px 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.12);
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: .3px;
+      margin-bottom: 14px;
+    }
+    .hero h2 { font-size: clamp(28px, 6vw, 46px); line-height: 1.05; margin: 0 0 14px; max-width: 720px; }
+    .hero p { color: rgba(255,255,255,.82); line-height: 1.65; max-width: 700px; margin: 0; }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 24px; }
+    .hero-actions button { background: #fff; color: #312e81; box-shadow: none; }
+
+    .section-title { margin: 0 0 8px; font-size: 25px; }
+    .section-subtitle { color: var(--muted); margin: 0 0 20px; line-height: 1.6; }
+
+    .language-grid { grid-template-columns: repeat(3, 1fr); margin-top: 22px; }
+    .language-choice { min-height: 88px; background: #fff; color: var(--ink); border: 1px solid var(--line); box-shadow: none; text-align: left; }
+    .language-choice strong { display: block; font-size: 18px; }
+    .language-choice span { display: block; margin-top: 5px; color: var(--muted); font-size: 13px; font-weight: 500; }
+    .language-choice:hover { border-color: #a5b4fc; background: #f8faff; }
+
+    .feature-grid, .rules-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-top: 20px; }
+    .feature, .rule { padding: 18px; border: 1px solid var(--line); border-radius: 16px; background: #fff; }
+    .feature-icon { font-size: 25px; margin-bottom: 9px; }
+    .feature strong, .rule strong { display: block; margin-bottom: 6px; }
+    .feature p, .rule p { margin: 0; color: var(--muted); font-size: 14px; line-height: 1.55; }
+    .rule-number { display: inline-grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; background: var(--soft); color: var(--primary-dark); font-weight: 800; margin-bottom: 10px; }
+
+    .rules-note { margin-top: 20px; padding: 15px 16px; border-radius: 14px; background: #ecfeff; color: #155e75; border: 1px solid #cffafe; line-height: 1.55; }
+
+    .auth-card { max-width: 520px; }
+    .auth-card:before { content: "AI VIDEO QUIZ"; display: inline-block; font-size: 12px; font-weight: 900; letter-spacing: 1.5px; color: var(--primary); margin-bottom: 12px; }
+    .auth-form input { border: 1px solid var(--line); background: #f8fafc; padding: 14px; }
+    .auth-form input:focus { border-color: #818cf8; box-shadow: 0 0 0 4px rgba(99,102,241,.10); }
+    .auth-language { display:flex; gap:7px; flex-wrap:wrap; margin-top:18px; }
+    .auth-language button { padding:7px 10px; font-size:12px; background:#f1f5f9; color:#475569; box-shadow:none; }
+    .auth-language button.active { background:#e0e7ff; color:#3730a3; }
+
+    .account-bar { border:1px solid var(--line); box-shadow: 0 10px 30px rgba(15,23,42,.06); }
+    .account-score { color: var(--primary); }
+    .badge { background:#eef2ff; color:#3730a3; font-weight:700; }
+    .video-container { box-shadow: 0 14px 35px rgba(15,23,42,.18); }
+    .progress-bar { background: linear-gradient(90deg, var(--primary), var(--accent)); }
+
+    .category-grid { gap: 14px; }
+    .category-choice { min-height: 105px; background: #fff; color: var(--ink); border: 1px solid var(--line); box-shadow:none; text-align:left; }
+    .category-choice strong { display:block; font-size:18px; }
+    .category-choice span { display:block; color:var(--muted); font-size:13px; margin-top:6px; font-weight:500; }
+    .category-choice:hover { border-color:#a5b4fc; background:#fafaff; }
+
+    .nav-row { display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:20px; }
+    .nav-row .back-button { margin:0; }
+    .ghost-button { background:#fff; color:#475569; border:1px solid var(--line); box-shadow:none; }
+
+    [dir="rtl"] { text-align:right; }
+    [dir="rtl"] .choice-button, [dir="rtl"] .category-choice, [dir="rtl"] .language-choice { text-align:right; }
+
+    @media (max-width: 700px) {
+      .language-grid, .feature-grid, .rules-grid { grid-template-columns: 1fr; }
+      .hero-actions { flex-direction:column; }
+      .hero-actions button { width:100%; }
+    }
+
   </style>
   <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
@@ -477,29 +626,26 @@
 </head>
 
 <body>
-
 <div class="app">
-
   <header>
     <h1>AI Video Quiz</h1>
-    <p>Regarde une video et teste tes connaissances</p>
+    <p id="headerSubtitle" data-i18n="headerSubtitle">Regarde une video et teste tes connaissances</p>
   </header>
-
 
   <div id="accountBar" class="account-bar hidden">
     <div class="account-info">
       <div id="accountEmail"></div>
-      <div>Points : <span id="accountScore" class="account-score">0</span></div>
+      <div><span id="accountPointsLabel" data-i18n="points">Points</span> : <span id="accountScore" class="account-score">0</span></div>
     </div>
-    <button class="logout-button" onclick="logoutUser()">Deconnexion</button>
+    <button class="logout-button" onclick="logoutUser()" data-i18n="logout">Deconnexion</button>
   </div>
 
   <section id="authScreen" class="card auth-card">
     <h2 id="authTitle">Connexion</h2>
     <p id="authDescription">Connecte-toi pour sauvegarder ton score.</p>
     <form id="authForm" class="auth-form" onsubmit="handleAuthSubmit(event)">
-      <input id="authEmail" type="email" placeholder="Adresse email" autocomplete="email" required>
-      <input id="authPassword" type="password" placeholder="Mot de passe" autocomplete="current-password" minlength="6" required>
+      <input id="authEmail" type="email" data-i18n-placeholder="emailPlaceholder" placeholder="Adresse email" autocomplete="email" required>
+      <input id="authPassword" type="password" data-i18n-placeholder="passwordPlaceholder" placeholder="Mot de passe" autocomplete="current-password" minlength="6" required>
       <button id="authSubmitButton" type="submit">Se connecter</button>
     </form>
     <div id="authError" class="auth-error hidden"></div>
@@ -507,410 +653,111 @@
       <span id="authSwitchText">Pas encore de compte ?</span>
       <button id="authSwitchButton" type="button" onclick="toggleAuthMode()">Creer un compte</button>
     </div>
+    <div class="auth-language">
+      <button id="authLangFr" type="button" onclick="setInterfaceLanguage('fr')">FR</button>
+      <button id="authLangEn" type="button" onclick="setInterfaceLanguage('en')">EN</button>
+      <button id="authLangAr" type="button" onclick="setInterfaceLanguage('ar')">AR</button>
+    </div>
   </section>
 
-  <!-- =========================================
-       LANGUAGE
-       ========================================= -->
+  <section id="languageScreen" class="card hero hidden">
+    <div class="hero-kicker" data-i18n="heroKicker">QUIZ VIDEO + IA</div>
+    <h2 data-i18n="heroTitle">Regarde. Reponds. Gagne des points.</h2>
+    <p data-i18n="heroText">Choisis une langue, regarde une video adaptee a ton theme et reponds a 4 questions generees a partir de son contenu.</p>
+    <div class="hero-actions">
+      <button type="button" onclick="scrollToLanguageChoices()" data-i18n="chooseLanguage">Choisir ma langue</button>
+      <button type="button" class="ghost-button" onclick="showScreen('rules')" data-i18n="seeRules">Voir les regles</button>
+    </div>
+  </section>
 
-  <section
-    id="languageScreen"
-    class="card hidden"
-  >
-
-    <h2>Choisis ta langue</h2>
-
+  <section id="languageChoicesSection" class="card hidden">
+    <h2 class="section-title" data-i18n="languageTitle">Choisis ta langue de jeu</h2>
+    <p class="section-subtitle" data-i18n="languageSubtitle">Les videos et les questions seront recherches dans la langue choisie.</p>
     <div class="language-grid">
-
-      <button
-        onclick="selectLanguage('fr')"
-      >
-        Francais
-      </button>
-
-      <button
-        onclick="selectLanguage('en')"
-      >
-        English
-      </button>
-
-      <button
-        onclick="selectLanguage('ar')"
-      >
-        العربية
-      </button>
-
+      <button class="language-choice" onclick="selectLanguage('fr')"><strong>Francais</strong><span>Videos et questions en francais</span></button>
+      <button class="language-choice" onclick="selectLanguage('en')"><strong>English</strong><span>Videos and questions in English</span></button>
+      <button class="language-choice" onclick="selectLanguage('ar')"><strong>العربية</strong><span>فيديوهات واسئلة باللغة العربية</span></button>
     </div>
-
+    <div class="feature-grid">
+      <div class="feature"><div class="feature-icon">🎬</div><strong data-i18n="featureVideoTitle">Videos selectionnees</strong><p data-i18n="featureVideoText">Des videos publiques et adaptees au theme choisi.</p></div>
+      <div class="feature"><div class="feature-icon">🧠</div><strong data-i18n="featureAiTitle">Questions par IA</strong><p data-i18n="featureAiText">4 questions sont generees a partir du contenu de la video.</p></div>
+      <div class="feature"><div class="feature-icon">🏆</div><strong data-i18n="featureScoreTitle">Score cumulatif</strong><p data-i18n="featureScoreText">4 bonnes reponses donnent 1 point.</p></div>
+    </div>
   </section>
 
-
-  <!-- =========================================
-       CATEGORY
-       ========================================= -->
-
-  <section
-    id="categoryScreen"
-    class="card hidden"
-  >
-
-    <div class="navigation-area">
-
-      <button
-        class="back-button"
-        onclick="goBackToLanguage()"
-      >
-        ← Retour
-      </button>
-
+  <section id="rulesScreen" class="card hidden">
+    <div class="nav-row">
+      <button class="back-button" onclick="showHome()" data-i18n="backHome">← Accueil</button>
+      <span class="badge" data-i18n="rulesBadge">REGLES DU JEU</span>
     </div>
+    <h2 class="section-title" data-i18n="rulesTitle">Comment jouer ?</h2>
+    <p class="section-subtitle" data-i18n="rulesSubtitle">Le principe est simple : une video, 4 questions, un point si tu reponds correctement aux 4.</p>
+    <div class="rules-grid">
+      <div class="rule"><div class="rule-number">1</div><strong data-i18n="rule1Title">Choisis ta langue</strong><p data-i18n="rule1Text">Selectionne Francais, English ou Arabe.</p></div>
+      <div class="rule"><div class="rule-number">2</div><strong data-i18n="rule2Title">Choisis un theme</strong><p data-i18n="rule2Text">Sport, Sciences, Art culinaire ou Culture generale.</p></div>
+      <div class="rule"><div class="rule-number">3</div><strong data-i18n="rule3Title">Regarde la video</strong><p data-i18n="rule3Text">Une video compatible avec ton theme est proposee.</p></div>
+      <div class="rule"><div class="rule-number">4</div><strong data-i18n="rule4Title">Reponds a 4 questions</strong><p data-i18n="rule4Text">Les questions sont generees a partir du contenu de la video.</p></div>
+      <div class="rule"><div class="rule-number">5</div><strong data-i18n="rule5Title">Gagne ton point</strong><p data-i18n="rule5Text">Si tes 4 reponses sont correctes, tu gagnes 1 point. Sinon, tu gagnes 0 point.</p></div>
+      <div class="rule"><div class="rule-number">6</div><strong data-i18n="rule6Title">Continue a jouer</strong><p data-i18n="rule6Text">Tu peux enchainer les videos et accumuler ton score.</p></div>
+    </div>
+    <div class="rules-note" data-i18n="rulesNote">Les videos restent hebergees sur YouTube. Le quiz utilise leur contenu pour generer les questions.</div>
+    <button class="primary" onclick="startCategories()" data-i18n="startGame">Commencer le jeu</button>
+  </section>
 
-    <h2>Choisis une categorie</h2>
-
+  <section id="categoryScreen" class="card hidden">
+    <div class="nav-row"><button class="back-button" onclick="showScreen('rules')" data-i18n="backRules">← Regles</button></div>
+    <h2 class="section-title" data-i18n="categoryTitle">Choisis une categorie</h2>
+    <p class="section-subtitle" data-i18n="categorySubtitle">Quel sujet veux-tu decouvrir aujourd'hui ?</p>
     <div class="category-grid">
-
-      <button
-        onclick="selectCategory('sport')"
-      >
-        Sport
-      </button>
-
-      <button
-        onclick="selectCategory('sciences')"
-      >
-        Sciences
-      </button>
-
-      <button
-        onclick="selectCategory('art culinaire')"
-      >
-        Art culinaire
-      </button>
-
-      <button
-        onclick="selectCategory('culture générale')"
-      >
-        Culture generale
-      </button>
-
+      <button class="category-choice" onclick="selectCategory('sport')"><strong data-i18n="catSport">Sport</strong><span data-i18n="catSportText">Matchs, athletes, techniques et histoire du sport.</span></button>
+      <button class="category-choice" onclick="selectCategory('sciences')"><strong data-i18n="catScience">Sciences</strong><span data-i18n="catScienceText">Science, espace, nature, technologie et decouvertes.</span></button>
+      <button class="category-choice" onclick="selectCategory('art culinaire')"><strong data-i18n="catFood">Art culinaire</strong><span data-i18n="catFoodText">Cuisine, recettes, gastronomie et savoir-faire.</span></button>
+      <button class="category-choice" onclick="selectCategory('culture générale')"><strong data-i18n="catCulture">Culture generale</strong><span data-i18n="catCultureText">Histoire, geographie, civilisation et connaissances.</span></button>
     </div>
-
   </section>
 
-
-  <!-- =========================================
-       GAME
-       ========================================= -->
-
-  <section
-    id="gameScreen"
-    class="card hidden"
-  >
-
+  <section id="gameScreen" class="card hidden">
     <div class="top-bar">
-
-      <div>
-
-        <span
-          id="languageBadge"
-          class="badge"
-        ></span>
-
-        <span
-          id="categoryBadge"
-          class="badge"
-        ></span>
-
-      </div>
-
-      <div>
-
-        <strong>
-          Points :
-          <span id="scoreDisplay">0</span>
-        </strong>
-
-      </div>
-
+      <div><span id="languageBadge" class="badge"></span><span id="categoryBadge" class="badge"></span></div>
+      <div><strong><span data-i18n="points">Points</span> : <span id="scoreDisplay">0</span></strong></div>
     </div>
-
-
-    <button
-      id="backToCategoriesButton"
-      class="back-button"
-      onclick="goBackToCategories()"
-    >
-      ← Retour aux categories
-    </button>
-
-
-    <div
-      id="videoLoading"
-      class="loading hidden"
-    >
-      Recherche d'une video...
+    <button id="backToCategoriesButton" class="back-button" onclick="goBackToCategories()" data-i18n="backCategories">← Retour aux categories</button>
+    <div id="videoLoading" class="loading hidden" data-i18n="videoLoading">Recherche d'une video...</div>
+    <div id="videoError" class="error hidden"></div>
+    <div id="videoContent">
+      <div id="videoTitle" class="video-title"></div>
+      <div id="videoChannel" class="video-channel"></div>
+      <div id="videoMeta" class="video-meta"></div>
+      <div class="video-container"><iframe id="youtubePlayer" src="" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>
+      <div class="info"><span data-i18n="watchThen">Regarde la video puis clique sur</span> <strong data-i18n="startQuiz">Commencer le quiz</strong>.</div>
+      <button id="startQuizButton" class="primary" onclick="startQuiz()" data-i18n="startQuiz">Commencer le quiz</button>
+      <div id="quizArea" class="hidden">
+        <div class="info" data-i18n="quizInfo">La video reste visible au-dessus. Reponds aux 4 questions en regardant la video.</div>
+        <div class="progress"><div id="progressBar" class="progress-bar"></div></div>
+        <div id="questionsContainer"></div>
+        <button id="submitQuizButton" class="primary" onclick="submitQuiz()" data-i18n="submitAnswers">Valider mes reponses</button>
+      </div>
     </div>
-
-
-    <div
-      id="videoError"
-      class="error hidden"
-    ></div>
-
-
-    <div
-      id="videoContent"
-    >
-
-      <div
-        id="videoTitle"
-        class="video-title"
-      ></div>
-
-
-      <div
-        id="videoChannel"
-        class="video-channel"
-      ></div>
-
-
-      <div
-        id="videoMeta"
-        class="video-meta"
-      ></div>
-
-
-      <div class="video-container">
-
-        <iframe
-          id="youtubePlayer"
-          src=""
-          title="YouTube video player"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-          allowfullscreen>
-        </iframe>
-
-      </div>
-
-
-      <div class="info">
-
-        Regarde la video puis clique sur
-        <strong>Commencer le quiz</strong>.
-
-      </div>
-
-
-      <button
-        id="startQuizButton"
-        class="primary"
-        onclick="startQuiz()"
-      >
-        Commencer le quiz
-      </button>
-
-
-      <!-- =====================================
-           QUIZ
-           ===================================== -->
-
-      <div
-        id="quizArea"
-        class="hidden"
-      >
-
-        <div class="info">
-
-          La video reste visible au-dessus.
-          Reponds aux 4 questions en regardant
-          la video.
-
-        </div>
-
-
-        <div class="progress">
-
-          <div
-            id="progressBar"
-            class="progress-bar"
-          ></div>
-
-        </div>
-
-
-        <div
-          id="questionsContainer"
-        ></div>
-
-
-        <button
-          id="submitQuizButton"
-          class="primary"
-          onclick="submitQuiz()"
-        >
-          Valider mes reponses
-        </button>
-
-      </div>
-
-    </div>
-
   </section>
 
-
-  <!-- =========================================
-       RESULT
-       ========================================= -->
-
-  <section
-    id="resultScreen"
-    class="card hidden"
-  >
-
-    <button
-      class="back-button"
-      onclick="goBackToQuiz()"
-    >
-      ← Retour au quiz
-    </button>
-
-
-    <h2>Resultat</h2>
-
-
-    <div class="score-box">
-
-      <div>
-        Score de cette partie
-      </div>
-
-      <div
-        id="roundScore"
-        class="score-number"
-      >
-        0
-      </div>
-
-      <div id="resultMessage"></div>
-
+  <section id="resultScreen" class="card hidden">
+    <button class="back-button" onclick="goBackToQuiz()" data-i18n="backQuiz">← Retour au quiz</button>
+    <h2 data-i18n="resultTitle">Resultat</h2>
+    <div class="score-box"><div data-i18n="roundScoreLabel">Score de cette partie</div><div id="roundScore" class="score-number">0</div><div id="resultMessage"></div></div>
+    <div class="info"><span data-i18n="totalScore">Score total</span> : <strong id="finalTotalScore">0</strong></div>
+    <div id="evaluationCard" class="evaluation-card">
+      <div class="evaluation-title" data-i18n="evaluationTitle">Que penses-tu de cette video ?</div>
+      <div class="evaluation-buttons"><button id="likeButton" class="evaluation-button like" onclick="rateVideo('like')" data-i18n="interesting">👍 Interessante</button><button id="dislikeButton" class="evaluation-button dislike" onclick="rateVideo('dislike')" data-i18n="notInteresting">👎 Pas interessante</button></div>
+      <div class="length-question" data-i18n="tooLongQuestion">La video etait-elle trop longue ?</div>
+      <div class="length-buttons"><button id="lengthNo" class="length-button" onclick="rateVideoLength('no')" data-i18n="no">Non</button><button id="lengthMedium" class="length-button" onclick="rateVideoLength('medium')" data-i18n="aLittle">Un peu</button><button id="lengthYes" class="length-button" onclick="rateVideoLength('yes')" data-i18n="yes">Oui</button></div>
+      <div id="evaluationThanks" class="evaluation-thanks hidden" data-i18n="thanks">Merci pour ton evaluation !</div>
     </div>
-
-
-    <div class="info">
-
-      Score total :
-      <strong id="finalTotalScore">
-        0
-      </strong>
-
-    </div>
-
-
-    <!-- =====================================
-         EVALUATION
-         ===================================== -->
-
-    <div
-      id="evaluationCard"
-      class="evaluation-card"
-    >
-
-      <div class="evaluation-title">
-        Que penses-tu de cette video ?
-      </div>
-
-
-      <div class="evaluation-buttons">
-
-        <button
-          id="likeButton"
-          class="evaluation-button like"
-          onclick="rateVideo('like')"
-        >
-          👍 Interessante
-        </button>
-
-
-        <button
-          id="dislikeButton"
-          class="evaluation-button dislike"
-          onclick="rateVideo('dislike')"
-        >
-          👎 Pas interessante
-        </button>
-
-      </div>
-
-
-      <div class="length-question">
-        La video etait-elle trop longue ?
-      </div>
-
-
-      <div class="length-buttons">
-
-        <button
-          id="lengthNo"
-          class="length-button"
-          onclick="rateVideoLength('no')"
-        >
-          Non
-        </button>
-
-        <button
-          id="lengthMedium"
-          class="length-button"
-          onclick="rateVideoLength('medium')"
-        >
-          Un peu
-        </button>
-
-        <button
-          id="lengthYes"
-          class="length-button"
-          onclick="rateVideoLength('yes')"
-        >
-          Oui
-        </button>
-
-      </div>
-
-
-      <div
-        id="evaluationThanks"
-        class="evaluation-thanks hidden"
-      >
-        Merci pour ton evaluation !
-      </div>
-
-    </div>
-
-
-    <button
-      class="primary"
-      onclick="nextVideo()"
-    >
-      Video suivante
-    </button>
-
-
-    <button
-      class="primary secondary"
-      onclick="goBackToCategories()"
-    >
-      Retour aux categories
-    </button>
-
+    <button class="primary" onclick="nextVideo()" data-i18n="nextVideo">Video suivante</button>
+    <button class="primary secondary" onclick="goBackToCategories()" data-i18n="backCategories">Retour aux categories</button>
   </section>
 
-
-  <section
-    id="globalError"
-    class="error hidden"
-  ></section>
-
+  <section id="globalError" class="error hidden"></section>
 </div>
-
 
 <script>
 
@@ -933,6 +780,86 @@
   const auth = firebase.auth();
   const db = firebase.firestore();
   let authMode = 'login';
+
+  let interfaceLanguage = localStorage.getItem('aivq_interface_language') || 'fr';
+
+  const I18N = {
+    fr: {
+      headerSubtitle:'Regarde une video et teste tes connaissances', points:'Points', logout:'Deconnexion',
+      login:'Connexion', loginDesc:'Connecte-toi pour sauvegarder ton score.', register:'Creer un compte', registerDesc:'Cree un compte pour sauvegarder ton score.',
+      emailPlaceholder:'Adresse email', passwordPlaceholder:'Mot de passe', connect:'Se connecter', createAccount:'Creer mon compte', noAccount:'Pas encore de compte ?', alreadyAccount:'Deja un compte ?',
+      heroKicker:'QUIZ VIDEO + IA', heroTitle:'Regarde. Reponds. Gagne des points.', heroText:'Choisis une langue, regarde une video adaptee a ton theme et reponds a 4 questions generees a partir de son contenu.', chooseLanguage:'Choisir ma langue', seeRules:'Voir les regles',
+      languageTitle:'Choisis ta langue de jeu', languageSubtitle:'Les videos et les questions seront recherches dans la langue choisie.', featureVideoTitle:'Videos selectionnees', featureVideoText:'Des videos publiques et adaptees au theme choisi.', featureAiTitle:'Questions par IA', featureAiText:'4 questions sont generees a partir du contenu de la video.', featureScoreTitle:'Score cumulatif', featureScoreText:'4 bonnes reponses donnent 1 point.',
+      rulesBadge:'REGLES DU JEU', rulesTitle:'Comment jouer ?', rulesSubtitle:'Le principe est simple : une video, 4 questions, un point si tu reponds correctement aux 4.',
+      rule1Title:'Choisis ta langue',rule1Text:'Selectionne Francais, English ou Arabe.',rule2Title:'Choisis un theme',rule2Text:'Sport, Sciences, Art culinaire ou Culture generale.',rule3Title:'Regarde la video',rule3Text:'Une video compatible avec ton theme est proposee.',rule4Title:'Reponds a 4 questions',rule4Text:'Les questions sont generees a partir du contenu de la video.',rule5Title:'Gagne ton point',rule5Text:'Si tes 4 reponses sont correctes, tu gagnes 1 point. Sinon, tu gagnes 0 point.',rule6Title:'Continue a jouer',rule6Text:'Tu peux enchainer les videos et accumuler ton score.',rulesNote:'Les videos restent hebergees sur YouTube. Le quiz utilise leur contenu pour generer les questions.',startGame:'Commencer le jeu',backHome:'← Accueil',backRules:'← Regles',
+      categoryTitle:'Choisis une categorie',categorySubtitle:"Quel sujet veux-tu decouvrir aujourd'hui ?",catSport:'Sport',catSportText:'Matchs, athletes, techniques et histoire du sport.',catScience:'Sciences',catScienceText:'Science, espace, nature, technologie et decouvertes.',catFood:'Art culinaire',catFoodText:'Cuisine, recettes, gastronomie et savoir-faire.',catCulture:'Culture generale',catCultureText:'Histoire, geographie, civilisation et connaissances.',
+      backCategories:'← Retour aux categories',videoLoading:"Recherche d'une video...",watchThen:'Regarde la video puis clique sur',startQuiz:'Commencer le quiz',quizInfo:'La video reste visible au-dessus. Reponds aux 4 questions en regardant la video.',submitAnswers:'Valider mes reponses',backQuiz:'← Retour au quiz',resultTitle:'Resultat',roundScoreLabel:'Score de cette partie',totalScore:'Score total',evaluationTitle:'Que penses-tu de cette video ?',interesting:'👍 Interessante',notInteresting:'👎 Pas interessante',tooLongQuestion:'La video etait-elle trop longue ?',no:'Non',aLittle:'Un peu',yes:'Oui',thanks:'Merci pour ton evaluation !',nextVideo:'Video suivante',
+      perfect:'Bravo ! 4/4 bonnes reponses. Tu gagnes 1 point.',notPerfect:'Cette fois, tu ne gagnes pas de point. Il fallait 4 bonnes reponses.'
+    },
+    en: {
+      headerSubtitle:'Watch a video and test your knowledge', points:'Points', logout:'Log out',
+      login:'Sign in', loginDesc:'Sign in to save your score.', register:'Create an account', registerDesc:'Create an account to save your score.', emailPlaceholder:'Email address', passwordPlaceholder:'Password', connect:'Sign in', createAccount:'Create my account', noAccount:"Don't have an account yet?", alreadyAccount:'Already have an account?',
+      heroKicker:'VIDEO QUIZ + AI', heroTitle:'Watch. Answer. Earn points.', heroText:'Choose a language, watch a video matched to your topic and answer 4 questions generated from its content.', chooseLanguage:'Choose my language', seeRules:'See the rules',
+      languageTitle:'Choose your game language', languageSubtitle:'Videos and questions will be searched in the selected language.', featureVideoTitle:'Selected videos', featureVideoText:'Public videos matched to your chosen topic.', featureAiTitle:'AI-generated questions', featureAiText:'4 questions are generated from the video content.', featureScoreTitle:'Cumulative score', featureScoreText:'4 correct answers give you 1 point.',
+      rulesBadge:'GAME RULES', rulesTitle:'How to play', rulesSubtitle:'The principle is simple: one video, 4 questions, one point if you answer all 4 correctly.',
+      rule1Title:'Choose your language',rule1Text:'Select French, English or Arabic.',rule2Title:'Choose a topic',rule2Text:'Sport, Science, Culinary Arts or General Knowledge.',rule3Title:'Watch the video',rule3Text:'A compatible video is selected for your topic.',rule4Title:'Answer 4 questions',rule4Text:'Questions are generated from the video content.',rule5Title:'Earn your point',rule5Text:'If all 4 answers are correct, you earn 1 point. Otherwise, you earn 0 points.',rule6Title:'Keep playing',rule6Text:'Continue with more videos and build your score.',rulesNote:'Videos remain hosted on YouTube. The quiz uses their content to generate the questions.',startGame:'Start the game',backHome:'← Home',backRules:'← Rules',
+      categoryTitle:'Choose a category',categorySubtitle:'What topic would you like to explore today?',catSport:'Sport',catSportText:'Matches, athletes, techniques and sports history.',catScience:'Science',catScienceText:'Science, space, nature, technology and discoveries.',catFood:'Culinary Arts',catFoodText:'Cooking, recipes, gastronomy and know-how.',catCulture:'General Knowledge',catCultureText:'History, geography, civilizations and knowledge.',
+      backCategories:'← Back to categories',videoLoading:'Searching for a video...',watchThen:'Watch the video then click',startQuiz:'Start the quiz',quizInfo:'The video remains visible above. Answer the 4 questions while watching the video.',submitAnswers:'Submit my answers',backQuiz:'← Back to quiz',resultTitle:'Result',roundScoreLabel:'Score for this round',totalScore:'Total score',evaluationTitle:'What do you think of this video?',interesting:'👍 Interesting',notInteresting:'👎 Not interesting',tooLongQuestion:'Was the video too long?',no:'No',aLittle:'A little',yes:'Yes',thanks:'Thanks for your feedback!',nextVideo:'Next video',
+      perfect:'Great! 4/4 correct answers. You earn 1 point.',notPerfect:'This time you earn no point. You need 4 correct answers.'
+    },
+    ar: {
+      headerSubtitle:'شاهد فيديو واختبر معلوماتك', points:'النقاط', logout:'تسجيل الخروج',
+      login:'تسجيل الدخول', loginDesc:'سجل الدخول لحفظ نقاطك.', register:'إنشاء حساب', registerDesc:'أنشئ حسابا لحفظ نقاطك.', emailPlaceholder:'البريد الإلكتروني', passwordPlaceholder:'كلمة المرور', connect:'تسجيل الدخول', createAccount:'إنشاء حسابي', noAccount:'ليس لديك حساب بعد؟', alreadyAccount:'لديك حساب بالفعل؟',
+      heroKicker:'اختبار فيديو + ذكاء اصطناعي', heroTitle:'شاهد. أجب. اكسب النقاط.', heroText:'اختر اللغة، شاهد فيديو مناسبا لموضوعك، ثم أجب عن 4 أسئلة يتم توليدها من محتوى الفيديو.', chooseLanguage:'اختر لغتي', seeRules:'شاهد القواعد',
+      languageTitle:'اختر لغة اللعب', languageSubtitle:'سيتم البحث عن الفيديوهات والأسئلة باللغة التي تختارها.', featureVideoTitle:'فيديوهات مختارة', featureVideoText:'فيديوهات عامة مناسبة للموضوع الذي تختاره.', featureAiTitle:'أسئلة بالذكاء الاصطناعي', featureAiText:'يتم توليد 4 أسئلة من محتوى الفيديو.', featureScoreTitle:'نقاط متراكمة', featureScoreText:'الإجابة الصحيحة عن الأسئلة الأربعة تمنحك نقطة واحدة.',
+      rulesBadge:'قواعد اللعبة', rulesTitle:'كيف تلعب؟', rulesSubtitle:'الفكرة بسيطة: فيديو واحد، 4 أسئلة، ونقطة واحدة إذا أجبت عن الأسئلة الأربعة بشكل صحيح.',
+      rule1Title:'اختر اللغة',rule1Text:'اختر الفرنسية أو الإنجليزية أو العربية.',rule2Title:'اختر الموضوع',rule2Text:'الرياضة أو العلوم أو فن الطبخ أو الثقافة العامة.',rule3Title:'شاهد الفيديو',rule3Text:'سيتم اقتراح فيديو مناسب للموضوع الذي اخترته.',rule4Title:'أجب عن 4 أسئلة',rule4Text:'يتم توليد الأسئلة من محتوى الفيديو.',rule5Title:'اكسب النقطة',rule5Text:'إذا كانت إجاباتك الأربعة صحيحة تحصل على نقطة واحدة، وإلا تحصل على صفر.',rule6Title:'واصل اللعب',rule6Text:'تابع مشاهدة فيديوهات أخرى واجمع نقاطك.',rulesNote:'تبقى الفيديوهات مستضافة على YouTube، ويستخدم الاختبار محتواها لتوليد الأسئلة.',startGame:'ابدأ اللعبة',backHome:'← الرئيسية',backRules:'← القواعد',
+      categoryTitle:'اختر فئة',categorySubtitle:'ما الموضوع الذي تريد اكتشافه اليوم؟',catSport:'الرياضة',catSportText:'مباريات ورياضيون وتقنيات وتاريخ الرياضة.',catScience:'العلوم',catScienceText:'العلوم والفضاء والطبيعة والتكنولوجيا والاكتشافات.',catFood:'فن الطبخ',catFoodText:'الطبخ والوصفات وفنون الطهي والخبرة.',catCulture:'الثقافة العامة',catCultureText:'التاريخ والجغرافيا والحضارات والمعارف.',
+      backCategories:'← العودة إلى الفئات',videoLoading:'جار البحث عن فيديو...',watchThen:'شاهد الفيديو ثم اضغط على',startQuiz:'ابدأ الاختبار',quizInfo:'يبقى الفيديو ظاهرا في الأعلى. أجب عن الأسئلة الأربعة أثناء مشاهدة الفيديو.',submitAnswers:'تأكيد إجاباتي',backQuiz:'← العودة إلى الاختبار',resultTitle:'النتيجة',roundScoreLabel:'نتيجة هذه الجولة',totalScore:'مجموع النقاط',evaluationTitle:'ما رأيك في هذا الفيديو؟',interesting:'👍 ممتع',notInteresting:'👎 غير ممتع',tooLongQuestion:'هل كان الفيديو طويلا جدا؟',no:'لا',aLittle:'قليلا',yes:'نعم',thanks:'شكرا على تقييمك!',nextVideo:'الفيديو التالي',
+      perfect:'أحسنت! 4/4 إجابات صحيحة. حصلت على نقطة واحدة.',notPerfect:'هذه المرة لم تحصل على نقطة. يجب أن تكون الإجابات الأربعة صحيحة.'
+    }
+  };
+
+  function t(key) { return (I18N[interfaceLanguage] && I18N[interfaceLanguage][key]) || I18N.fr[key] || key; }
+
+  function applyTranslations() {
+    document.documentElement.lang = interfaceLanguage;
+    document.documentElement.dir = interfaceLanguage === 'ar' ? 'rtl' : 'ltr';
+    document.querySelectorAll('[data-i18n]').forEach(function(el){ el.textContent = t(el.getAttribute('data-i18n')); });
+    document.querySelectorAll('[data-i18n-placeholder]').forEach(function(el){ el.placeholder = t(el.getAttribute('data-i18n-placeholder')); });
+    authTitle.textContent = authMode === 'register' ? t('register') : t('login');
+    authDescription.textContent = authMode === 'register' ? t('registerDesc') : t('loginDesc');
+    authSubmitButton.textContent = authMode === 'register' ? t('createAccount') : t('connect');
+    authSwitchText.textContent = authMode === 'register' ? t('alreadyAccount') : t('noAccount');
+    authSwitchButton.textContent = authMode === 'register' ? t('connect') : t('createAccount');
+    document.getElementById('authLangFr').classList.toggle('active', interfaceLanguage === 'fr');
+    document.getElementById('authLangEn').classList.toggle('active', interfaceLanguage === 'en');
+    document.getElementById('authLangAr').classList.toggle('active', interfaceLanguage === 'ar');
+    if (state.language) {
+      languageBadge.textContent = getLanguageLabel(state.language);
+      categoryBadge.textContent = state.category ? getCategoryLabel(state.category) : '';
+    }
+  }
+
+  function setInterfaceLanguage(language) {
+    interfaceLanguage = language;
+    localStorage.setItem('aivq_interface_language', language);
+    applyTranslations();
+  }
+
+  function scrollToLanguageChoices() {
+    document.getElementById('languageChoicesSection').classList.remove('hidden');
+    document.getElementById('languageChoicesSection').scrollIntoView({behavior:'smooth', block:'start'});
+  }
+
+  function showHome() {
+    showScreen('language');
+    document.getElementById('languageChoicesSection').classList.remove('hidden');
+  }
+
+  function startCategories() {
+    showScreen('category');
+  }
 
   // =====================================================
   // STATE
@@ -993,6 +920,8 @@
     document.getElementById(
       'languageScreen'
     );
+  const languageChoicesSection = document.getElementById('languageChoicesSection');
+  const rulesScreen = document.getElementById('rulesScreen');
 
 
   const authScreen = document.getElementById('authScreen');
@@ -1127,58 +1056,20 @@
   // LANGUAGE LABEL
   // =====================================================
 
-  function getLanguageLabel(
-    language
-  ) {
-
-    if (language === 'fr') {
-      return 'Francais';
-    }
-
-    if (language === 'en') {
-      return 'English';
-    }
-
-    if (language === 'ar') {
-      return 'العربية';
-    }
-
+  function getLanguageLabel(language) {
+    if (language === 'fr') return 'Francais';
+    if (language === 'en') return 'English';
+    if (language === 'ar') return 'العربية';
     return language;
-
   }
 
-
-  // =====================================================
-  // CATEGORY LABEL
-  // =====================================================
-
-  function getCategoryLabel(
-    category
-  ) {
-
-    if (category === 'sport') {
-      return 'Sport';
-    }
-
-    if (category === 'sciences') {
-      return 'Sciences';
-    }
-
-    if (category === 'art culinaire') {
-      return 'Art culinaire';
-    }
-
-    if (
-      category ===
-      'culture générale'
-    ) {
-      return 'Culture generale';
-    }
-
+  function getCategoryLabel(category) {
+    if (category === 'sport') return t('catSport');
+    if (category === 'sciences') return t('catScience');
+    if (category === 'art culinaire') return t('catFood');
+    if (category === 'culture générale') return t('catCulture');
     return category;
-
   }
-
 
 
   function setAuthError(message) {
@@ -1190,22 +1081,8 @@
     authMode = authMode === 'login' ? 'register' : 'login';
     setAuthError('');
     authForm.reset();
-
-    if (authMode === 'register') {
-      authTitle.textContent = 'Creer un compte';
-      authDescription.textContent = 'Cree un compte pour sauvegarder ton score.';
-      authSubmitButton.textContent = 'Creer mon compte';
-      authSwitchText.textContent = 'Deja un compte ?';
-      authSwitchButton.textContent = 'Se connecter';
-      authPassword.autocomplete = 'new-password';
-    } else {
-      authTitle.textContent = 'Connexion';
-      authDescription.textContent = 'Connecte-toi pour sauvegarder ton score.';
-      authSubmitButton.textContent = 'Se connecter';
-      authSwitchText.textContent = 'Pas encore de compte ?';
-      authSwitchButton.textContent = 'Creer un compte';
-      authPassword.autocomplete = 'current-password';
-    }
+    authPassword.autocomplete = authMode === 'register' ? 'new-password' : 'current-password';
+    applyTranslations();
   }
 
   function firebaseAuthErrorMessage(error) {
@@ -1306,6 +1183,8 @@
     updateAccountBar();
   }
 
+  applyTranslations();
+
   auth.onAuthStateChanged(async function(user) {
     if (!user) {
       state.user = null;
@@ -1326,6 +1205,7 @@
 
       updateAccountBar();
       showScreen('language');
+      applyTranslations();
     } catch (error) {
       console.error('Firestore error:', error);
       state.user = null;
@@ -1346,9 +1226,9 @@
       'hidden'
     );
 
-    languageScreen.classList.add(
-      'hidden'
-    );
+    languageScreen.classList.add('hidden');
+    languageChoicesSection.classList.add('hidden');
+    rulesScreen.classList.add('hidden');
 
     categoryScreen.classList.add(
       'hidden'
@@ -1369,11 +1249,12 @@
 
 
     if (screen === 'language') {
+      languageScreen.classList.remove('hidden');
+      languageChoicesSection.classList.remove('hidden');
+    }
 
-      languageScreen.classList.remove(
-        'hidden'
-      );
-
+    if (screen === 'rules') {
+      rulesScreen.classList.remove('hidden');
     }
 
 
@@ -1424,19 +1305,10 @@
     language
   ) {
 
-    state.language =
-      language;
-
-
-    languageBadge.textContent =
-      getLanguageLabel(
-        language
-      );
-
-
-    showScreen(
-      'category'
-    );
+    state.language = language;
+    setInterfaceLanguage(language);
+    languageBadge.textContent = getLanguageLabel(language);
+    showScreen('rules');
 
   }
 
@@ -2471,27 +2343,12 @@
       );
 
 
-    if (
-      correct === 4
-    ) {
-
-      resultMessage.textContent =
-        'Bravo ! 4/4. Tu gagnes 1 point.';
-
-
-      resultMessage.className =
-        'result-success';
-
+    if (correct === 4) {
+      resultMessage.textContent = t('perfect');
+      resultMessage.className = 'result-success';
     } else {
-
-      resultMessage.textContent =
-        correct +
-        '/4 bonnes reponses. Aucun point pour cette partie.';
-
-
-      resultMessage.className =
-        'result-fail';
-
+      resultMessage.textContent = t('notPerfect');
+      resultMessage.className = 'result-fail';
     }
 
 
