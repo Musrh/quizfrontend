@@ -51,6 +51,68 @@
       display: none !important;
     }
 
+    .auth-card {
+      max-width: 520px;
+      margin: 0 auto 20px;
+    }
+    .auth-form {
+      display: grid;
+      gap: 12px;
+      margin-top: 18px;
+    }
+    .auth-form input {
+      width: 100%;
+      padding: 13px 14px;
+      border: 1px solid #cbd5e1;
+      border-radius: 10px;
+      font-size: 16px;
+      outline: none;
+    }
+    .auth-switch {
+      margin-top: 14px;
+      text-align: center;
+      color: #64748b;
+    }
+    .auth-switch button {
+      background: transparent;
+      color: #2563eb;
+      padding: 4px;
+      font-size: 15px;
+    }
+    .auth-error {
+      margin-top: 12px;
+      padding: 10px 12px;
+      border-radius: 8px;
+      background: #fee2e2;
+      color: #991b1b;
+    }
+    .account-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      background: #fff;
+      border-radius: 12px;
+      padding: 12px 14px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 10px rgba(0,0,0,.06);
+    }
+    .account-info {
+      font-size: 14px;
+      color: #475569;
+    }
+    .account-score {
+      font-weight: bold;
+      color: #2563eb;
+    }
+    .logout-button {
+      background: #64748b;
+      padding: 9px 13px;
+      font-size: 14px;
+    }
+
+
     h2 {
       margin-top: 0;
     }
@@ -409,6 +471,9 @@
       }
     }
   </style>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
 </head>
 
 <body>
@@ -421,13 +486,36 @@
   </header>
 
 
+  <div id="accountBar" class="account-bar hidden">
+    <div class="account-info">
+      <div id="accountEmail"></div>
+      <div>Points : <span id="accountScore" class="account-score">0</span></div>
+    </div>
+    <button class="logout-button" onclick="logoutUser()">Deconnexion</button>
+  </div>
+
+  <section id="authScreen" class="card auth-card">
+    <h2 id="authTitle">Connexion</h2>
+    <p id="authDescription">Connecte-toi pour sauvegarder ton score.</p>
+    <form id="authForm" class="auth-form" onsubmit="handleAuthSubmit(event)">
+      <input id="authEmail" type="email" placeholder="Adresse email" autocomplete="email" required>
+      <input id="authPassword" type="password" placeholder="Mot de passe" autocomplete="current-password" minlength="6" required>
+      <button id="authSubmitButton" type="submit">Se connecter</button>
+    </form>
+    <div id="authError" class="auth-error hidden"></div>
+    <div class="auth-switch">
+      <span id="authSwitchText">Pas encore de compte ?</span>
+      <button id="authSwitchButton" type="button" onclick="toggleAuthMode()">Creer un compte</button>
+    </div>
+  </section>
+
   <!-- =========================================
        LANGUAGE
        ========================================= -->
 
   <section
     id="languageScreen"
-    class="card"
+    class="card hidden"
   >
 
     <h2>Choisis ta langue</h2>
@@ -830,6 +918,22 @@
     'https://ai-video-quiz-backend-production.up.railway.app';
 
 
+  const firebaseConfig = {
+    apiKey: "AIzaSyBuiap7vkHi1nsK78hAMZSC4ebm0a3r3_Y",
+    authDomain: "recettes-2c62a.firebaseapp.com",
+    databaseURL: "https://recettes-2c62a-default-rtdb.firebaseio.com",
+    projectId: "recettes-2c62a",
+    storageBucket: "recettes-2c62a.firebasestorage.app",
+    messagingSenderId: "384412687224",
+    appId: "1:384412687224:web:64485e5af41d8e0c49868d",
+    measurementId: "G-77JB0FD358"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+  const auth = firebase.auth();
+  const db = firebase.firestore();
+  let authMode = 'login';
+
   // =====================================================
   // STATE
   // =====================================================
@@ -837,7 +941,10 @@
   const state = {
 
     screen:
-      'language',
+      'auth',
+
+    user:
+      null,
 
     language:
       null,
@@ -887,6 +994,20 @@
       'languageScreen'
     );
 
+
+  const authScreen = document.getElementById('authScreen');
+  const accountBar = document.getElementById('accountBar');
+  const accountEmail = document.getElementById('accountEmail');
+  const accountScore = document.getElementById('accountScore');
+  const authTitle = document.getElementById('authTitle');
+  const authDescription = document.getElementById('authDescription');
+  const authForm = document.getElementById('authForm');
+  const authEmail = document.getElementById('authEmail');
+  const authPassword = document.getElementById('authPassword');
+  const authSubmitButton = document.getElementById('authSubmitButton');
+  const authError = document.getElementById('authError');
+  const authSwitchText = document.getElementById('authSwitchText');
+  const authSwitchButton = document.getElementById('authSwitchButton');
 
   const categoryScreen =
     document.getElementById(
@@ -1059,6 +1180,160 @@
   }
 
 
+
+  function setAuthError(message) {
+    authError.textContent = message || '';
+    authError.classList.toggle('hidden', !message);
+  }
+
+  function toggleAuthMode() {
+    authMode = authMode === 'login' ? 'register' : 'login';
+    setAuthError('');
+    authForm.reset();
+
+    if (authMode === 'register') {
+      authTitle.textContent = 'Creer un compte';
+      authDescription.textContent = 'Cree un compte pour sauvegarder ton score.';
+      authSubmitButton.textContent = 'Creer mon compte';
+      authSwitchText.textContent = 'Deja un compte ?';
+      authSwitchButton.textContent = 'Se connecter';
+      authPassword.autocomplete = 'new-password';
+    } else {
+      authTitle.textContent = 'Connexion';
+      authDescription.textContent = 'Connecte-toi pour sauvegarder ton score.';
+      authSubmitButton.textContent = 'Se connecter';
+      authSwitchText.textContent = 'Pas encore de compte ?';
+      authSwitchButton.textContent = 'Creer un compte';
+      authPassword.autocomplete = 'current-password';
+    }
+  }
+
+  function firebaseAuthErrorMessage(error) {
+    const messages = {
+      'auth/invalid-email': 'Adresse email invalide.',
+      'auth/email-already-in-use': 'Cette adresse email est deja utilisee.',
+      'auth/weak-password': 'Le mot de passe doit contenir au moins 6 caracteres.',
+      'auth/user-not-found': 'Aucun compte ne correspond a cette adresse email.',
+      'auth/wrong-password': 'Mot de passe incorrect.',
+      'auth/invalid-credential': 'Email ou mot de passe incorrect.',
+      'auth/too-many-requests': 'Trop de tentatives. Reessaie plus tard.'
+    };
+    return messages[error.code] || error.message || 'Une erreur de connexion est survenue.';
+  }
+
+  async function ensureUserDocument(user) {
+    const ref = db.collection('users').doc(user.uid);
+    const snap = await ref.get();
+
+    if (!snap.exists) {
+      await ref.set({
+        email: user.email || '',
+        totalPoints: 0,
+        videosCompleted: 0,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+        lastLogin: firebase.firestore.FieldValue.serverTimestamp()
+      });
+      return { totalPoints: 0, videosCompleted: 0 };
+    }
+
+    await ref.update({
+      email: user.email || '',
+      lastLogin: firebase.firestore.FieldValue.serverTimestamp()
+    });
+
+    return snap.data();
+  }
+
+  async function handleAuthSubmit(event) {
+    event.preventDefault();
+    setAuthError('');
+
+    const email = authEmail.value.trim();
+    const password = authPassword.value;
+
+    if (!email || !password) {
+      setAuthError('Entre ton email et ton mot de passe.');
+      return;
+    }
+
+    authSubmitButton.disabled = true;
+
+    try {
+      if (authMode === 'register') {
+        await auth.createUserWithEmailAndPassword(email, password);
+      } else {
+        await auth.signInWithEmailAndPassword(email, password);
+      }
+    } catch (error) {
+      console.error('Firebase Auth error:', error);
+      setAuthError(firebaseAuthErrorMessage(error));
+    } finally {
+      authSubmitButton.disabled = false;
+    }
+  }
+
+  async function logoutUser() {
+    await auth.signOut();
+  }
+
+  function updateAccountBar() {
+    if (!state.user) {
+      accountBar.classList.add('hidden');
+      return;
+    }
+
+    accountEmail.textContent = state.user.email || '';
+    accountScore.textContent = String(state.totalScore);
+    accountBar.classList.remove('hidden');
+  }
+
+  async function saveUserScore(points) {
+    if (!state.user) return;
+
+    const ref = db.collection('users').doc(state.user.uid);
+
+    const data = {
+      totalPoints: state.totalScore,
+      lastLogin: firebase.firestore.FieldValue.serverTimestamp()
+    };
+
+    if (points === 1) {
+      data.videosCompleted =
+        firebase.firestore.FieldValue.increment(1);
+    }
+
+    await ref.set(data, { merge: true });
+    updateAccountBar();
+  }
+
+  auth.onAuthStateChanged(async function(user) {
+    if (!user) {
+      state.user = null;
+      state.totalScore = 0;
+      updateAccountBar();
+      showScreen('auth');
+      return;
+    }
+
+    try {
+      const data = await ensureUserDocument(user);
+
+      state.user = user;
+      state.totalScore = Number(data.totalPoints) || 0;
+
+      scoreDisplay.textContent = String(state.totalScore);
+      finalTotalScore.textContent = String(state.totalScore);
+
+      updateAccountBar();
+      showScreen('language');
+    } catch (error) {
+      console.error('Firestore error:', error);
+      state.user = null;
+      setAuthError('Impossible de charger ton compte. Verifie les regles Firestore.');
+      showScreen('auth');
+    }
+  });
+
   // =====================================================
   // SHOW SCREEN
   // =====================================================
@@ -1066,6 +1341,10 @@
   function showScreen(
     screen
   ) {
+
+    authScreen.classList.add(
+      'hidden'
+    );
 
     languageScreen.classList.add(
       'hidden'
@@ -1082,6 +1361,11 @@
     resultScreen.classList.add(
       'hidden'
     );
+
+
+    if (screen === 'auth') {
+      authScreen.classList.remove('hidden');
+    }
 
 
     if (screen === 'language') {
@@ -2163,6 +2447,10 @@
 
     state.totalScore +=
       points;
+
+    saveUserScore(points).catch(function(error) {
+      console.error('Firestore score save error:', error);
+    });
 
 
     scoreDisplay.textContent =
