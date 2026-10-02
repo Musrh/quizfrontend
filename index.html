@@ -639,15 +639,13 @@
     .ielts-kicker{display:inline-flex;padding:7px 12px;border-radius:999px;background:rgba(255,255,255,.13);font-size:12px;font-weight:800;letter-spacing:.5px;margin-bottom:10px}
     .ielts-hero h2{margin:0 0 9px;font-size:clamp(27px,5vw,39px)}
     .ielts-hero p{margin:0;color:rgba(255,255,255,.84);line-height:1.65;max-width:720px}
-    .ielts-skills{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:18px 0 22px}
-    .ielts-skill-button{background:#fff;color:#1e293b;border:1px solid #e2e8f0;box-shadow:none;padding:13px 10px;font-size:14px}
-    .ielts-skill-button.active{background:#e0e7ff;color:#3730a3;border-color:#818cf8}
+    .ielts-listening-badge{display:inline-flex;margin-top:15px;padding:8px 13px;border:1px solid rgba(255,255,255,.28);border-radius:999px;background:rgba(255,255,255,.13);font-size:13px;font-weight:800;letter-spacing:.3px}
     .ielts-video-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
     .ielts-video-card{overflow:hidden;border:1px solid #e2e8f0;border-radius:18px;background:#fff;box-shadow:0 8px 24px rgba(15,23,42,.06)}
     .ielts-thumbnail{display:block;width:100%;aspect-ratio:16/9;object-fit:cover;background:#0f172a}
     .ielts-video-body{padding:16px}.ielts-video-title{font-size:17px;font-weight:800;line-height:1.4;margin-bottom:7px}.ielts-video-channel{color:#64748b;font-size:13px;margin-bottom:10px}
     .ielts-video-meta{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:13px}.ielts-meta{padding:5px 8px;border-radius:999px;background:#f1f5f9;color:#475569;font-size:12px;font-weight:700}.ielts-watch{width:100%;padding:11px 14px}.ielts-empty,.ielts-loading{padding:28px;text-align:center;color:#64748b;border:1px dashed #cbd5e1;border-radius:16px;background:#f8fafc}
-    @media(max-width:700px){.ielts-skills{grid-template-columns:repeat(2,1fr)}.ielts-video-grid{grid-template-columns:1fr}}
+    @media(max-width:700px){.ielts-video-grid{grid-template-columns:1fr}}
 
     @media (max-width: 700px) {
       .language-grid, .feature-grid, .rules-grid { grid-template-columns: 1fr; }
@@ -969,16 +967,7 @@
 
   <section id="ieltsScreen" class="card ielts-card hidden">
     <div class="nav-row"><button class="back-button" type="button" onclick="showHome()" data-i18n="backHome">← Accueil</button></div>
-    <div class="ielts-hero"><div class="ielts-kicker" data-i18n="ieltsKicker">IELTS PREPARATION</div><h2 data-i18n="ieltsTitle">Prepare for your IELTS exam with videos</h2><p data-i18n="ieltsLead">Explore English videos focused on Listening, Speaking, Reading, Writing, Vocabulary and exam strategies.</p></div>
-    <div class="ielts-skills">
-      <button id="ieltsSkillAll" class="ielts-skill-button active" type="button" onclick="loadIeltsVideos('all')" data-i18n="ieltsAll">All</button>
-      <button id="ieltsSkillListening" class="ielts-skill-button" type="button" onclick="loadIeltsVideos('listening')" data-i18n="ieltsListening">Listening</button>
-      <button id="ieltsSkillSpeaking" class="ielts-skill-button" type="button" onclick="loadIeltsVideos('speaking')" data-i18n="ieltsSpeaking">Speaking</button>
-      <button id="ieltsSkillReading" class="ielts-skill-button" type="button" onclick="loadIeltsVideos('reading')" data-i18n="ieltsReading">Reading</button>
-      <button id="ieltsSkillWriting" class="ielts-skill-button" type="button" onclick="loadIeltsVideos('writing')" data-i18n="ieltsWriting">Writing</button>
-      <button id="ieltsSkillVocabulary" class="ielts-skill-button" type="button" onclick="loadIeltsVideos('vocabulary')" data-i18n="ieltsVocabulary">Vocabulary & Grammar</button>
-      <button id="ieltsSkillTips" class="ielts-skill-button" type="button" onclick="loadIeltsVideos('tips')" data-i18n="ieltsTips">Tips & Strategies</button>
-    </div>
+    <div class="ielts-hero"><div class="ielts-kicker" data-i18n="ieltsKicker">IELTS PREPARATION</div><h2 data-i18n="ieltsTitle">Prepare for your IELTS exam with videos</h2><p data-i18n="ieltsLead">Practice English listening with videos, then answer questions generated from what you watched.</p><span class="ielts-listening-badge" data-i18n="ieltsListening">Listening</span></div>
     <div id="ieltsError" class="error hidden"></div><div id="ieltsLoading" class="ielts-loading hidden" data-i18n="ieltsLoading">Searching for IELTS videos...</div><div id="ieltsVideoGrid" class="ielts-video-grid"></div>
   </section>
 
@@ -1435,6 +1424,25 @@
     }
   };
 
+  Object.assign(I18N.fr, {
+    ieltsLead: 'Travaille ta compréhension orale en anglais grâce à des vidéos, puis réponds à des questions générées à partir de leur contenu.',
+    ieltsWatch: 'Commencer le quiz',
+    ieltsNoVideos: 'Aucune vidéo Listening trouvée.',
+    preparingQuiz: 'Préparation du quiz...'
+  });
+  Object.assign(I18N.en, {
+    ieltsLead: 'Practice English listening with videos, then answer questions generated from what you watched.',
+    ieltsWatch: 'Start listening quiz',
+    ieltsNoVideos: 'No IELTS Listening videos were found.',
+    preparingQuiz: 'Preparing your quiz...'
+  });
+  Object.assign(I18N.ar, {
+    ieltsLead: 'تدرّب على مهارة الاستماع باللغة الإنجليزية عبر الفيديوهات، ثم أجب عن أسئلة مُنشأة من محتواها.',
+    ieltsWatch: 'ابدأ اختبار الاستماع',
+    ieltsNoVideos: 'لم يتم العثور على فيديوهات للاستماع في IELTS.',
+    preparingQuiz: 'جارٍ إعداد الاختبار...'
+  });
+
   function t(key) { return (I18N[interfaceLanguage] && I18N[interfaceLanguage][key]) || I18N.fr[key] || key; }
 
   function applyTranslations() {
@@ -1463,10 +1471,7 @@
     if (state.screen === 'info') {
       openInfoPage(currentInfoPage);
     }
-    if (state.screen === 'ielts') {
-      setIeltsSkillButton(currentIeltsSkill);
-      renderIeltsVideos();
-    }
+    if (state.screen === 'ielts') renderIeltsVideos();
   }
 
   function setInterfaceLanguage(language) {
@@ -1519,22 +1524,15 @@
   }
 
 
-  let currentIeltsSkill = 'all';
+  let currentIeltsSkill = 'listening';
   let ieltsVideos = [];
 
-  function openIeltsPage() { showScreen('ielts'); loadIeltsVideos('all'); }
-
-  function setIeltsSkillButton(skill) {
-    ['all','listening','speaking','reading','writing','vocabulary','tips'].forEach(function(item){
-      const id='ieltsSkill'+item.charAt(0).toUpperCase()+item.slice(1);
-      const b=document.getElementById(id); if(b) b.classList.toggle('active',item===skill);
-    });
-  }
+  function openIeltsPage() { showScreen('ielts'); loadIeltsVideos(); }
 
   function escapeHtml(value){return String(value||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\"/g,'&quot;').replace(/'/g,'&#039;');}
 
-  async function loadIeltsVideos(skill){
-    currentIeltsSkill=skill||'all'; setIeltsSkillButton(currentIeltsSkill);
+  async function loadIeltsVideos(){
+    currentIeltsSkill='listening';
     ieltsError.classList.add('hidden'); ieltsLoading.classList.remove('hidden'); ieltsVideoGrid.innerHTML='';
     try{
       const r=await fetch(API_BASE+'/api/youtube/ielts?skill='+encodeURIComponent(currentIeltsSkill));
@@ -1552,7 +1550,31 @@
     }).join('');
   }
 
-  function watchIeltsVideo(videoId){window.open('https://www.youtube.com/watch?v='+encodeURIComponent(videoId),'_blank','noopener,noreferrer');}
+  function watchIeltsVideo(videoId) {
+    const selectedVideo = ieltsVideos.find(function(video) {
+      return video.videoId === videoId;
+    });
+    if (!selectedVideo) {
+      ieltsError.textContent = t('ieltsError');
+      ieltsError.classList.remove('hidden');
+      return;
+    }
+
+    state.language = 'en';
+    state.category = 'ielts-listening';
+    state.currentVideo = selectedVideo;
+    state.questions = [];
+    state.answers = [];
+    state.submitted = false;
+    state.evaluation = { like: null, length: null };
+    languageBadge.textContent = getLanguageLabel('en');
+    categoryBadge.textContent = t('ieltsListening');
+
+    showScreen('game');
+    displayVideo();
+    document.getElementById('startQuizButton').textContent = t('startQuiz');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
 
   function startCategories() {
     showScreen('category');
@@ -1767,6 +1789,7 @@
   }
 
   function getCategoryLabel(category) {
+    if (category === 'ielts-listening') return t('ieltsListening');
     if (category === 'sport') return t('catSport');
     if (category === 'sciences') return t('catScience');
     if (category === 'art culinaire') return t('catFood');
@@ -2131,9 +2154,13 @@
     );
 
 
-    showScreen(
-      'category'
-    );
+    if (state.category === 'ielts-listening') {
+      showScreen('ielts');
+      loadIeltsVideos();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+      showScreen('category');
+    }
 
   }
 
@@ -2599,7 +2626,9 @@
 
 
     button.textContent =
-      'Preparation du quiz...';
+      state.category === 'ielts-listening'
+        ? t('preparingQuiz')
+        : 'Preparation du quiz...';
 
 
     hideVideoError();
@@ -2723,7 +2752,9 @@
     } finally {
 
       button.textContent =
-        'Commencer le quiz';
+        state.category === 'ielts-listening'
+          ? t('startQuiz')
+          : 'Commencer le quiz';
 
     }
 
@@ -3680,6 +3711,13 @@
     startButton.textContent =
       'Commencer le quiz';
 
+
+    if (state.category === 'ielts-listening') {
+      showScreen('ielts');
+      await loadIeltsVideos();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
 
     await loadVideos();
 
