@@ -613,10 +613,239 @@
     [dir="rtl"] { text-align:right; }
     [dir="rtl"] .choice-button, [dir="rtl"] .category-choice, [dir="rtl"] .language-choice { text-align:right; }
 
+
+    .ielts-card{background:linear-gradient(135deg,#fff 0%,#f8fafc 100%)}
+    .ielts-hero{padding:24px;border-radius:20px;background:linear-gradient(135deg,#172554,#1e3a8a 55%,#0e7490);color:#fff;margin-bottom:20px}
+    .ielts-kicker{display:inline-flex;padding:7px 12px;border-radius:999px;background:rgba(255,255,255,.13);font-size:12px;font-weight:800;letter-spacing:.5px;margin-bottom:10px}
+    .ielts-hero h2{margin:0 0 9px;font-size:clamp(27px,5vw,39px)}
+    .ielts-hero p{margin:0;color:rgba(255,255,255,.84);line-height:1.65;max-width:720px}
+    .ielts-skills{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:18px 0 22px}
+    .ielts-skill-button{background:#fff;color:#1e293b;border:1px solid #e2e8f0;box-shadow:none;padding:13px 10px;font-size:14px}
+    .ielts-skill-button.active{background:#e0e7ff;color:#3730a3;border-color:#818cf8}
+    .ielts-video-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+    .ielts-video-card{overflow:hidden;border:1px solid #e2e8f0;border-radius:18px;background:#fff;box-shadow:0 8px 24px rgba(15,23,42,.06)}
+    .ielts-thumbnail{display:block;width:100%;aspect-ratio:16/9;object-fit:cover;background:#0f172a}
+    .ielts-video-body{padding:16px}.ielts-video-title{font-size:17px;font-weight:800;line-height:1.4;margin-bottom:7px}.ielts-video-channel{color:#64748b;font-size:13px;margin-bottom:10px}
+    .ielts-video-meta{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:13px}.ielts-meta{padding:5px 8px;border-radius:999px;background:#f1f5f9;color:#475569;font-size:12px;font-weight:700}.ielts-watch{width:100%;padding:11px 14px}.ielts-empty,.ielts-loading{padding:28px;text-align:center;color:#64748b;border:1px dashed #cbd5e1;border-radius:16px;background:#f8fafc}
+    @media(max-width:700px){.ielts-skills{grid-template-columns:repeat(2,1fr)}.ielts-video-grid{grid-template-columns:1fr}}
+
     @media (max-width: 700px) {
       .language-grid, .feature-grid, .rules-grid { grid-template-columns: 1fr; }
       .hero-actions { flex-direction:column; }
       .hero-actions button { width:100%; }
+    }
+
+
+    /* =========================================================
+       INFORMATION PAGES + PROFESSIONAL FOOTER
+       ========================================================= */
+    .info-page {
+      max-width: 920px;
+      margin: 0 auto 24px;
+    }
+
+    .info-page-header {
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:18px;
+      flex-wrap:wrap;
+      margin-bottom:24px;
+    }
+
+    .info-page-kicker {
+      display:inline-flex;
+      padding:7px 12px;
+      border-radius:999px;
+      background:#eef2ff;
+      color:#3730a3;
+      font-size:12px;
+      font-weight:800;
+      letter-spacing:.4px;
+      margin-bottom:10px;
+    }
+
+    .info-page h2 {
+      margin:0 0 10px;
+      font-size:clamp(28px,5vw,40px);
+      letter-spacing:-.6px;
+    }
+
+    .info-page-lead {
+      margin:0;
+      color:var(--muted);
+      line-height:1.7;
+      max-width:760px;
+    }
+
+    .info-content {
+      display:grid;
+      gap:14px;
+    }
+
+    .info-block {
+      padding:20px;
+      border:1px solid var(--line);
+      border-radius:17px;
+      background:#fff;
+    }
+
+    .info-block h3 {
+      margin:0 0 9px;
+      font-size:18px;
+      color:var(--ink);
+    }
+
+    .info-block p {
+      margin:0;
+      color:#475569;
+      line-height:1.7;
+    }
+
+    .info-block ul {
+      margin:8px 0 0;
+      padding-left:21px;
+      color:#475569;
+      line-height:1.75;
+    }
+
+    [dir="rtl"] .info-block ul {
+      padding-left:0;
+      padding-right:21px;
+    }
+
+    .legal-placeholder {
+      display:inline-block;
+      padding:2px 7px;
+      border-radius:6px;
+      background:#fff7ed;
+      color:#9a3412;
+      font-weight:700;
+    }
+
+    .info-note {
+      padding:16px 18px;
+      border-radius:15px;
+      background:#f8fafc;
+      border:1px solid var(--line);
+      color:#475569;
+      line-height:1.65;
+    }
+
+    .site-footer {
+      margin-top:34px;
+      border-top:1px solid rgba(226,232,240,.9);
+      background:rgba(255,255,255,.82);
+      border-radius:22px 22px 0 0;
+      padding:30px 24px 22px;
+      box-shadow:0 -8px 30px rgba(15,23,42,.04);
+    }
+
+    .footer-main {
+      display:grid;
+      grid-template-columns:1.4fr repeat(3,1fr);
+      gap:28px;
+    }
+
+    .footer-brand strong {
+      display:block;
+      font-size:19px;
+      letter-spacing:-.3px;
+      color:var(--ink);
+    }
+
+    .footer-brand p {
+      color:var(--muted);
+      line-height:1.6;
+      margin:8px 0 0;
+      font-size:14px;
+      max-width:330px;
+    }
+
+    .footer-column h3 {
+      margin:0 0 10px;
+      font-size:14px;
+      color:var(--ink);
+    }
+
+    .footer-links {
+      display:grid;
+      gap:7px;
+    }
+
+    .footer-link {
+      display:inline-block;
+      width:max-content;
+      max-width:100%;
+      padding:2px 0;
+      border:0;
+      border-radius:0;
+      background:transparent;
+      box-shadow:none;
+      color:#64748b;
+      font-size:14px;
+      font-weight:600;
+      text-align:left;
+      cursor:pointer;
+    }
+
+    .footer-link:hover {
+      color:var(--primary);
+      transform:none;
+      background:transparent;
+    }
+
+    .footer-bottom {
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:14px;
+      flex-wrap:wrap;
+      margin-top:26px;
+      padding-top:18px;
+      border-top:1px solid var(--line);
+      color:#94a3b8;
+      font-size:13px;
+    }
+
+    .footer-language {
+      display:flex;
+      gap:6px;
+    }
+
+    .footer-language button {
+      padding:7px 9px;
+      font-size:12px;
+      background:#f1f5f9;
+      color:#475569;
+      box-shadow:none;
+    }
+
+    .footer-language button.active {
+      background:#e0e7ff;
+      color:#3730a3;
+    }
+
+    @media (max-width: 820px) {
+      .footer-main {
+        grid-template-columns:repeat(2,1fr);
+      }
+      .footer-brand {
+        grid-column:1 / -1;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .site-footer {
+        padding:24px 18px 18px;
+      }
+      .footer-main {
+        grid-template-columns:1fr;
+        gap:22px;
+      }
+      .footer-brand {
+        grid-column:auto;
+      }
     }
 
   </style>
@@ -704,6 +933,34 @@
     <button class="primary" onclick="startCategories()" data-i18n="startGame">Commencer le jeu</button>
   </section>
 
+
+  <section id="infoPageScreen" class="card info-page hidden">
+    <div class="info-page-header">
+      <div>
+        <div id="infoPageKicker" class="info-page-kicker"></div>
+        <h2 id="infoPageTitle"></h2>
+        <p id="infoPageLead" class="info-page-lead"></p>
+      </div>
+      <button class="ghost-button" type="button" onclick="showHome()" data-i18n="backHome">← Accueil</button>
+    </div>
+    <div id="infoPageContent" class="info-content"></div>
+  </section>
+
+  <section id="ieltsScreen" class="card ielts-card hidden">
+    <div class="nav-row"><button class="back-button" type="button" onclick="showHome()" data-i18n="backHome">← Accueil</button></div>
+    <div class="ielts-hero"><div class="ielts-kicker" data-i18n="ieltsKicker">IELTS PREPARATION</div><h2 data-i18n="ieltsTitle">Prepare for your IELTS exam with videos</h2><p data-i18n="ieltsLead">Explore English videos focused on Listening, Speaking, Reading, Writing, Vocabulary and exam strategies.</p></div>
+    <div class="ielts-skills">
+      <button id="ieltsSkillAll" class="ielts-skill-button active" type="button" onclick="loadIeltsVideos('all')" data-i18n="ieltsAll">All</button>
+      <button id="ieltsSkillListening" class="ielts-skill-button" type="button" onclick="loadIeltsVideos('listening')" data-i18n="ieltsListening">Listening</button>
+      <button id="ieltsSkillSpeaking" class="ielts-skill-button" type="button" onclick="loadIeltsVideos('speaking')" data-i18n="ieltsSpeaking">Speaking</button>
+      <button id="ieltsSkillReading" class="ielts-skill-button" type="button" onclick="loadIeltsVideos('reading')" data-i18n="ieltsReading">Reading</button>
+      <button id="ieltsSkillWriting" class="ielts-skill-button" type="button" onclick="loadIeltsVideos('writing')" data-i18n="ieltsWriting">Writing</button>
+      <button id="ieltsSkillVocabulary" class="ielts-skill-button" type="button" onclick="loadIeltsVideos('vocabulary')" data-i18n="ieltsVocabulary">Vocabulary & Grammar</button>
+      <button id="ieltsSkillTips" class="ielts-skill-button" type="button" onclick="loadIeltsVideos('tips')" data-i18n="ieltsTips">Tips & Strategies</button>
+    </div>
+    <div id="ieltsError" class="error hidden"></div><div id="ieltsLoading" class="ielts-loading hidden" data-i18n="ieltsLoading">Searching for IELTS videos...</div><div id="ieltsVideoGrid" class="ielts-video-grid"></div>
+  </section>
+
   <section id="categoryScreen" class="card hidden">
     <div class="nav-row"><button class="back-button" onclick="showScreen('rules')" data-i18n="backRules">← Regles</button></div>
     <h2 class="section-title" data-i18n="categoryTitle">Choisis une categorie</h2>
@@ -757,6 +1014,53 @@
   </section>
 
   <section id="globalError" class="error hidden"></section>
+
+  <footer class="site-footer">
+    <div class="footer-main">
+      <div class="footer-brand">
+        <strong>AI Video Quiz</strong>
+        <p data-i18n="footerTagline">Regarde, apprends et teste tes connaissances avec des quiz video.</p>
+      </div>
+
+      <div class="footer-column">
+        <h3 data-i18n="footerPlay">Jouer</h3>
+        <div class="footer-links">
+          <button class="footer-link" type="button" onclick="showHome()" data-i18n="footerHome">Accueil</button>
+          <button class="footer-link" type="button" onclick="openInfoPage('rules')" data-i18n="footerRules">Regles du jeu</button>
+          <button class="footer-link" type="button" onclick="startCategories()" data-i18n="footerCategories">Categories</button>
+          <button class="footer-link" type="button" onclick="openIeltsPage()" data-i18n="footerIelts">IELTS Preparation</button>
+        </div>
+      </div>
+
+      <div class="footer-column">
+        <h3 data-i18n="footerAbout">A propos</h3>
+        <div class="footer-links">
+          <button class="footer-link" type="button" onclick="openInfoPage('about')" data-i18n="footerAboutPage">A propos de nous</button>
+          <button class="footer-link" type="button" onclick="openInfoPage('contact')" data-i18n="footerContact">Contact</button>
+        </div>
+      </div>
+
+      <div class="footer-column">
+        <h3 data-i18n="footerLegal">Legal</h3>
+        <div class="footer-links">
+          <button class="footer-link" type="button" onclick="openInfoPage('privacy')" data-i18n="footerPrivacy">Politique de confidentialite</button>
+          <button class="footer-link" type="button" onclick="openInfoPage('terms')" data-i18n="footerTerms">Conditions d'utilisation</button>
+          <button class="footer-link" type="button" onclick="openInfoPage('legal')" data-i18n="footerLegalNotice">Mentions legales</button>
+          <button class="footer-link" type="button" onclick="openInfoPage('cookies')" data-i18n="footerCookies">Cookies</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <span data-i18n="footerCopyright">© 2026 AI Video Quiz. Tous droits reserves.</span>
+      <div class="footer-language">
+        <button id="footerLangFr" type="button" onclick="setInterfaceLanguage('fr')">FR</button>
+        <button id="footerLangEn" type="button" onclick="setInterfaceLanguage('en')">EN</button>
+        <button id="footerLangAr" type="button" onclick="setInterfaceLanguage('ar')">AR</button>
+      </div>
+    </div>
+  </footer>
+
 </div>
 
 <script>
@@ -794,7 +1098,7 @@
       rule1Title:'Choisis ta langue',rule1Text:'Selectionne Francais, English ou Arabe.',rule2Title:'Choisis un theme',rule2Text:'Sport, Sciences, Art culinaire ou Culture generale.',rule3Title:'Regarde la video',rule3Text:'Une video compatible avec ton theme est proposee.',rule4Title:'Reponds a 4 questions',rule4Text:'Les questions sont generees a partir du contenu de la video.',rule5Title:'Gagne ton point',rule5Text:'Si tes 4 reponses sont correctes, tu gagnes 1 point. Sinon, tu gagnes 0 point.',rule6Title:'Continue a jouer',rule6Text:'Tu peux enchainer les videos et accumuler ton score.',rulesNote:'Les videos restent hebergees sur YouTube. Le quiz utilise leur contenu pour generer les questions.',startGame:'Commencer le jeu',backHome:'← Accueil',backRules:'← Regles',
       categoryTitle:'Choisis une categorie',categorySubtitle:"Quel sujet veux-tu decouvrir aujourd'hui ?",catSport:'Sport',catSportText:'Matchs, athletes, techniques et histoire du sport.',catScience:'Sciences',catScienceText:'Science, espace, nature, technologie et decouvertes.',catFood:'Art culinaire',catFoodText:'Cuisine, recettes, gastronomie et savoir-faire.',catCulture:'Culture generale',catCultureText:'Histoire, geographie, civilisation et connaissances.',
       backCategories:'← Retour aux categories',videoLoading:"Recherche d'une video...",watchThen:'Regarde la video puis clique sur',startQuiz:'Commencer le quiz',quizInfo:'La video reste visible au-dessus. Reponds aux 4 questions en regardant la video.',submitAnswers:'Valider mes reponses',backQuiz:'← Retour au quiz',resultTitle:'Resultat',roundScoreLabel:'Score de cette partie',totalScore:'Score total',evaluationTitle:'Que penses-tu de cette video ?',interesting:'👍 Interessante',notInteresting:'👎 Pas interessante',tooLongQuestion:'La video etait-elle trop longue ?',no:'Non',aLittle:'Un peu',yes:'Oui',thanks:'Merci pour ton evaluation !',nextVideo:'Video suivante',
-      perfect:'Bravo ! 4/4 bonnes reponses. Tu gagnes 1 point.',notPerfect:'Cette fois, tu ne gagnes pas de point. Il fallait 4 bonnes reponses.'
+      perfect:'Bravo ! 4/4 bonnes reponses. Tu gagnes 1 point.',notPerfect:'Cette fois, tu ne gagnes pas de point. Il fallait 4 bonnes reponses.',footerTagline:'Regarde, apprends et teste tes connaissances avec des quiz video.', footerIelts:'Preparation IELTS', ieltsKicker:'PREPARATION IELTS', ieltsTitle:'Prepare ton examen IELTS avec des videos', ieltsLead:'Decouvre des videos en anglais consacrees au Listening, Speaking, Reading, Writing, Vocabulary et aux strategies d examen.', ieltsAll:'Toutes', ieltsListening:'Listening', ieltsSpeaking:'Speaking', ieltsReading:'Reading', ieltsWriting:'Writing', ieltsVocabulary:'Vocabulaire & grammaire', ieltsTips:'Conseils & strategies', ieltsLoading:'Recherche de videos IELTS...', ieltsWatch:'Regarder sur YouTube', ieltsDuration:'Duree', ieltsChannel:'Chaine', ieltsNoVideos:'Aucune video IELTS trouvee pour cette categorie.', ieltsError:'Impossible de charger les videos IELTS pour le moment.', ieltsPublic:'Video publique', ieltsEnglish:'Anglais', footerPlay:'Jouer', footerHome:'Accueil', footerRules:'Regles du jeu', footerCategories:'Categories', footerAbout:'A propos', footerAboutPage:'A propos de nous', footerContact:'Contact', footerLegal:'Legal', footerPrivacy:'Politique de confidentialite', footerTerms:"Conditions d'utilisation", footerLegalNotice:'Mentions legales', footerCookies:'Cookies', footerCopyright:'© 2026 AI Video Quiz. Tous droits reserves.',
     },
     en: {
       headerSubtitle:'Watch a video and test your knowledge', points:'Points', logout:'Log out',
@@ -805,7 +1109,7 @@
       rule1Title:'Choose your language',rule1Text:'Select French, English or Arabic.',rule2Title:'Choose a topic',rule2Text:'Sport, Science, Culinary Arts or General Knowledge.',rule3Title:'Watch the video',rule3Text:'A compatible video is selected for your topic.',rule4Title:'Answer 4 questions',rule4Text:'Questions are generated from the video content.',rule5Title:'Earn your point',rule5Text:'If all 4 answers are correct, you earn 1 point. Otherwise, you earn 0 points.',rule6Title:'Keep playing',rule6Text:'Continue with more videos and build your score.',rulesNote:'Videos remain hosted on YouTube. The quiz uses their content to generate the questions.',startGame:'Start the game',backHome:'← Home',backRules:'← Rules',
       categoryTitle:'Choose a category',categorySubtitle:'What topic would you like to explore today?',catSport:'Sport',catSportText:'Matches, athletes, techniques and sports history.',catScience:'Science',catScienceText:'Science, space, nature, technology and discoveries.',catFood:'Culinary Arts',catFoodText:'Cooking, recipes, gastronomy and know-how.',catCulture:'General Knowledge',catCultureText:'History, geography, civilizations and knowledge.',
       backCategories:'← Back to categories',videoLoading:'Searching for a video...',watchThen:'Watch the video then click',startQuiz:'Start the quiz',quizInfo:'The video remains visible above. Answer the 4 questions while watching the video.',submitAnswers:'Submit my answers',backQuiz:'← Back to quiz',resultTitle:'Result',roundScoreLabel:'Score for this round',totalScore:'Total score',evaluationTitle:'What do you think of this video?',interesting:'👍 Interesting',notInteresting:'👎 Not interesting',tooLongQuestion:'Was the video too long?',no:'No',aLittle:'A little',yes:'Yes',thanks:'Thanks for your feedback!',nextVideo:'Next video',
-      perfect:'Great! 4/4 correct answers. You earn 1 point.',notPerfect:'This time you earn no point. You need 4 correct answers.'
+      perfect:'Great! 4/4 correct answers. You earn 1 point.',notPerfect:'This time you earn no point. You need 4 correct answers.',footerTagline:'Watch, learn and test your knowledge with video quizzes.', footerIelts:'IELTS Preparation', ieltsKicker:'IELTS PREPARATION', ieltsTitle:'Prepare for your IELTS exam with videos', ieltsLead:'Explore English videos focused on Listening, Speaking, Reading, Writing, Vocabulary and exam strategies.', ieltsAll:'All', ieltsListening:'Listening', ieltsSpeaking:'Speaking', ieltsReading:'Reading', ieltsWriting:'Writing', ieltsVocabulary:'Vocabulary & Grammar', ieltsTips:'Tips & Strategies', ieltsLoading:'Searching for IELTS videos...', ieltsWatch:'Watch on YouTube', ieltsDuration:'Duration', ieltsChannel:'Channel', ieltsNoVideos:'No IELTS videos were found for this category.', ieltsError:'Unable to load IELTS videos right now.', ieltsPublic:'Public video', ieltsEnglish:'English', footerPlay:'Play', footerHome:'Home', footerRules:'Game rules', footerCategories:'Categories', footerAbout:'About', footerAboutPage:'About AI Video Quiz', footerContact:'Contact', footerLegal:'Legal', footerPrivacy:'Privacy Policy', footerTerms:'Terms of Use', footerLegalNotice:'Legal Notice', footerCookies:'Cookies', footerCopyright:'© 2026 AI Video Quiz. All rights reserved.',
     },
     ar: {
       headerSubtitle:'شاهد فيديو واختبر معلوماتك', points:'النقاط', logout:'تسجيل الخروج',
@@ -816,7 +1120,296 @@
       rule1Title:'اختر اللغة',rule1Text:'اختر الفرنسية أو الإنجليزية أو العربية.',rule2Title:'اختر الموضوع',rule2Text:'الرياضة أو العلوم أو فن الطبخ أو الثقافة العامة.',rule3Title:'شاهد الفيديو',rule3Text:'سيتم اقتراح فيديو مناسب للموضوع الذي اخترته.',rule4Title:'أجب عن 4 أسئلة',rule4Text:'يتم توليد الأسئلة من محتوى الفيديو.',rule5Title:'اكسب النقطة',rule5Text:'إذا كانت إجاباتك الأربعة صحيحة تحصل على نقطة واحدة، وإلا تحصل على صفر.',rule6Title:'واصل اللعب',rule6Text:'تابع مشاهدة فيديوهات أخرى واجمع نقاطك.',rulesNote:'تبقى الفيديوهات مستضافة على YouTube، ويستخدم الاختبار محتواها لتوليد الأسئلة.',startGame:'ابدأ اللعبة',backHome:'← الرئيسية',backRules:'← القواعد',
       categoryTitle:'اختر فئة',categorySubtitle:'ما الموضوع الذي تريد اكتشافه اليوم؟',catSport:'الرياضة',catSportText:'مباريات ورياضيون وتقنيات وتاريخ الرياضة.',catScience:'العلوم',catScienceText:'العلوم والفضاء والطبيعة والتكنولوجيا والاكتشافات.',catFood:'فن الطبخ',catFoodText:'الطبخ والوصفات وفنون الطهي والخبرة.',catCulture:'الثقافة العامة',catCultureText:'التاريخ والجغرافيا والحضارات والمعارف.',
       backCategories:'← العودة إلى الفئات',videoLoading:'جار البحث عن فيديو...',watchThen:'شاهد الفيديو ثم اضغط على',startQuiz:'ابدأ الاختبار',quizInfo:'يبقى الفيديو ظاهرا في الأعلى. أجب عن الأسئلة الأربعة أثناء مشاهدة الفيديو.',submitAnswers:'تأكيد إجاباتي',backQuiz:'← العودة إلى الاختبار',resultTitle:'النتيجة',roundScoreLabel:'نتيجة هذه الجولة',totalScore:'مجموع النقاط',evaluationTitle:'ما رأيك في هذا الفيديو؟',interesting:'👍 ممتع',notInteresting:'👎 غير ممتع',tooLongQuestion:'هل كان الفيديو طويلا جدا؟',no:'لا',aLittle:'قليلا',yes:'نعم',thanks:'شكرا على تقييمك!',nextVideo:'الفيديو التالي',
-      perfect:'أحسنت! 4/4 إجابات صحيحة. حصلت على نقطة واحدة.',notPerfect:'هذه المرة لم تحصل على نقطة. يجب أن تكون الإجابات الأربعة صحيحة.'
+      perfect:'أحسنت! 4/4 إجابات صحيحة. حصلت على نقطة واحدة.',notPerfect:'هذه المرة لم تحصل على نقطة. يجب أن تكون الإجابات الأربعة صحيحة.',footerTagline:'شاهد وتعلم واختبر معلوماتك من خلال اختبارات الفيديو.', footerIelts:'التحضير لامتحان IELTS', ieltsKicker:'التحضير لامتحان IELTS', ieltsTitle:'استعد لامتحان IELTS من خلال الفيديوهات', ieltsLead:'اكتشف فيديوهات باللغة الإنجليزية تركز على الاستماع والتحدث والقراءة والكتابة والمفردات واستراتيجيات الامتحان.', ieltsAll:'الكل', ieltsListening:'الاستماع', ieltsSpeaking:'التحدث', ieltsReading:'القراءة', ieltsWriting:'الكتابة', ieltsVocabulary:'المفردات والقواعد', ieltsTips:'نصائح واستراتيجيات', ieltsLoading:'جار البحث عن فيديوهات IELTS...', ieltsWatch:'شاهد على YouTube', ieltsDuration:'المدة', ieltsChannel:'القناة', ieltsNoVideos:'لم يتم العثور على فيديوهات IELTS لهذه الفئة.', ieltsError:'تعذر تحميل فيديوهات IELTS حاليا.', ieltsPublic:'فيديو عام', ieltsEnglish:'الإنجليزية', footerPlay:'اللعب', footerHome:'الرئيسية', footerRules:'قواعد اللعبة', footerCategories:'الفئات', footerAbout:'حول الموقع', footerAboutPage:'حول AI Video Quiz', footerContact:'اتصل بنا', footerLegal:'قانوني', footerPrivacy:'سياسة الخصوصية', footerTerms:'شروط الاستخدام', footerLegalNotice:'الإشعارات القانونية', footerCookies:'ملفات الارتباط', footerCopyright:'© 2026 AI Video Quiz. جميع الحقوق محفوظة.',
+    }
+  };
+
+
+  const INFO_PAGES = {
+    fr: {
+      rules: {
+        kicker: 'REGLES DU JEU',
+        title: 'Comment jouer a AI Video Quiz ?',
+        lead: 'Regarde une video, reponds a 4 questions et accumule des points.',
+        blocks: [
+          ['1. Choisis ta langue', 'Choisis le francais, l anglais ou l arabe. La recherche des videos et la generation des questions sont adaptees a la langue choisie.'],
+          ['2. Choisis une categorie', 'Choisis Sport, Sciences, Art culinaire ou Culture generale. Le service recherche des videos correspondant au theme selectionne.'],
+          ['3. Regarde la video', 'Une video YouTube compatible avec le theme est proposee. La video reste diffusee depuis YouTube et n est pas hebergee par AI Video Quiz.'],
+          ['4. Reponds aux 4 questions', 'Les questions sont generees a partir du contenu disponible de la video. Chaque question comporte quatre propositions et une seule bonne reponse.'],
+          ['5. Gagne un point', 'Tu gagnes 1 point uniquement si tes 4 reponses sont correctes. Dans les autres cas, la manche rapporte 0 point.'],
+          ['6. Continue', 'Ton score total est conserve sur ton compte. Tu peux ensuite continuer avec une nouvelle video.'],
+          ['A propos des questions IA', 'Les questions sont generees automatiquement. Elles peuvent donc contenir une erreur ou une formulation imparfaite. Verifie toujours les informations importantes par une source fiable.']
+        ]
+      },
+      about: {
+        kicker: 'A PROPOS',
+        title: 'A propos de AI Video Quiz',
+        lead: 'Un quiz interactif qui transforme le visionnage de videos en experience de jeu et d apprentissage.',
+        blocks: [
+          ['Notre concept', 'AI Video Quiz propose des videos publiques correspondant a une langue et a une categorie, puis genere quatre questions a partir du contenu de la video.'],
+          ['Notre objectif', 'L objectif est de permettre aux utilisateurs de decouvrir des contenus, de tester leur comprehension et de suivre leur progression avec un score cumulatif.'],
+          ['Technologie', 'Le service utilise YouTube pour la diffusion des videos, Firebase pour l authentification et certaines donnees du compte, et un service d intelligence artificielle pour generer les questions.'],
+          ['Contenu video', 'AI Video Quiz ne se presente pas comme l hebergeur des videos YouTube. Les videos sont affichees au moyen du lecteur YouTube et restent soumises aux conditions et regles de YouTube.']
+        ]
+      },
+      contact: {
+        kicker: 'CONTACT',
+        title: 'Contactez AI Video Quiz',
+        lead: 'Pour une question, un probleme technique ou une demande concernant vos donnees, utilisez les coordonnees officielles du service.',
+        blocks: [
+          ['Support', 'Adresse e-mail : <span class="legal-placeholder">[EMAIL DE CONTACT A RENSEIGNER]</span>'],
+          ['Probleme technique', 'Indiquez votre adresse e-mail de compte, le probleme rencontre et, si possible, une capture d ecran. Ne communiquez jamais votre mot de passe.'],
+          ['Demande relative aux donnees', 'Pour demander une information, une correction ou la suppression de donnees associees a votre compte, utilisez l adresse de contact officielle du service.'],
+          ['Informations a renseigner', 'Avant publication, remplacez les champs entre crochets par les coordonnees reelles de l editeur.']
+        ]
+      },
+      privacy: {
+        kicker: 'CONFIDENTIALITE',
+        title: 'Politique de confidentialite',
+        lead: 'Cette page explique de maniere generale quelles donnees AI Video Quiz peut traiter et dans quel but.',
+        blocks: [
+          ['1. Donnees de compte', 'Lors de la creation d un compte, le service traite notamment l adresse e-mail et les informations necessaires a l authentification.'],
+          ['2. Donnees de jeu', 'Le service peut enregistrer le score total et, lorsque la fonctionnalite sera activee, l historique des videos jouees, les resultats et les evaluations associees.'],
+          ['3. Firebase', 'L authentification et certaines donnees du compte sont gerees avec Firebase Authentication et Firestore. Les donnees sont associees au compte Firebase de l utilisateur.'],
+          ['4. Videos YouTube', 'Les videos sont diffusees depuis YouTube. Lorsque vous utilisez le lecteur YouTube integre, YouTube peut traiter certaines informations selon ses propres conditions et politiques.'],
+          ['5. Questions generees par IA', 'Pour generer les questions, des informations issues de la video, notamment son texte disponible, peuvent etre transmises au service d intelligence artificielle utilise par AI Video Quiz.'],
+          ['6. Finalites', 'Les donnees sont utilisees pour permettre la connexion, sauvegarder le score, faire fonctionner le jeu, ameliorer le service et repondre aux demandes d assistance.'],
+          ['7. Conservation', 'Les donnees sont conservees pendant la periode necessaire au fonctionnement du compte et aux finalites indiquees, sous reserve des obligations legales applicables.'],
+          ['8. Vos demandes', 'Pour demander l acces, la correction ou la suppression de donnees associees a votre compte, contactez l editeur a l adresse indiquee sur la page Contact.'],
+          ['9. Securite', 'Des mesures techniques et organisationnelles sont mises en place pour proteger les donnees. Aucun systeme en ligne ne peut toutefois garantir une securite absolue.'],
+          ['10. Mise a jour', 'Cette politique peut etre mise a jour lorsque le fonctionnement du service evolue. La date de derniere mise a jour doit etre indiquee lors de la publication.']
+        ]
+      },
+      terms: {
+        kicker: 'CONDITIONS',
+        title: 'Conditions d utilisation',
+        lead: 'Les presentes conditions encadrent l utilisation de AI Video Quiz.',
+        blocks: [
+          ['1. Utilisation du service', 'AI Video Quiz permet de regarder des videos YouTube et de repondre a des questions generees a partir de leur contenu.'],
+          ['2. Compte', 'L utilisateur est responsable de l exactitude des informations fournies lors de la creation du compte et de la confidentialite de ses identifiants.'],
+          ['3. Regles du jeu', 'Le systeme de points est celui affiche dans le service : une manche rapporte 1 point lorsque les quatre reponses sont correctes, et 0 point dans les autres cas.'],
+          ['4. Contenu YouTube', 'Les videos sont fournies par YouTube. L utilisateur doit respecter les conditions applicables a l utilisation du lecteur et du contenu YouTube.'],
+          ['5. Questions generees par IA', 'Les questions sont generees automatiquement a partir du contenu disponible. Elles sont fournies a des fins de jeu et d apprentissage et ne constituent pas une garantie d exactitude.'],
+          ['6. Utilisations interdites', 'Il est interdit d utiliser le service pour tenter d acceder aux comptes d autrui, contourner les mesures de securite, perturber le service ou utiliser le site d une maniere contraire aux lois applicables.'],
+          ['7. Disponibilite', 'AI Video Quiz peut etre modifie, suspendu ou interrompu temporairement pour maintenance, securite ou evolution technique.'],
+          ['8. Compte et donnees', 'L utilisateur peut demander la suppression de son compte et des donnees associees en utilisant les coordonnees de contact publiees.'],
+          ['9. Modifications', 'Les conditions peuvent etre mises a jour lorsque le service evolue. La version publiee sur le site constitue la version applicable a compter de sa date d entree en vigueur.']
+        ]
+      },
+      legal: {
+        kicker: 'MENTIONS LEGALES',
+        title: 'Mentions legales',
+        lead: 'Les informations ci-dessous doivent etre completees avec les informations legales reelles de l editeur avant la mise en production.',
+        blocks: [
+          ['Editeur du site', 'Nom / raison sociale : <span class="legal-placeholder">[A RENSEIGNER]</span><br>Adresse : <span class="legal-placeholder">[A RENSEIGNER]</span><br>E-mail : <span class="legal-placeholder">[A RENSEIGNER]</span>'],
+          ['Responsable de publication', 'Nom : <span class="legal-placeholder">[A RENSEIGNER]</span>'],
+          ['Hebergement', 'Interface web : GitHub Pages.<br>API : Railway.<br>Authentification et donnees du compte : Firebase / Google Cloud.'],
+          ['Videos', 'Les videos sont diffusees depuis YouTube au moyen de son lecteur integre. AI Video Quiz ne revendique pas la propriete des videos diffusees par des tiers.'],
+          ['Important', 'Les champs entre crochets doivent etre remplaces par les informations exactes de l editeur et adaptes aux exigences legales du pays ou le service est exploite.']
+        ]
+      },
+      cookies: {
+        kicker: 'COOKIES',
+        title: 'Cookies et technologies similaires',
+        lead: 'AI Video Quiz peut utiliser des cookies, le stockage local du navigateur et des technologies de session pour faire fonctionner le service.',
+        blocks: [
+          ['Stockage local', 'Le site peut utiliser le stockage local du navigateur pour conserver certaines preferences d interface, par exemple la langue choisie.'],
+          ['Authentification', 'Firebase Authentication peut utiliser des mecanismes necessaires au maintien de la session de connexion.'],
+          ['Lecteur YouTube', 'Le lecteur YouTube integre peut utiliser des cookies ou technologies similaires selon le fonctionnement et les parametres de YouTube.'],
+          ['Gestion des preferences', 'Les preferences du navigateur peuvent permettre de limiter ou supprimer certains cookies. La desactivation de mecanismes necessaires peut toutefois affecter certaines fonctions du site.'],
+          ['Mise a jour', 'Cette page doit etre ajustee si de nouveaux outils d analyse, de publicite ou de suivi sont ajoutes au service.']
+        ]
+      }
+    },
+    en: {
+      rules: {
+        kicker: 'GAME RULES',
+        title: 'How to play AI Video Quiz',
+        lead: 'Watch a video, answer 4 questions and build your score.',
+        blocks: [
+          ['1. Choose your language', 'Choose French, English or Arabic. Video search and question generation are adapted to the selected language.'],
+          ['2. Choose a category', 'Choose Sport, Science, Culinary Arts or General Knowledge. The service searches for videos matching the selected topic.'],
+          ['3. Watch the video', 'A YouTube video compatible with the topic is proposed. The video remains hosted and streamed by YouTube.'],
+          ['4. Answer 4 questions', 'Questions are generated from available video content. Each question has four choices and one correct answer.'],
+          ['5. Earn a point', 'You earn 1 point only if all 4 answers are correct. Otherwise, the round gives 0 points.'],
+          ['6. Keep playing', 'Your total score is saved to your account. You can continue with another video.'],
+          ['About AI questions', 'Questions are generated automatically and may contain an error or imperfect wording. Verify important information with a reliable source.']
+        ]
+      },
+      about: {
+        kicker: 'ABOUT',
+        title: 'About AI Video Quiz',
+        lead: 'An interactive quiz that turns video watching into a game and learning experience.',
+        blocks: [
+          ['Our concept', 'AI Video Quiz proposes public videos matching a language and category, then generates four questions from the video content.'],
+          ['Our goal', 'The goal is to help users discover content, test their understanding and track their progress with a cumulative score.'],
+          ['Technology', 'The service uses YouTube to play videos, Firebase for authentication and some account data, and an artificial intelligence service to generate questions.'],
+          ['Video content', 'AI Video Quiz does not present itself as the host of YouTube videos. Videos are displayed through the YouTube player and remain subject to YouTube rules and terms.']
+        ]
+      },
+      contact: {
+        kicker: 'CONTACT',
+        title: 'Contact AI Video Quiz',
+        lead: 'For a question, technical issue or request about your data, use the official service contact details.',
+        blocks: [
+          ['Support', 'Email address: <span class="legal-placeholder">[CONTACT EMAIL TO BE ADDED]</span>'],
+          ['Technical issue', 'Include your account email, the problem you encountered and, if possible, a screenshot. Never share your password.'],
+          ['Data request', 'To request information, correction or deletion of data associated with your account, use the official contact address.'],
+          ['Before publication', 'Replace the bracketed fields with the real publisher contact details.']
+        ]
+      },
+      privacy: {
+        kicker: 'PRIVACY',
+        title: 'Privacy Policy',
+        lead: 'This page generally explains what data AI Video Quiz may process and why.',
+        blocks: [
+          ['1. Account data', 'When you create an account, the service processes information such as your email address and data required for authentication.'],
+          ['2. Game data', 'The service may store your total score and, when enabled, your played-video history, results and related evaluations.'],
+          ['3. Firebase', 'Authentication and some account data are handled with Firebase Authentication and Firestore and associated with your Firebase user account.'],
+          ['4. YouTube videos', 'Videos are streamed from YouTube. When you use the embedded YouTube player, YouTube may process certain information under its own terms and policies.'],
+          ['5. AI-generated questions', 'To generate questions, information from the video, including available text, may be sent to the artificial intelligence service used by AI Video Quiz.'],
+          ['6. Purposes', 'Data is used to provide login, save scores, operate the game, improve the service and respond to support requests.'],
+          ['7. Retention', 'Data is retained for as long as needed for the account and stated purposes, subject to applicable legal requirements.'],
+          ['8. Your requests', 'To request access, correction or deletion of account data, contact the publisher using the address on the Contact page.'],
+          ['9. Security', 'Technical and organizational measures are used to protect data. No online system can guarantee absolute security.'],
+          ['10. Updates', 'This policy may be updated when the service changes. A last-updated date should be added when the page is published.']
+        ]
+      },
+      terms: {
+        kicker: 'TERMS',
+        title: 'Terms of Use',
+        lead: 'These terms govern the use of AI Video Quiz.',
+        blocks: [
+          ['1. Service use', 'AI Video Quiz lets users watch YouTube videos and answer questions generated from their content.'],
+          ['2. Account', 'Users are responsible for the accuracy of information provided when creating an account and for keeping their credentials confidential.'],
+          ['3. Game rules', 'The scoring system displayed by the service applies: a round gives 1 point when all four answers are correct, and 0 points otherwise.'],
+          ['4. YouTube content', 'Videos are provided by YouTube. Users must comply with the terms applicable to use of the YouTube player and content.'],
+          ['5. AI questions', 'Questions are automatically generated from available content. They are provided for game and learning purposes and are not a guarantee of factual accuracy.'],
+          ['6. Prohibited use', 'Users must not attempt to access other users accounts, bypass security measures, disrupt the service or use the site in violation of applicable laws.'],
+          ['7. Availability', 'AI Video Quiz may be modified, temporarily suspended or interrupted for maintenance, security or technical changes.'],
+          ['8. Account and data', 'Users may request account and associated data deletion using the published contact details.'],
+          ['9. Changes', 'These terms may be updated when the service changes. The version published on the site applies from its effective date.']
+        ]
+      },
+      legal: {
+        kicker: 'LEGAL NOTICE',
+        title: 'Legal Notice',
+        lead: 'The information below must be completed with the publisher s actual legal details before launch.',
+        blocks: [
+          ['Site publisher', 'Name / company: <span class="legal-placeholder">[TO BE COMPLETED]</span><br>Address: <span class="legal-placeholder">[TO BE COMPLETED]</span><br>Email: <span class="legal-placeholder">[TO BE COMPLETED]</span>'],
+          ['Publication manager', 'Name: <span class="legal-placeholder">[TO BE COMPLETED]</span>'],
+          ['Hosting', 'Web interface: GitHub Pages.<br>API: Railway.<br>Authentication and account data: Firebase / Google Cloud.'],
+          ['Videos', 'Videos are displayed through the embedded YouTube player. AI Video Quiz does not claim ownership of third-party videos.'],
+          ['Important', 'Replace bracketed fields with the publisher s exact information and adapt this page to the legal requirements of the country where the service operates.']
+        ]
+      },
+      cookies: {
+        kicker: 'COOKIES',
+        title: 'Cookies and Similar Technologies',
+        lead: 'AI Video Quiz may use cookies, browser local storage and session technologies needed to operate the service.',
+        blocks: [
+          ['Local storage', 'The site may use browser local storage to keep interface preferences such as the selected language.'],
+          ['Authentication', 'Firebase Authentication may use mechanisms needed to maintain the login session.'],
+          ['YouTube player', 'The embedded YouTube player may use cookies or similar technologies depending on YouTube s operation and settings.'],
+          ['Managing preferences', 'Browser settings may allow you to limit or delete certain cookies. Disabling necessary mechanisms may affect some site features.'],
+          ['Updates', 'This page should be updated if analytics, advertising or additional tracking tools are added.']
+        ]
+      }
+    },
+    ar: {
+      rules: {
+        kicker: 'قواعد اللعبة',
+        title: 'كيف تلعب AI Video Quiz؟',
+        lead: 'شاهد فيديو، أجب عن 4 أسئلة واجمع النقاط.',
+        blocks: [
+          ['1. اختر اللغة', 'اختر الفرنسية أو الإنجليزية أو العربية. يتم تكييف البحث عن الفيديوهات وتوليد الأسئلة حسب اللغة المختارة.'],
+          ['2. اختر الفئة', 'اختر الرياضة أو العلوم أو فن الطبخ أو الثقافة العامة. يبحث النظام عن فيديوهات مناسبة للموضوع.'],
+          ['3. شاهد الفيديو', 'يتم اقتراح فيديو من YouTube مناسب للموضوع. يبقى الفيديو مستضافا ويتم تشغيله عبر YouTube.'],
+          ['4. أجب عن 4 أسئلة', 'يتم توليد الأسئلة من المحتوى المتاح للفيديو. لكل سؤال أربعة اختيارات وإجابة صحيحة واحدة.'],
+          ['5. احصل على نقطة', 'تحصل على نقطة واحدة فقط إذا كانت إجاباتك الأربعة صحيحة. وفي غير ذلك تحصل الجولة على صفر.'],
+          ['6. واصل اللعب', 'يتم حفظ مجموع نقاطك في حسابك ويمكنك متابعة اللعب بفيديو آخر.'],
+          ['حول أسئلة الذكاء الاصطناعي', 'يتم توليد الأسئلة تلقائيا وقد تحتوي على خطأ أو صياغة غير دقيقة. تحقق من المعلومات المهمة باستخدام مصدر موثوق.']
+        ]
+      },
+      about: {
+        kicker: 'من نحن',
+        title: 'حول AI Video Quiz',
+        lead: 'اختبار تفاعلي يحول مشاهدة الفيديو إلى تجربة لعب وتعلم.',
+        blocks: [
+          ['فكرتنا', 'يقترح AI Video Quiz فيديوهات عامة مناسبة للغة والفئة المختارة، ثم يولد أربعة أسئلة من محتوى الفيديو.'],
+          ['هدفنا', 'الهدف هو مساعدة المستخدم على اكتشاف محتوى جديد واختبار فهمه ومتابعة تقدمه من خلال مجموع النقاط.'],
+          ['التقنية', 'يستخدم الموقع YouTube لتشغيل الفيديوهات وFirebase للمصادقة وبعض بيانات الحساب، وخدمة ذكاء اصطناعي لتوليد الأسئلة.'],
+          ['محتوى الفيديو', 'لا يقدم AI Video Quiz نفسه باعتباره مستضيفا لفيديوهات YouTube. يتم عرض الفيديوهات عبر مشغل YouTube وتخضع لقواعد وشروط YouTube.']
+        ]
+      },
+      contact: {
+        kicker: 'اتصل بنا',
+        title: 'تواصل مع AI Video Quiz',
+        lead: 'لطرح سؤال أو الإبلاغ عن مشكلة تقنية أو طلب يتعلق ببياناتك، استخدم معلومات الاتصال الرسمية للخدمة.',
+        blocks: [
+          ['الدعم', 'البريد الإلكتروني: <span class="legal-placeholder">[يتم إضافة بريد الاتصال]</span>'],
+          ['مشكلة تقنية', 'اذكر بريد حسابك والمشكلة التي واجهتها، ويمكنك إضافة لقطة شاشة إذا أمكن. لا ترسل كلمة المرور أبدا.'],
+          ['طلب متعلق بالبيانات', 'لطلب معلومات أو تصحيح أو حذف بيانات مرتبطة بحسابك، استخدم عنوان الاتصال الرسمي.'],
+          ['قبل النشر', 'استبدل الحقول الموجودة بين الأقواس ببيانات الاتصال الحقيقية للناشر.']
+        ]
+      },
+      privacy: {
+        kicker: 'الخصوصية',
+        title: 'سياسة الخصوصية',
+        lead: 'توضح هذه الصفحة بشكل عام البيانات التي قد يعالجها AI Video Quiz والغرض من استخدامها.',
+        blocks: [
+          ['1. بيانات الحساب', 'عند إنشاء حساب، تتم معالجة معلومات مثل عنوان البريد الإلكتروني والبيانات اللازمة للمصادقة.'],
+          ['2. بيانات اللعب', 'قد يتم حفظ مجموع النقاط، وعند تفعيل الميزة، سجل الفيديوهات التي تم لعبها والنتائج والتقييمات المرتبطة بها.'],
+          ['3. Firebase', 'تتم إدارة المصادقة وبعض بيانات الحساب باستخدام Firebase Authentication وFirestore وربطها بحساب Firebase الخاص بالمستخدم.'],
+          ['4. فيديوهات YouTube', 'يتم تشغيل الفيديوهات من YouTube. عند استخدام مشغل YouTube المدمج، قد يعالج YouTube بعض المعلومات وفقا لشروطه وسياساته الخاصة.'],
+          ['5. الأسئلة المولدة بالذكاء الاصطناعي', 'لتوليد الأسئلة، قد يتم إرسال معلومات من الفيديو، بما في ذلك النص المتاح، إلى خدمة الذكاء الاصطناعي المستخدمة من طرف AI Video Quiz.'],
+          ['6. الأغراض', 'تستخدم البيانات لتوفير تسجيل الدخول وحفظ النقاط وتشغيل اللعبة وتحسين الخدمة والرد على طلبات الدعم.'],
+          ['7. مدة الاحتفاظ', 'يتم الاحتفاظ بالبيانات للمدة اللازمة لتشغيل الحساب وتحقيق الأغراض المذكورة، مع مراعاة المتطلبات القانونية المطبقة.'],
+          ['8. طلباتك', 'لطلب الوصول إلى البيانات أو تصحيحها أو حذفها، تواصل مع الناشر عبر العنوان الموجود في صفحة الاتصال.'],
+          ['9. الأمان', 'يتم استخدام إجراءات تقنية وتنظيمية لحماية البيانات، لكن لا يمكن ضمان أمان مطلق لأي نظام متصل بالإنترنت.'],
+          ['10. التحديثات', 'قد يتم تحديث هذه السياسة عند تغيير الخدمة. يجب إضافة تاريخ آخر تحديث عند نشر الصفحة.']
+        ]
+      },
+      terms: {
+        kicker: 'الشروط',
+        title: 'شروط الاستخدام',
+        lead: 'تنظم هذه الشروط استخدام AI Video Quiz.',
+        blocks: [
+          ['1. استخدام الخدمة', 'يسمح AI Video Quiz للمستخدمين بمشاهدة فيديوهات YouTube والإجابة عن أسئلة مولدة من محتواها.'],
+          ['2. الحساب', 'المستخدم مسؤول عن صحة المعلومات التي يقدمها عند إنشاء الحساب وعن الحفاظ على سرية بيانات الدخول.'],
+          ['3. قواعد اللعبة', 'يطبق نظام النقاط المعروض في الخدمة: تمنح الجولة نقطة واحدة عند صحة الإجابات الأربع، وصفر في الحالات الأخرى.'],
+          ['4. محتوى YouTube', 'يتم توفير الفيديوهات بواسطة YouTube. يجب على المستخدم احترام الشروط المطبقة على استخدام مشغل ومحتوى YouTube.'],
+          ['5. أسئلة الذكاء الاصطناعي', 'يتم توليد الأسئلة تلقائيا من المحتوى المتاح. وهي مخصصة للعب والتعلم ولا تشكل ضمانا للدقة الواقعية.'],
+          ['6. الاستخدامات الممنوعة', 'يمنع محاولة الوصول إلى حسابات الآخرين أو تجاوز إجراءات الأمان أو تعطيل الخدمة أو استخدام الموقع بما يخالف القوانين المطبقة.'],
+          ['7. توفر الخدمة', 'قد يتم تعديل AI Video Quiz أو تعليقه أو إيقافه مؤقتا لأسباب تتعلق بالصيانة أو الأمان أو التطوير التقني.'],
+          ['8. الحساب والبيانات', 'يمكن للمستخدم طلب حذف الحساب والبيانات المرتبطة به باستخدام معلومات الاتصال المنشورة.'],
+          ['9. التعديلات', 'قد يتم تحديث هذه الشروط عند تغيير الخدمة، وتصبح النسخة المنشورة على الموقع سارية من تاريخ نفاذها.']
+        ]
+      },
+      legal: {
+        kicker: 'إشعار قانوني',
+        title: 'الإشعارات القانونية',
+        lead: 'يجب استكمال المعلومات التالية بالبيانات القانونية الحقيقية للناشر قبل إطلاق الموقع.',
+        blocks: [
+          ['ناشر الموقع', 'الاسم / الشركة: <span class="legal-placeholder">[يتم الاستكمال]</span><br>العنوان: <span class="legal-placeholder">[يتم الاستكمال]</span><br>البريد الإلكتروني: <span class="legal-placeholder">[يتم الاستكمال]</span>'],
+          ['مسؤول النشر', 'الاسم: <span class="legal-placeholder">[يتم الاستكمال]</span>'],
+          ['الاستضافة', 'واجهة الموقع: GitHub Pages.<br>واجهة API: Railway.<br>المصادقة وبيانات الحساب: Firebase / Google Cloud.'],
+          ['الفيديوهات', 'يتم عرض الفيديوهات عبر مشغل YouTube المدمج. لا يدعي AI Video Quiz ملكية فيديوهات الجهات الأخرى.'],
+          ['مهم', 'استبدل الحقول بين الأقواس بالمعلومات الدقيقة للناشر وكيّف هذه الصفحة مع المتطلبات القانونية في البلد الذي تعمل فيه الخدمة.']
+        ]
+      },
+      cookies: {
+        kicker: 'ملفات الارتباط',
+        title: 'ملفات الارتباط والتقنيات المشابهة',
+        lead: 'قد يستخدم AI Video Quiz ملفات الارتباط والتخزين المحلي للمتصفح وتقنيات الجلسات اللازمة لتشغيل الخدمة.',
+        blocks: [
+          ['التخزين المحلي', 'قد يستخدم الموقع التخزين المحلي للمتصفح لحفظ بعض تفضيلات الواجهة مثل اللغة المختارة.'],
+          ['المصادقة', 'قد تستخدم Firebase Authentication آليات ضرورية للحفاظ على جلسة تسجيل الدخول.'],
+          ['مشغل YouTube', 'قد يستخدم مشغل YouTube المدمج ملفات ارتباط أو تقنيات مشابهة حسب طريقة عمل YouTube وإعداداته.'],
+          ['إدارة التفضيلات', 'يمكن لإعدادات المتصفح أن تسمح بالحد من بعض ملفات الارتباط أو حذفها. وقد يؤثر تعطيل الآليات الضرورية على بعض وظائف الموقع.'],
+          ['التحديثات', 'يجب تحديث هذه الصفحة إذا تمت إضافة أدوات تحليل أو إعلانات أو تقنيات تتبع إضافية.']
+        ]
+      }
     }
   };
 
@@ -835,9 +1428,20 @@
     document.getElementById('authLangFr').classList.toggle('active', interfaceLanguage === 'fr');
     document.getElementById('authLangEn').classList.toggle('active', interfaceLanguage === 'en');
     document.getElementById('authLangAr').classList.toggle('active', interfaceLanguage === 'ar');
+    document.getElementById('footerLangFr').classList.toggle('active', interfaceLanguage === 'fr');
+    document.getElementById('footerLangEn').classList.toggle('active', interfaceLanguage === 'en');
+    document.getElementById('footerLangAr').classList.toggle('active', interfaceLanguage === 'ar');
     if (state.language) {
       languageBadge.textContent = getLanguageLabel(state.language);
       categoryBadge.textContent = state.category ? getCategoryLabel(state.category) : '';
+    }
+
+    if (state.screen === 'info') {
+      openInfoPage(currentInfoPage);
+    }
+    if (state.screen === 'ielts') {
+      setIeltsSkillButton(currentIeltsSkill);
+      renderIeltsVideos();
     }
   }
 
@@ -855,7 +1459,76 @@
   function showHome() {
     showScreen('language');
     document.getElementById('languageChoicesSection').classList.remove('hidden');
+    document.title = 'AI Video Quiz';
+    window.scrollTo({top: 0, behavior: 'smooth'});
   }
+
+
+  let currentInfoPage = 'about';
+
+  function escapeInfoText(value) {
+    return String(value)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;');
+  }
+
+  function openInfoPage(pageKey) {
+    if (!INFO_PAGES[interfaceLanguage] || !INFO_PAGES[interfaceLanguage][pageKey]) {
+      pageKey = 'about';
+    }
+
+    currentInfoPage = pageKey;
+    const page = INFO_PAGES[interfaceLanguage][pageKey];
+
+    document.getElementById('infoPageKicker').textContent = page.kicker;
+    document.getElementById('infoPageTitle').textContent = page.title;
+    document.getElementById('infoPageLead').textContent = page.lead;
+
+    document.getElementById('infoPageContent').innerHTML = page.blocks.map(function(block) {
+      return '<article class="info-block"><h3>' + block[0] + '</h3><p>' + block[1] + '</p></article>';
+    }).join('');
+
+    showScreen('info');
+    document.title = 'AI Video Quiz - ' + page.title;
+    window.scrollTo({top: 0, behavior: 'smooth'});
+  }
+
+
+  let currentIeltsSkill = 'all';
+  let ieltsVideos = [];
+
+  function openIeltsPage() { showScreen('ielts'); loadIeltsVideos('all'); }
+
+  function setIeltsSkillButton(skill) {
+    ['all','listening','speaking','reading','writing','vocabulary','tips'].forEach(function(item){
+      const id='ieltsSkill'+item.charAt(0).toUpperCase()+item.slice(1);
+      const b=document.getElementById(id); if(b) b.classList.toggle('active',item===skill);
+    });
+  }
+
+  function escapeHtml(value){return String(value||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\"/g,'&quot;').replace(/'/g,'&#039;');}
+
+  async function loadIeltsVideos(skill){
+    currentIeltsSkill=skill||'all'; setIeltsSkillButton(currentIeltsSkill);
+    ieltsError.classList.add('hidden'); ieltsLoading.classList.remove('hidden'); ieltsVideoGrid.innerHTML='';
+    try{
+      const r=await fetch(API_BASE+'/api/youtube/ielts?skill='+encodeURIComponent(currentIeltsSkill));
+      const data=await r.json(); if(!r.ok||!data.ok) throw new Error(data.message||t('ieltsError'));
+      ieltsVideos=Array.isArray(data.videos)?data.videos:[]; renderIeltsVideos();
+    }catch(e){console.error('IELTS loading error:',e); ieltsError.textContent=t('ieltsError'); ieltsError.classList.remove('hidden');}
+    finally{ieltsLoading.classList.add('hidden');}
+  }
+
+  function renderIeltsVideos(){
+    if(!ieltsVideos.length){ieltsVideoGrid.innerHTML='<div class="ielts-empty">'+escapeHtml(t('ieltsNoVideos'))+'</div>';return;}
+    ieltsVideoGrid.innerHTML=ieltsVideos.map(function(v){
+      const thumb=v.thumbnail||('https://i.ytimg.com/vi/'+encodeURIComponent(v.videoId)+'/hqdefault.jpg');
+      return '<article class="ielts-video-card"><img class="ielts-thumbnail" src="'+escapeHtml(thumb)+'" alt="'+escapeHtml(v.title)+'" loading="lazy"><div class="ielts-video-body"><div class="ielts-video-title">'+escapeHtml(v.title)+'</div><div class="ielts-video-channel">'+escapeHtml(t('ieltsChannel'))+': '+escapeHtml(v.channelTitle||'')+'</div><div class="ielts-video-meta"><span class="ielts-meta">'+escapeHtml(t('ieltsEnglish'))+'</span><span class="ielts-meta">'+escapeHtml(t('ieltsDuration'))+': '+escapeHtml(v.durationFormatted||'')+'</span><span class="ielts-meta">'+escapeHtml(t('ieltsPublic'))+'</span></div><button class="ielts-watch" type="button" onclick="watchIeltsVideo(\''+escapeHtml(v.videoId)+'\')">'+escapeHtml(t('ieltsWatch'))+'</button></div></article>';
+    }).join('');
+  }
+
+  function watchIeltsVideo(videoId){window.open('https://www.youtube.com/watch?v='+encodeURIComponent(videoId),'_blank','noopener,noreferrer');}
 
   function startCategories() {
     showScreen('category');
@@ -942,6 +1615,11 @@
     document.getElementById(
       'categoryScreen'
     );
+
+  const ieltsScreen = document.getElementById('ieltsScreen');
+  const ieltsLoading = document.getElementById('ieltsLoading');
+  const ieltsError = document.getElementById('ieltsError');
+  const ieltsVideoGrid = document.getElementById('ieltsVideoGrid');
 
 
   const gameScreen =
@@ -1229,6 +1907,8 @@
     languageScreen.classList.add('hidden');
     languageChoicesSection.classList.add('hidden');
     rulesScreen.classList.add('hidden');
+    infoPageScreen.classList.add('hidden');
+    ieltsScreen.classList.add('hidden');
 
     categoryScreen.classList.add(
       'hidden'
@@ -1257,6 +1937,14 @@
       rulesScreen.classList.remove('hidden');
     }
 
+    if (screen === 'info') {
+      infoPageScreen.classList.remove('hidden');
+    }
+
+
+    if (screen === 'ielts') {
+      ieltsScreen.classList.remove('hidden');
+    }
 
     if (screen === 'category') {
 
