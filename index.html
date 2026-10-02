@@ -639,13 +639,15 @@
     .ielts-kicker{display:inline-flex;padding:7px 12px;border-radius:999px;background:rgba(255,255,255,.13);font-size:12px;font-weight:800;letter-spacing:.5px;margin-bottom:10px}
     .ielts-hero h2{margin:0 0 9px;font-size:clamp(27px,5vw,39px)}
     .ielts-hero p{margin:0;color:rgba(255,255,255,.84);line-height:1.65;max-width:720px}
-    .ielts-listening-badge{display:inline-flex;margin-top:15px;padding:8px 13px;border:1px solid rgba(255,255,255,.28);border-radius:999px;background:rgba(255,255,255,.13);font-size:13px;font-weight:800;letter-spacing:.3px}
+    .ielts-skills{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:18px 0 22px}
+    .ielts-skill-button{background:#fff;color:#1e293b;border:1px solid #e2e8f0;box-shadow:none;padding:13px 10px;font-size:14px}
+    .ielts-skill-button.active{background:#e0e7ff;color:#3730a3;border-color:#818cf8}
     .ielts-video-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
     .ielts-video-card{overflow:hidden;border:1px solid #e2e8f0;border-radius:18px;background:#fff;box-shadow:0 8px 24px rgba(15,23,42,.06)}
     .ielts-thumbnail{display:block;width:100%;aspect-ratio:16/9;object-fit:cover;background:#0f172a}
     .ielts-video-body{padding:16px}.ielts-video-title{font-size:17px;font-weight:800;line-height:1.4;margin-bottom:7px}.ielts-video-channel{color:#64748b;font-size:13px;margin-bottom:10px}
     .ielts-video-meta{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:13px}.ielts-meta{padding:5px 8px;border-radius:999px;background:#f1f5f9;color:#475569;font-size:12px;font-weight:700}.ielts-watch{width:100%;padding:11px 14px}.ielts-empty,.ielts-loading{padding:28px;text-align:center;color:#64748b;border:1px dashed #cbd5e1;border-radius:16px;background:#f8fafc}
-    @media(max-width:700px){.ielts-video-grid{grid-template-columns:1fr}}
+    @media(max-width:700px){.ielts-skills{grid-template-columns:repeat(2,1fr)}.ielts-video-grid{grid-template-columns:1fr}}
 
     @media (max-width: 700px) {
       .language-grid, .feature-grid, .rules-grid { grid-template-columns: 1fr; }
@@ -967,7 +969,10 @@
 
   <section id="ieltsScreen" class="card ielts-card hidden">
     <div class="nav-row"><button class="back-button" type="button" onclick="showHome()" data-i18n="backHome">← Accueil</button></div>
-    <div class="ielts-hero"><div class="ielts-kicker" data-i18n="ieltsKicker">IELTS PREPARATION</div><h2 data-i18n="ieltsTitle">Prepare for your IELTS exam with videos</h2><p data-i18n="ieltsLead">Practice English listening with videos, then answer questions generated from what you watched.</p><span class="ielts-listening-badge" data-i18n="ieltsListening">Listening</span></div>
+    <div class="ielts-hero"><div class="ielts-kicker" data-i18n="ieltsKicker">IELTS PREPARATION</div><h2 data-i18n="ieltsTitle">Prepare for your IELTS exam with videos</h2><p data-i18n="ieltsLead">Explore English videos focused on Listening, Speaking, Reading, Writing, Vocabulary and exam strategies.</p></div>
+    <div class="ielts-skills">
+            <button id="ieltsSkillListening" class="ielts-skill-button active" type="button" onclick="loadIeltsVideos('listening')" data-i18n="ieltsListening">Listening</button>
+                                  </div>
     <div id="ieltsError" class="error hidden"></div><div id="ieltsLoading" class="ielts-loading hidden" data-i18n="ieltsLoading">Searching for IELTS videos...</div><div id="ieltsVideoGrid" class="ielts-video-grid"></div>
   </section>
 
@@ -1424,25 +1429,6 @@
     }
   };
 
-  Object.assign(I18N.fr, {
-    ieltsLead: 'Travaille ta compréhension orale en anglais grâce à des vidéos, puis réponds à des questions générées à partir de leur contenu.',
-    ieltsWatch: 'Commencer le quiz',
-    ieltsNoVideos: 'Aucune vidéo Listening trouvée.',
-    preparingQuiz: 'Préparation du quiz...'
-  });
-  Object.assign(I18N.en, {
-    ieltsLead: 'Practice English listening with videos, then answer questions generated from what you watched.',
-    ieltsWatch: 'Start listening quiz',
-    ieltsNoVideos: 'No IELTS Listening videos were found.',
-    preparingQuiz: 'Preparing your quiz...'
-  });
-  Object.assign(I18N.ar, {
-    ieltsLead: 'تدرّب على مهارة الاستماع باللغة الإنجليزية عبر الفيديوهات، ثم أجب عن أسئلة مُنشأة من محتواها.',
-    ieltsWatch: 'ابدأ اختبار الاستماع',
-    ieltsNoVideos: 'لم يتم العثور على فيديوهات للاستماع في IELTS.',
-    preparingQuiz: 'جارٍ إعداد الاختبار...'
-  });
-
   function t(key) { return (I18N[interfaceLanguage] && I18N[interfaceLanguage][key]) || I18N.fr[key] || key; }
 
   function applyTranslations() {
@@ -1471,7 +1457,10 @@
     if (state.screen === 'info') {
       openInfoPage(currentInfoPage);
     }
-    if (state.screen === 'ielts') renderIeltsVideos();
+    if (state.screen === 'ielts') {
+      setIeltsSkillButton(currentIeltsSkill);
+      renderIeltsVideos();
+    }
   }
 
   function setInterfaceLanguage(language) {
@@ -1524,20 +1513,63 @@
   }
 
 
-  let currentIeltsSkill = 'listening';
+  let currentIeltsSkill = 'all';
   let ieltsVideos = [];
 
-  function openIeltsPage() { showScreen('ielts'); loadIeltsVideos(); }
+  const IELTS_LISTENING_QUERY = 'ielts listening practice test 2025 with answers';
+  function isIeltsListeningTest(v){
+    const title=String((v&&v.title)||'').toLowerCase();
+    return title.includes('ielts') && title.includes('listening') && (title.includes('test') || title.includes('practice')) ;
+  }
+  function openIeltsPage() { if(!requireLogin()) return; leaveIeltsMode(); state.ieltsScore = 0; showScreen('ielts'); loadIeltsVideos('listening'); }
+
+  function refreshScoreDisplay() {
+    const value = state.mode === 'ielts' ? state.ieltsScore : state.totalScore;
+    scoreDisplay.textContent = String(value);
+    finalTotalScore.textContent = String(value);
+  }
+
+  function leaveIeltsMode() {
+    if (state.mode === 'ielts' && state.languageBeforeIelts) state.language = state.languageBeforeIelts;
+    state.mode = 'game';
+    state.languageBeforeIelts = null;
+    if (typeof scoreDisplay !== 'undefined') refreshScoreDisplay();
+  }
+
+  function practiceIeltsVideo(videoId) {
+    if (!requireLogin()) return;
+    const video = ieltsVideos.find(function(v){ return v.videoId === videoId; });
+    if (!video) return;
+    if (state.mode !== 'ielts') state.languageBeforeIelts = state.language;
+    state.mode = 'ielts';
+    state.language = 'en';
+    state.currentVideo = video;
+    state.questions = []; state.answers = []; state.submitted = false;
+    quizArea.classList.add('hidden');
+    const startBtn = document.getElementById('startQuizButton');
+    if (startBtn) { startBtn.classList.remove('hidden'); startBtn.disabled = false; }
+    categoryBadge.textContent = 'IELTS Listening — score temporaire';
+    showScreen('game');
+    displayVideo();
+    refreshScoreDisplay();
+  }
+
+  function setIeltsSkillButton(skill) {
+    ['all','listening','speaking','reading','writing','vocabulary','tips'].forEach(function(item){
+      const id='ieltsSkill'+item.charAt(0).toUpperCase()+item.slice(1);
+      const b=document.getElementById(id); if(b) b.classList.toggle('active',item===skill);
+    });
+  }
 
   function escapeHtml(value){return String(value||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\"/g,'&quot;').replace(/'/g,'&#039;');}
 
-  async function loadIeltsVideos(){
-    currentIeltsSkill='listening';
+  async function loadIeltsVideos(skill){
+    if(!requireLogin()) return; currentIeltsSkill='listening'; setIeltsSkillButton(currentIeltsSkill);
     ieltsError.classList.add('hidden'); ieltsLoading.classList.remove('hidden'); ieltsVideoGrid.innerHTML='';
     try{
-      const r=await fetch(API_BASE+'/api/youtube/ielts?skill='+encodeURIComponent(currentIeltsSkill));
+      const r=await fetch(API_BASE+'/api/youtube/ielts?skill=listening&q='+encodeURIComponent(IELTS_LISTENING_QUERY));
       const data=await r.json(); if(!r.ok||!data.ok) throw new Error(data.message||t('ieltsError'));
-      ieltsVideos=Array.isArray(data.videos)?data.videos:[]; renderIeltsVideos();
+      ieltsVideos=(Array.isArray(data.videos)?data.videos:[]).filter(isIeltsListeningTest); renderIeltsVideos();
     }catch(e){console.error('IELTS loading error:',e); ieltsError.textContent=t('ieltsError'); ieltsError.classList.remove('hidden');}
     finally{ieltsLoading.classList.add('hidden');}
   }
@@ -1546,37 +1578,26 @@
     if(!ieltsVideos.length){ieltsVideoGrid.innerHTML='<div class="ielts-empty">'+escapeHtml(t('ieltsNoVideos'))+'</div>';return;}
     ieltsVideoGrid.innerHTML=ieltsVideos.map(function(v){
       const thumb=v.thumbnail||('https://i.ytimg.com/vi/'+encodeURIComponent(v.videoId)+'/hqdefault.jpg');
-      return '<article class="ielts-video-card"><img class="ielts-thumbnail" src="'+escapeHtml(thumb)+'" alt="'+escapeHtml(v.title)+'" loading="lazy"><div class="ielts-video-body"><div class="ielts-video-title">'+escapeHtml(v.title)+'</div><div class="ielts-video-channel">'+escapeHtml(t('ieltsChannel'))+': '+escapeHtml(v.channelTitle||'')+'</div><div class="ielts-video-meta"><span class="ielts-meta">'+escapeHtml(t('ieltsEnglish'))+'</span><span class="ielts-meta">'+escapeHtml(t('ieltsDuration'))+': '+escapeHtml(v.durationFormatted||'')+'</span><span class="ielts-meta">'+escapeHtml(t('ieltsPublic'))+'</span></div><button class="ielts-watch" type="button" onclick="watchIeltsVideo(\''+escapeHtml(v.videoId)+'\')">'+escapeHtml(t('ieltsWatch'))+'</button></div></article>';
+      return '<article class="ielts-video-card"><img class="ielts-thumbnail" src="'+escapeHtml(thumb)+'" alt="'+escapeHtml(v.title)+'" loading="lazy"><div class="ielts-video-body"><div class="ielts-video-title">'+escapeHtml(v.title)+'</div><div class="ielts-video-channel">'+escapeHtml(t('ieltsChannel'))+': '+escapeHtml(v.channelTitle||'')+'</div><div class="ielts-video-meta"><span class="ielts-meta">'+escapeHtml(t('ieltsEnglish'))+'</span><span class="ielts-meta">'+escapeHtml(t('ieltsDuration'))+': '+escapeHtml(v.durationFormatted||'')+'</span><span class="ielts-meta">'+escapeHtml(t('ieltsPublic'))+'</span></div><button class="ielts-watch" type="button" onclick="watchIeltsVideo(\''+escapeHtml(v.videoId)+'\')">'+escapeHtml(t('ieltsWatch'))+'</button><button class="ielts-watch primary" style="margin-top:8px" type="button" onclick="practiceIeltsVideo(\''+escapeHtml(v.videoId)+'\')">Faire le quiz (score temporaire)</button></div></article>';
     }).join('');
   }
 
-  function watchIeltsVideo(videoId) {
-    const selectedVideo = ieltsVideos.find(function(video) {
-      return video.videoId === videoId;
-    });
-    if (!selectedVideo) {
-      ieltsError.textContent = t('ieltsError');
-      ieltsError.classList.remove('hidden');
-      return;
-    }
+  function watchIeltsVideo(videoId){window.open('https://www.youtube.com/watch?v='+encodeURIComponent(videoId),'_blank','noopener,noreferrer');}
 
-    state.language = 'en';
-    state.category = 'ielts-listening';
-    state.currentVideo = selectedVideo;
-    state.questions = [];
-    state.answers = [];
-    state.submitted = false;
-    state.evaluation = { like: null, length: null };
-    languageBadge.textContent = getLanguageLabel('en');
-    categoryBadge.textContent = t('ieltsListening');
+  function isLoggedIn() {
+    return Boolean(auth.currentUser && auth.currentUser.emailVerified && state.user);
+  }
 
-    showScreen('game');
-    displayVideo();
-    document.getElementById('startQuizButton').textContent = t('startQuiz');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+  function requireLogin() {
+    if (isLoggedIn()) return true;
+    setAuthError(t('loginRequired') !== 'loginRequired' ? t('loginRequired') : 'Connecte-toi (email verifie) pour jouer ou acceder a la preparation IELTS.');
+    showScreen('auth');
+    return false;
   }
 
   function startCategories() {
+    if (!requireLogin()) return;
+    leaveIeltsMode();
     showScreen('category');
   }
 
@@ -1612,6 +1633,15 @@
 
     totalScore:
       0,
+
+    mode:
+      'game',          // 'game' = score lie au compte, 'ielts' = score temporaire
+
+    ieltsScore:
+      0,               // score IELTS de la session (jamais enregistre)
+
+    languageBeforeIelts:
+      null,
 
     viewedVideos:
       new Set(),
@@ -1789,7 +1819,6 @@
   }
 
   function getCategoryLabel(category) {
-    if (category === 'ielts-listening') return t('ieltsListening');
     if (category === 'sport') return t('catSport');
     if (category === 'sciences') return t('catScience');
     if (category === 'art culinaire') return t('catFood');
@@ -1842,6 +1871,7 @@
       'auth/user-not-found': 'Aucun compte ne correspond a cette adresse email.',
       'auth/wrong-password': 'Mot de passe incorrect.',
       'auth/invalid-credential': 'Email ou mot de passe incorrect.',
+      'auth/missing-email': 'Adresse email manquante.',
       'auth/too-many-requests': 'Trop de tentatives. Reessaie plus tard.',
       'auth/operation-not-allowed': 'La connexion par email et mot de passe doit être activée dans Firebase.',
       'auth/unauthorized-domain': 'Ce domaine doit être autorisé dans Firebase Authentication.',
@@ -1889,9 +1919,22 @@
 
     try {
       if (authMode === 'register') {
-        await auth.createUserWithEmailAndPassword(email, password);
+        const cred = await auth.createUserWithEmailAndPassword(email, password);
+        auth.languageCode = interfaceLanguage || 'fr';
+        await cred.user.sendEmailVerification();
+        await auth.signOut();
+        authMode = 'login';
+        applyTranslations();
+        setAuthError('Compte cree ! Un email de verification a ete envoye a ' + email + '. Clique sur le lien (verifie aussi les spams), puis connecte-toi.', true);
       } else {
-        await auth.signInWithEmailAndPassword(email, password);
+        const cred = await auth.signInWithEmailAndPassword(email, password);
+        await cred.user.reload();
+        if (!cred.user.emailVerified) {
+          try { await cred.user.sendEmailVerification(); } catch (e) { console.warn('Verification resend failed:', e); }
+          await auth.signOut();
+          setAuthError('Ton email n est pas encore verifie. Un nouveau lien de verification vient d etre envoye a ' + email + ' (verifie aussi les spams).');
+          return;
+        }
       }
     } catch (error) {
       console.error('Firebase Auth error:', error);
@@ -1922,9 +1965,11 @@
     const ref = db.collection('users').doc(state.user.uid);
 
     const data = {
-      totalPoints: state.totalScore,
       lastLogin: firebase.firestore.FieldValue.serverTimestamp()
     };
+    if (points > 0) {
+      data.totalPoints = firebase.firestore.FieldValue.increment(points);
+    }
 
     if (points === 1) {
       data.videosCompleted =
@@ -1932,12 +1977,23 @@
     }
 
     await ref.set(data, { merge: true });
+    const fresh = await ref.get();
+    if (fresh.exists) state.totalScore = Number(fresh.data().totalPoints) || 0;
+    if (state.mode !== 'ielts') refreshScoreDisplay();
     updateAccountBar();
   }
 
   applyTranslations();
 
   auth.onAuthStateChanged(async function(user) {
+    if (user && !user.emailVerified) {
+      // Unverified accounts cannot access the game
+      state.user = null;
+      state.totalScore = 0;
+      updateAccountBar();
+      showScreen('auth');
+      return;
+    }
     if (!user) {
       state.user = null;
       state.totalScore = 0;
@@ -2105,6 +2161,8 @@
   async function selectCategory(
     category
   ) {
+    if (!requireLogin()) return;
+    leaveIeltsMode();
 
     state.category =
       category;
@@ -2131,6 +2189,13 @@
   // =====================================================
 
   function goBackToCategories() {
+    if (state.mode === 'ielts') {
+      youtubePlayer.src = '';
+      state.currentVideo = null; state.questions = []; state.answers = []; state.submitted = false;
+      quizArea.classList.add('hidden');
+      showScreen('ielts');
+      return;
+    }
 
     youtubePlayer.src =
       '';
@@ -2154,13 +2219,9 @@
     );
 
 
-    if (state.category === 'ielts-listening') {
-      showScreen('ielts');
-      loadIeltsVideos();
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    } else {
-      showScreen('category');
-    }
+    showScreen(
+      'category'
+    );
 
   }
 
@@ -2600,7 +2661,11 @@
   // START QUIZ
   // =====================================================
 
+  const QUIZ_QUESTION_COUNT = 10;
+  const QUIZ_PASS_THRESHOLD = 8; // 8/10 bonnes reponses = 1 point
+
   async function startQuiz() {
+    if (!requireLogin()) return;
 
     if (
       !state.currentVideo
@@ -2626,9 +2691,7 @@
 
 
     button.textContent =
-      state.category === 'ielts-listening'
-        ? t('preparingQuiz')
-        : 'Preparation du quiz...';
+      'Preparation du quiz...';
 
 
     hideVideoError();
@@ -2646,7 +2709,8 @@
         '&language=' +
         encodeURIComponent(
           state.language
-        );
+        ) +
+        '&count=' + QUIZ_QUESTION_COUNT;
 
 
       console.log(
@@ -2688,18 +2752,18 @@
         !Array.isArray(
           data.questions
         ) ||
-        data.questions.length !== 4
+        data.questions.length < 4
       ) {
 
         throw new Error(
-          'Le serveur doit retourner exactement 4 questions.'
+          'Le serveur doit retourner au moins 4 questions (10 attendues).'
         );
 
       }
 
 
       state.questions =
-        data.questions;
+        data.questions.slice(0, QUIZ_QUESTION_COUNT);
 
 
       state.answers =
@@ -2752,9 +2816,7 @@
     } finally {
 
       button.textContent =
-        state.category === 'ielts-listening'
-          ? t('startQuiz')
-          : 'Commencer le quiz';
+        'Commencer le quiz';
 
     }
 
@@ -3024,7 +3086,7 @@
     if (unanswered) {
 
       alert(
-        'Tu dois repondre aux 4 questions avant de valider.'
+        'Tu dois repondre a toutes les questions (' + state.questions.length + ') avant de valider.'
       );
 
       return;
@@ -3077,8 +3139,12 @@
       0;
 
 
+    const total = state.questions.length;
+    const needed = total >= QUIZ_QUESTION_COUNT ? QUIZ_PASS_THRESHOLD : total;
+    const passed = correct >= needed;
+
     if (
-      correct === 4
+      passed
     ) {
 
       points =
@@ -3087,18 +3153,18 @@
     }
 
 
-    state.totalScore +=
-      points;
+    if (state.mode === 'ielts') {
+      // Score IELTS : temporaire, jamais enregistre sur le compte
+      state.ieltsScore += points;
+    } else {
+      // Jeu general : score cumule et enregistre sur le compte
+      state.totalScore += points;
+      saveUserScore(points).catch(function(error) {
+        console.error('Firestore score save error:', error);
+      });
+    }
 
-    saveUserScore(points).catch(function(error) {
-      console.error('Firestore score save error:', error);
-    });
-
-
-    scoreDisplay.textContent =
-      String(
-        state.totalScore
-      );
+    refreshScoreDisplay();
 
 
     roundScore.textContent =
@@ -3107,17 +3173,14 @@
       );
 
 
-    finalTotalScore.textContent =
-      String(
-        state.totalScore
-      );
+    refreshScoreDisplay();
 
 
-    if (correct === 4) {
-      resultMessage.textContent = t('perfect');
+    if (passed) {
+      resultMessage.textContent = t('perfect').replace('4/4', correct + '/' + total);
       resultMessage.className = 'result-success';
     } else {
-      resultMessage.textContent = t('notPerfect');
+      resultMessage.textContent = correct + '/' + total + ' — ' + t('notPerfect').replace(/\b4\b/g, String(needed));
       resultMessage.className = 'result-fail';
     }
 
@@ -3646,6 +3709,15 @@
   // =====================================================
 
   async function nextVideo() {
+    if (state.mode === 'ielts') {
+      resultScreen.classList.add('hidden');
+      youtubePlayer.src = '';
+      state.currentVideo = null; state.questions = []; state.answers = []; state.submitted = false;
+      quizArea.classList.add('hidden');
+      showScreen('ielts');
+      renderIeltsVideos();
+      return;
+    }
 
     resultScreen.classList.add(
       'hidden'
@@ -3711,13 +3783,6 @@
     startButton.textContent =
       'Commencer le quiz';
 
-
-    if (state.category === 'ielts-listening') {
-      showScreen('ielts');
-      await loadIeltsVideos();
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-      return;
-    }
 
     await loadVideos();
 
