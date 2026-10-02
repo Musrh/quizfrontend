@@ -878,6 +878,8 @@
       <button id="authSubmitButton" type="submit">Se connecter</button>
     </form>
     <div id="authError" class="auth-error hidden"></div>
+    <div id="authMessage" class="auth-message hidden"></div>
+    <button id="forgotPasswordButton" class="text-button" type="button" onclick="resetPassword()" data-i18n="forgotPassword">Mot de passe oublie ?</button>
     <div class="auth-switch">
       <span id="authSwitchText">Pas encore de compte ?</span>
       <button id="authSwitchButton" type="button" onclick="toggleAuthMode()">Creer un compte</button>
@@ -948,17 +950,17 @@
 
   <section id="ieltsScreen" class="card ielts-card hidden">
     <div class="nav-row"><button class="back-button" type="button" onclick="showHome()" data-i18n="backHome">← Accueil</button></div>
-    <div class="ielts-hero"><div class="ielts-kicker" data-i18n="ieltsKicker">IELTS PREPARATION</div><h2 data-i18n="ieltsTitle">Prepare for your IELTS exam with videos</h2><p data-i18n="ieltsLead">Explore English videos focused on Listening, Speaking, Reading, Writing, Vocabulary and exam strategies.</p></div>
-    <div class="ielts-skills">
-      <button id="ieltsSkillAll" class="ielts-skill-button active" type="button" onclick="loadIeltsVideos('all')" data-i18n="ieltsAll">All</button>
-      <button id="ieltsSkillListening" class="ielts-skill-button" type="button" onclick="loadIeltsVideos('listening')" data-i18n="ieltsListening">Listening</button>
-      <button id="ieltsSkillSpeaking" class="ielts-skill-button" type="button" onclick="loadIeltsVideos('speaking')" data-i18n="ieltsSpeaking">Speaking</button>
-      <button id="ieltsSkillReading" class="ielts-skill-button" type="button" onclick="loadIeltsVideos('reading')" data-i18n="ieltsReading">Reading</button>
-      <button id="ieltsSkillWriting" class="ielts-skill-button" type="button" onclick="loadIeltsVideos('writing')" data-i18n="ieltsWriting">Writing</button>
-      <button id="ieltsSkillVocabulary" class="ielts-skill-button" type="button" onclick="loadIeltsVideos('vocabulary')" data-i18n="ieltsVocabulary">Vocabulary & Grammar</button>
-      <button id="ieltsSkillTips" class="ielts-skill-button" type="button" onclick="loadIeltsVideos('tips')" data-i18n="ieltsTips">Tips & Strategies</button>
-    </div>
+    <div class="ielts-hero"><div class="ielts-kicker" data-i18n="ieltsKicker">IELTS LISTENING</div><h2 data-i18n="ieltsTitle">Prepare for IELTS Listening</h2><p data-i18n="ieltsLead">Watch English listening videos and answer up to 10 AI-generated questions based on the video content.</p></div>
     <div id="ieltsError" class="error hidden"></div><div id="ieltsLoading" class="ielts-loading hidden" data-i18n="ieltsLoading">Searching for IELTS videos...</div><div id="ieltsVideoGrid" class="ielts-video-grid"></div>
+  </section>
+
+  <section id="ieltsQuizScreen" class="card hidden">
+    <div class="nav-row"><button class="back-button" type="button" onclick="openIeltsPage()" data-i18n="backIelts">← IELTS Listening</button></div>
+    <div class="video-header"><div><span class="video-badge" data-i18n="ieltsBadge">IELTS LISTENING</span><h2 id="ieltsQuizTitle"></h2></div></div>
+    <div class="video-player-wrap"><iframe id="ieltsQuizPlayer" title="IELTS Listening video" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>
+    <div class="info" data-i18n="ieltsQuizInfo">Watch the video, then answer up to 10 questions based only on its content.</div>
+    <button id="startIeltsQuizButton" class="primary" type="button" onclick="startIeltsQuiz()" data-i18n="startIeltsQuiz">Start IELTS quiz</button>
+    <div id="ieltsQuizArea" class="hidden"><div id="ieltsQuestionsContainer"></div><button id="submitIeltsQuizButton" class="primary" type="button" onclick="submitIeltsQuiz()" data-i18n="submitIeltsAnswers">Submit IELTS answers</button><div id="ieltsQuizResult" class="result-box hidden"></div><button id="nextIeltsVideoButton" class="secondary hidden" type="button" onclick="openIeltsPage()" data-i18n="nextIeltsVideo">Next IELTS video</button></div>
   </section>
 
   <section id="categoryScreen" class="card hidden">
@@ -1098,7 +1100,7 @@
       rule1Title:'Choisis ta langue',rule1Text:'Selectionne Francais, English ou Arabe.',rule2Title:'Choisis un theme',rule2Text:'Sport, Sciences, Art culinaire ou Culture generale.',rule3Title:'Regarde la video',rule3Text:'Une video compatible avec ton theme est proposee.',rule4Title:'Reponds a 4 questions',rule4Text:'Les questions sont generees a partir du contenu de la video.',rule5Title:'Gagne ton point',rule5Text:'Si tes 4 reponses sont correctes, tu gagnes 1 point. Sinon, tu gagnes 0 point.',rule6Title:'Continue a jouer',rule6Text:'Tu peux enchainer les videos et accumuler ton score.',rulesNote:'Les videos restent hebergees sur YouTube. Le quiz utilise leur contenu pour generer les questions.',startGame:'Commencer le jeu',backHome:'← Accueil',backRules:'← Regles',
       categoryTitle:'Choisis une categorie',categorySubtitle:"Quel sujet veux-tu decouvrir aujourd'hui ?",catSport:'Sport',catSportText:'Matchs, athletes, techniques et histoire du sport.',catScience:'Sciences',catScienceText:'Science, espace, nature, technologie et decouvertes.',catFood:'Art culinaire',catFoodText:'Cuisine, recettes, gastronomie et savoir-faire.',catCulture:'Culture generale',catCultureText:'Histoire, geographie, civilisation et connaissances.',
       backCategories:'← Retour aux categories',videoLoading:"Recherche d'une video...",watchThen:'Regarde la video puis clique sur',startQuiz:'Commencer le quiz',quizInfo:'La video reste visible au-dessus. Reponds aux 4 questions en regardant la video.',submitAnswers:'Valider mes reponses',backQuiz:'← Retour au quiz',resultTitle:'Resultat',roundScoreLabel:'Score de cette partie',totalScore:'Score total',evaluationTitle:'Que penses-tu de cette video ?',interesting:'👍 Interessante',notInteresting:'👎 Pas interessante',tooLongQuestion:'La video etait-elle trop longue ?',no:'Non',aLittle:'Un peu',yes:'Oui',thanks:'Merci pour ton evaluation !',nextVideo:'Video suivante',
-      perfect:'Bravo ! 4/4 bonnes reponses. Tu gagnes 1 point.',notPerfect:'Cette fois, tu ne gagnes pas de point. Il fallait 4 bonnes reponses.',footerTagline:'Regarde, apprends et teste tes connaissances avec des quiz video.', footerIelts:'Preparation IELTS', ieltsKicker:'PREPARATION IELTS', ieltsTitle:'Prepare ton examen IELTS avec des videos', ieltsLead:'Decouvre des videos en anglais consacrees au Listening, Speaking, Reading, Writing, Vocabulary et aux strategies d examen.', ieltsAll:'Toutes', ieltsListening:'Listening', ieltsSpeaking:'Speaking', ieltsReading:'Reading', ieltsWriting:'Writing', ieltsVocabulary:'Vocabulaire & grammaire', ieltsTips:'Conseils & strategies', ieltsLoading:'Recherche de videos IELTS...', ieltsWatch:'Regarder sur YouTube', ieltsDuration:'Duree', ieltsChannel:'Chaine', ieltsNoVideos:'Aucune video IELTS trouvee pour cette categorie.', ieltsError:'Impossible de charger les videos IELTS pour le moment.', ieltsPublic:'Video publique', ieltsEnglish:'Anglais', footerPlay:'Jouer', footerHome:'Accueil', footerRules:'Regles du jeu', footerCategories:'Categories', footerAbout:'A propos', footerAboutPage:'A propos de nous', footerContact:'Contact', footerLegal:'Legal', footerPrivacy:'Politique de confidentialite', footerTerms:"Conditions d'utilisation", footerLegalNotice:'Mentions legales', footerCookies:'Cookies', footerCopyright:'© 2026 AI Video Quiz. Tous droits reserves.',
+      perfect:'Bravo ! 4/4 bonnes reponses. Tu gagnes 1 point.',notPerfect:'Cette fois, tu ne gagnes pas de point. Il fallait 4 bonnes reponses.',footerTagline:'Regarde, apprends et teste tes connaissances avec des quiz video.', footerIelts:'Preparation IELTS', ieltsKicker:'IELTS LISTENING', ieltsTitle:'Prepare ton IELTS Listening', ieltsLead:'Regarde des videos en anglais et reponds a jusqu a 10 questions generees a partir du contenu de la video.', ieltsAll:'Listening', ieltsListening:'Listening', ieltsLoading:'Recherche de videos IELTS Listening...', ieltsWatch:'Commencer le quiz', ieltsDuration:'Duree', ieltsChannel:'Chaine', ieltsNoVideos:'Aucune video IELTS Listening trouvee.', ieltsError:'Impossible de charger les videos IELTS pour le moment.', ieltsPublic:'Video publique', ieltsEnglish:'Anglais', ieltsBadge:'IELTS LISTENING', ieltsQuizInfo:'Regarde la video puis reponds a jusqu a 10 questions basees uniquement sur son contenu.', startIeltsQuiz:'Commencer le quiz IELTS', submitIeltsAnswers:'Valider mes reponses IELTS', nextIeltsVideo:'Video IELTS suivante', backIelts:'← IELTS Listening', forgotPassword:'Mot de passe oublie ?', verificationSent:'Un email de verification a ete envoye. Verifie ta boite de reception avant de te connecter.', verificationRequired:'Verifie ton adresse email avant de te connecter. Un nouveau lien de verification peut etre envoye.', passwordResetSent:'Un lien de reinitialisation a ete envoye a ton adresse email.', passwordResetError:'Impossible d envoyer le lien de reinitialisation.' footerPlay:'Jouer', footerHome:'Accueil', footerRules:'Regles du jeu', footerCategories:'Categories', footerAbout:'A propos', footerAboutPage:'A propos de nous', footerContact:'Contact', footerLegal:'Legal', footerPrivacy:'Politique de confidentialite', footerTerms:"Conditions d'utilisation", footerLegalNotice:'Mentions legales', footerCookies:'Cookies', footerCopyright:'© 2026 AI Video Quiz. Tous droits reserves.',
     },
     en: {
       headerSubtitle:'Watch a video and test your knowledge', points:'Points', logout:'Log out',
@@ -1109,7 +1111,7 @@
       rule1Title:'Choose your language',rule1Text:'Select French, English or Arabic.',rule2Title:'Choose a topic',rule2Text:'Sport, Science, Culinary Arts or General Knowledge.',rule3Title:'Watch the video',rule3Text:'A compatible video is selected for your topic.',rule4Title:'Answer 4 questions',rule4Text:'Questions are generated from the video content.',rule5Title:'Earn your point',rule5Text:'If all 4 answers are correct, you earn 1 point. Otherwise, you earn 0 points.',rule6Title:'Keep playing',rule6Text:'Continue with more videos and build your score.',rulesNote:'Videos remain hosted on YouTube. The quiz uses their content to generate the questions.',startGame:'Start the game',backHome:'← Home',backRules:'← Rules',
       categoryTitle:'Choose a category',categorySubtitle:'What topic would you like to explore today?',catSport:'Sport',catSportText:'Matches, athletes, techniques and sports history.',catScience:'Science',catScienceText:'Science, space, nature, technology and discoveries.',catFood:'Culinary Arts',catFoodText:'Cooking, recipes, gastronomy and know-how.',catCulture:'General Knowledge',catCultureText:'History, geography, civilizations and knowledge.',
       backCategories:'← Back to categories',videoLoading:'Searching for a video...',watchThen:'Watch the video then click',startQuiz:'Start the quiz',quizInfo:'The video remains visible above. Answer the 4 questions while watching the video.',submitAnswers:'Submit my answers',backQuiz:'← Back to quiz',resultTitle:'Result',roundScoreLabel:'Score for this round',totalScore:'Total score',evaluationTitle:'What do you think of this video?',interesting:'👍 Interesting',notInteresting:'👎 Not interesting',tooLongQuestion:'Was the video too long?',no:'No',aLittle:'A little',yes:'Yes',thanks:'Thanks for your feedback!',nextVideo:'Next video',
-      perfect:'Great! 4/4 correct answers. You earn 1 point.',notPerfect:'This time you earn no point. You need 4 correct answers.',footerTagline:'Watch, learn and test your knowledge with video quizzes.', footerIelts:'IELTS Preparation', ieltsKicker:'IELTS PREPARATION', ieltsTitle:'Prepare for your IELTS exam with videos', ieltsLead:'Explore English videos focused on Listening, Speaking, Reading, Writing, Vocabulary and exam strategies.', ieltsAll:'All', ieltsListening:'Listening', ieltsSpeaking:'Speaking', ieltsReading:'Reading', ieltsWriting:'Writing', ieltsVocabulary:'Vocabulary & Grammar', ieltsTips:'Tips & Strategies', ieltsLoading:'Searching for IELTS videos...', ieltsWatch:'Watch on YouTube', ieltsDuration:'Duration', ieltsChannel:'Channel', ieltsNoVideos:'No IELTS videos were found for this category.', ieltsError:'Unable to load IELTS videos right now.', ieltsPublic:'Public video', ieltsEnglish:'English', footerPlay:'Play', footerHome:'Home', footerRules:'Game rules', footerCategories:'Categories', footerAbout:'About', footerAboutPage:'About AI Video Quiz', footerContact:'Contact', footerLegal:'Legal', footerPrivacy:'Privacy Policy', footerTerms:'Terms of Use', footerLegalNotice:'Legal Notice', footerCookies:'Cookies', footerCopyright:'© 2026 AI Video Quiz. All rights reserved.',
+      perfect:'Great! 4/4 correct answers. You earn 1 point.',notPerfect:'This time you earn no point. You need 4 correct answers.',footerTagline:'Watch, learn and test your knowledge with video quizzes.', footerIelts:'IELTS Preparation', ieltsKicker:'IELTS LISTENING', ieltsTitle:'Prepare for IELTS Listening', ieltsLead:'Watch English listening videos and answer up to 10 AI-generated questions based on the video content.', ieltsAll:'Listening', ieltsListening:'Listening', ieltsLoading:'Searching for IELTS Listening videos...', ieltsWatch:'Start quiz', ieltsDuration:'Duration', ieltsChannel:'Channel', ieltsNoVideos:'No IELTS Listening videos were found.', ieltsError:'Unable to load IELTS videos right now.', ieltsPublic:'Public video', ieltsEnglish:'English', ieltsBadge:'IELTS LISTENING', ieltsQuizInfo:'Watch the video, then answer up to 10 questions based only on its content.', startIeltsQuiz:'Start IELTS quiz', submitIeltsAnswers:'Submit IELTS answers', nextIeltsVideo:'Next IELTS video', backIelts:'← IELTS Listening', forgotPassword:'Forgot password?', verificationSent:'A verification email has been sent. Check your inbox before signing in.', verificationRequired:'Please verify your email address before signing in. A new verification link can be sent.', passwordResetSent:'A password reset link has been sent to your email address.', passwordResetError:'Unable to send the password reset link.' footerPlay:'Play', footerHome:'Home', footerRules:'Game rules', footerCategories:'Categories', footerAbout:'About', footerAboutPage:'About AI Video Quiz', footerContact:'Contact', footerLegal:'Legal', footerPrivacy:'Privacy Policy', footerTerms:'Terms of Use', footerLegalNotice:'Legal Notice', footerCookies:'Cookies', footerCopyright:'© 2026 AI Video Quiz. All rights reserved.',
     },
     ar: {
       headerSubtitle:'شاهد فيديو واختبر معلوماتك', points:'النقاط', logout:'تسجيل الخروج',
@@ -1120,7 +1122,7 @@
       rule1Title:'اختر اللغة',rule1Text:'اختر الفرنسية أو الإنجليزية أو العربية.',rule2Title:'اختر الموضوع',rule2Text:'الرياضة أو العلوم أو فن الطبخ أو الثقافة العامة.',rule3Title:'شاهد الفيديو',rule3Text:'سيتم اقتراح فيديو مناسب للموضوع الذي اخترته.',rule4Title:'أجب عن 4 أسئلة',rule4Text:'يتم توليد الأسئلة من محتوى الفيديو.',rule5Title:'اكسب النقطة',rule5Text:'إذا كانت إجاباتك الأربعة صحيحة تحصل على نقطة واحدة، وإلا تحصل على صفر.',rule6Title:'واصل اللعب',rule6Text:'تابع مشاهدة فيديوهات أخرى واجمع نقاطك.',rulesNote:'تبقى الفيديوهات مستضافة على YouTube، ويستخدم الاختبار محتواها لتوليد الأسئلة.',startGame:'ابدأ اللعبة',backHome:'← الرئيسية',backRules:'← القواعد',
       categoryTitle:'اختر فئة',categorySubtitle:'ما الموضوع الذي تريد اكتشافه اليوم؟',catSport:'الرياضة',catSportText:'مباريات ورياضيون وتقنيات وتاريخ الرياضة.',catScience:'العلوم',catScienceText:'العلوم والفضاء والطبيعة والتكنولوجيا والاكتشافات.',catFood:'فن الطبخ',catFoodText:'الطبخ والوصفات وفنون الطهي والخبرة.',catCulture:'الثقافة العامة',catCultureText:'التاريخ والجغرافيا والحضارات والمعارف.',
       backCategories:'← العودة إلى الفئات',videoLoading:'جار البحث عن فيديو...',watchThen:'شاهد الفيديو ثم اضغط على',startQuiz:'ابدأ الاختبار',quizInfo:'يبقى الفيديو ظاهرا في الأعلى. أجب عن الأسئلة الأربعة أثناء مشاهدة الفيديو.',submitAnswers:'تأكيد إجاباتي',backQuiz:'← العودة إلى الاختبار',resultTitle:'النتيجة',roundScoreLabel:'نتيجة هذه الجولة',totalScore:'مجموع النقاط',evaluationTitle:'ما رأيك في هذا الفيديو؟',interesting:'👍 ممتع',notInteresting:'👎 غير ممتع',tooLongQuestion:'هل كان الفيديو طويلا جدا؟',no:'لا',aLittle:'قليلا',yes:'نعم',thanks:'شكرا على تقييمك!',nextVideo:'الفيديو التالي',
-      perfect:'أحسنت! 4/4 إجابات صحيحة. حصلت على نقطة واحدة.',notPerfect:'هذه المرة لم تحصل على نقطة. يجب أن تكون الإجابات الأربعة صحيحة.',footerTagline:'شاهد وتعلم واختبر معلوماتك من خلال اختبارات الفيديو.', footerIelts:'التحضير لامتحان IELTS', ieltsKicker:'التحضير لامتحان IELTS', ieltsTitle:'استعد لامتحان IELTS من خلال الفيديوهات', ieltsLead:'اكتشف فيديوهات باللغة الإنجليزية تركز على الاستماع والتحدث والقراءة والكتابة والمفردات واستراتيجيات الامتحان.', ieltsAll:'الكل', ieltsListening:'الاستماع', ieltsSpeaking:'التحدث', ieltsReading:'القراءة', ieltsWriting:'الكتابة', ieltsVocabulary:'المفردات والقواعد', ieltsTips:'نصائح واستراتيجيات', ieltsLoading:'جار البحث عن فيديوهات IELTS...', ieltsWatch:'شاهد على YouTube', ieltsDuration:'المدة', ieltsChannel:'القناة', ieltsNoVideos:'لم يتم العثور على فيديوهات IELTS لهذه الفئة.', ieltsError:'تعذر تحميل فيديوهات IELTS حاليا.', ieltsPublic:'فيديو عام', ieltsEnglish:'الإنجليزية', footerPlay:'اللعب', footerHome:'الرئيسية', footerRules:'قواعد اللعبة', footerCategories:'الفئات', footerAbout:'حول الموقع', footerAboutPage:'حول AI Video Quiz', footerContact:'اتصل بنا', footerLegal:'قانوني', footerPrivacy:'سياسة الخصوصية', footerTerms:'شروط الاستخدام', footerLegalNotice:'الإشعارات القانونية', footerCookies:'ملفات الارتباط', footerCopyright:'© 2026 AI Video Quiz. جميع الحقوق محفوظة.',
+      perfect:'أحسنت! 4/4 إجابات صحيحة. حصلت على نقطة واحدة.',notPerfect:'هذه المرة لم تحصل على نقطة. يجب أن تكون الإجابات الأربعة صحيحة.',footerTagline:'شاهد وتعلم واختبر معلوماتك من خلال اختبارات الفيديو.', footerIelts:'التحضير لامتحان IELTS', ieltsKicker:'IELTS LISTENING', ieltsTitle:'التحضير لاختبار IELTS Listening', ieltsLead:'شاهد فيديوهات الاستماع باللغة الإنجليزية وأجب عن ما يصل إلى 10 أسئلة مولدة بالذكاء الاصطناعي من محتوى الفيديو.', ieltsAll:'الاستماع', ieltsListening:'الاستماع', ieltsLoading:'جار البحث عن فيديوهات IELTS Listening...', ieltsWatch:'ابدأ الاختبار', ieltsDuration:'المدة', ieltsChannel:'القناة', ieltsNoVideos:'لم يتم العثور على فيديوهات IELTS Listening.', ieltsError:'تعذر تحميل فيديوهات IELTS حاليا.', ieltsPublic:'فيديو عام', ieltsEnglish:'الإنجليزية', ieltsBadge:'IELTS LISTENING', ieltsQuizInfo:'شاهد الفيديو ثم أجب عن ما يصل إلى 10 أسئلة تعتمد فقط على محتواه.', startIeltsQuiz:'ابدأ اختبار IELTS', submitIeltsAnswers:'تأكيد إجابات IELTS', nextIeltsVideo:'فيديو IELTS التالي', backIelts:'← IELTS Listening', forgotPassword:'نسيت كلمة المرور؟', verificationSent:'تم إرسال رسالة تحقق إلى بريدك الإلكتروني. تحقق من صندوق البريد قبل تسجيل الدخول.', verificationRequired:'يرجى التحقق من بريدك الإلكتروني قبل تسجيل الدخول. يمكن إرسال رابط تحقق جديد.', passwordResetSent:'تم إرسال رابط إعادة تعيين كلمة المرور إلى بريدك الإلكتروني.', passwordResetError:'تعذر إرسال رابط إعادة تعيين كلمة المرور.' footerPlay:'اللعب', footerHome:'الرئيسية', footerRules:'قواعد اللعبة', footerCategories:'الفئات', footerAbout:'حول الموقع', footerAboutPage:'حول AI Video Quiz', footerContact:'اتصل بنا', footerLegal:'قانوني', footerPrivacy:'سياسة الخصوصية', footerTerms:'شروط الاستخدام', footerLegalNotice:'الإشعارات القانونية', footerCookies:'ملفات الارتباط', footerCopyright:'© 2026 AI Video Quiz. جميع الحقوق محفوظة.',
     }
   };
 
@@ -1157,7 +1159,7 @@
         title: 'Contactez AI Video Quiz',
         lead: 'Pour une question, un probleme technique ou une demande concernant vos donnees, utilisez les coordonnees officielles du service.',
         blocks: [
-          ['Support', 'Adresse e-mail : <span class="legal-placeholder">[EMAIL DE CONTACT A RENSEIGNER]</span>'],
+          ['Support', 'Adresse e-mail : <span class="legal-placeholder">myshopts@gmail.com</span>'],
           ['Probleme technique', 'Indiquez votre adresse e-mail de compte, le probleme rencontre et, si possible, une capture d ecran. Ne communiquez jamais votre mot de passe.'],
           ['Demande relative aux donnees', 'Pour demander une information, une correction ou la suppression de donnees associees a votre compte, utilisez l adresse de contact officielle du service.'],
           ['Informations a renseigner', 'Avant publication, remplacez les champs entre crochets par les coordonnees reelles de l editeur.']
@@ -1347,7 +1349,7 @@
         title: 'تواصل مع AI Video Quiz',
         lead: 'لطرح سؤال أو الإبلاغ عن مشكلة تقنية أو طلب يتعلق ببياناتك، استخدم معلومات الاتصال الرسمية للخدمة.',
         blocks: [
-          ['الدعم', 'البريد الإلكتروني: <span class="legal-placeholder">[يتم إضافة بريد الاتصال]</span>'],
+          ['الدعم', 'البريد الإلكتروني: <span class="legal-placeholder">myshopts@gmail.com</span>'],
           ['مشكلة تقنية', 'اذكر بريد حسابك والمشكلة التي واجهتها، ويمكنك إضافة لقطة شاشة إذا أمكن. لا ترسل كلمة المرور أبدا.'],
           ['طلب متعلق بالبيانات', 'لطلب معلومات أو تصحيح أو حذف بيانات مرتبطة بحسابك، استخدم عنوان الاتصال الرسمي.'],
           ['قبل النشر', 'استبدل الحقول الموجودة بين الأقواس ببيانات الاتصال الحقيقية للناشر.']
@@ -1530,6 +1532,46 @@
 
   function watchIeltsVideo(videoId){window.open('https://www.youtube.com/watch?v='+encodeURIComponent(videoId),'_blank','noopener,noreferrer');}
 
+  async function startIeltsQuiz() {
+    if(!state.ieltsVideo) return;
+    startIeltsQuizButton.disabled=true;
+    try {
+      const url=API_BASE+'/api/youtube/questions?videoId='+encodeURIComponent(state.ieltsVideo.videoId)+'&language=en&count=10&mode=ielts_listening';
+      const response=await fetch(url);
+      const data=await response.json();
+      if(!response.ok||!data.ok) throw new Error(data.error||'Unable to generate the IELTS quiz.');
+      if(!Array.isArray(data.questions)||data.questions.length<1||data.questions.length>10) throw new Error('The IELTS server must return between 1 and 10 questions.');
+      state.ieltsQuestions=data.questions; state.ieltsAnswers=new Array(data.questions.length).fill(null); state.ieltsSubmitted=false;
+      renderIeltsQuiz(); ieltsQuizArea.classList.remove('hidden'); startIeltsQuizButton.classList.add('hidden');
+    } catch(error) {
+      console.error('IELTS quiz error:',error); ieltsQuizResult.textContent=error.message||'Unable to generate the IELTS quiz.'; ieltsQuizResult.classList.remove('hidden'); startIeltsQuizButton.disabled=false;
+    }
+  }
+
+  function renderIeltsQuiz() {
+    ieltsQuestionsContainer.innerHTML='';
+    state.ieltsQuestions.forEach(function(q,i){
+      const box=document.createElement('div'); box.className='question';
+      const n=document.createElement('div'); n.className='question-number'; n.textContent='Question '+(i+1)+' / '+state.ieltsQuestions.length; box.appendChild(n);
+      const text=document.createElement('div'); text.className='question-text'; text.textContent=q.question||''; box.appendChild(text);
+      const choices=document.createElement('div'); choices.className='choices';
+      (q.choices||[]).forEach(function(choice,j){
+        const label=document.createElement('label'); label.className='choice'; const input=document.createElement('input'); input.type='radio'; input.name='ielts-q-'+i; input.value=String(j); input.checked=state.ieltsAnswers[i]===j; input.disabled=state.ieltsSubmitted; input.onchange=function(){state.ieltsAnswers[i]=j;}; const span=document.createElement('span'); span.textContent=choice; label.appendChild(input); label.appendChild(span); choices.appendChild(label);
+      });
+      box.appendChild(choices); ieltsQuestionsContainer.appendChild(box);
+    });
+  }
+
+  function submitIeltsQuiz() {
+    if(state.ieltsSubmitted) return;
+    if(state.ieltsAnswers.some(function(a){return a===null;})){ ieltsQuizResult.textContent='Please answer all IELTS questions before submitting.'; ieltsQuizResult.classList.remove('hidden'); return; }
+    state.ieltsSubmitted=true;
+    let correct=0;
+    state.ieltsQuestions.forEach(function(q,i){if(state.ieltsAnswers[i]===q.correctAnswer) correct++;});
+    ieltsQuizResult.textContent='IELTS Listening: '+correct+' / '+state.ieltsQuestions.length+' correct answers.';
+    ieltsQuizResult.classList.remove('hidden'); submitIeltsQuizButton.classList.add('hidden'); nextIeltsVideoButton.classList.remove('hidden'); renderIeltsQuiz();
+  }
+
   function startCategories() {
     showScreen('category');
   }
@@ -1620,6 +1662,17 @@
   const ieltsLoading = document.getElementById('ieltsLoading');
   const ieltsError = document.getElementById('ieltsError');
   const ieltsVideoGrid = document.getElementById('ieltsVideoGrid');
+  const ieltsQuizScreen = document.getElementById('ieltsQuizScreen');
+  const ieltsQuizTitle = document.getElementById('ieltsQuizTitle');
+  const ieltsQuizPlayer = document.getElementById('ieltsQuizPlayer');
+  const startIeltsQuizButton = document.getElementById('startIeltsQuizButton');
+  const ieltsQuizArea = document.getElementById('ieltsQuizArea');
+  const ieltsQuestionsContainer = document.getElementById('ieltsQuestionsContainer');
+  const submitIeltsQuizButton = document.getElementById('submitIeltsQuizButton');
+  const ieltsQuizResult = document.getElementById('ieltsQuizResult');
+  const nextIeltsVideoButton = document.getElementById('nextIeltsVideoButton');
+  const authMessage = document.getElementById('authMessage');
+  const forgotPasswordButton = document.getElementById('forgotPasswordButton');
 
 
   const gameScreen =
@@ -1758,6 +1811,7 @@
   function toggleAuthMode() {
     authMode = authMode === 'login' ? 'register' : 'login';
     setAuthError('');
+    setAuthMessage('');
     authForm.reset();
     authPassword.autocomplete = authMode === 'register' ? 'new-password' : 'current-password';
     applyTranslations();
@@ -1771,7 +1825,8 @@
       'auth/user-not-found': 'Aucun compte ne correspond a cette adresse email.',
       'auth/wrong-password': 'Mot de passe incorrect.',
       'auth/invalid-credential': 'Email ou mot de passe incorrect.',
-      'auth/too-many-requests': 'Trop de tentatives. Reessaie plus tard.'
+      'auth/too-many-requests': 'Trop de tentatives. Reessaie plus tard.',
+      'auth/network-request-failed': 'Probleme de connexion. Reessaie.'
     };
     return messages[error.code] || error.message || 'Une erreur de connexion est survenue.';
   }
@@ -1799,6 +1854,18 @@
     return snap.data();
   }
 
+  function setAuthMessage(message) { if (!authMessage) return; authMessage.textContent=message||''; authMessage.classList.toggle('hidden',!message); }
+
+  async function resetPassword() {
+    setAuthError(''); setAuthMessage('');
+    const email=authEmail.value.trim();
+    if(!email){ setAuthError(t('passwordResetError')+' '+t('emailPlaceholder')+'.'); authEmail.focus(); return; }
+    forgotPasswordButton.disabled=true;
+    try { await auth.sendPasswordResetEmail(email); setAuthMessage(t('passwordResetSent')); }
+    catch(error){ console.error('Password reset error:',error); setAuthError(firebaseAuthErrorMessage(error)); }
+    finally { forgotPasswordButton.disabled=false; }
+  }
+
   async function handleAuthSubmit(event) {
     event.preventDefault();
     setAuthError('');
@@ -1815,9 +1882,18 @@
 
     try {
       if (authMode === 'register') {
-        await auth.createUserWithEmailAndPassword(email, password);
+        const credential = await auth.createUserWithEmailAndPassword(email, password);
+        await credential.user.sendEmailVerification();
+        setAuthMessage(t('verificationSent'));
+        await auth.signOut();
       } else {
-        await auth.signInWithEmailAndPassword(email, password);
+        const credential = await auth.signInWithEmailAndPassword(email, password);
+        if (!credential.user.emailVerified) {
+          await credential.user.sendEmailVerification();
+          await auth.signOut();
+          setAuthError(t('verificationRequired'));
+          setAuthMessage(t('verificationSent'));
+        }
       }
     } catch (error) {
       console.error('Firebase Auth error:', error);
@@ -1873,6 +1949,17 @@
     }
 
     try {
+      await user.reload();
+      if (!user.emailVerified) {
+        await user.sendEmailVerification();
+        state.user = null;
+        setAuthError(t('verificationRequired'));
+        setAuthMessage(t('verificationSent'));
+        await auth.signOut();
+        showScreen('auth');
+        return;
+      }
+
       const data = await ensureUserDocument(user);
 
       state.user = user;
@@ -1909,6 +1996,7 @@
     rulesScreen.classList.add('hidden');
     infoPageScreen.classList.add('hidden');
     ieltsScreen.classList.add('hidden');
+    ieltsQuizScreen.classList.add('hidden');
 
     categoryScreen.classList.add(
       'hidden'
@@ -1944,6 +2032,9 @@
 
     if (screen === 'ielts') {
       ieltsScreen.classList.remove('hidden');
+    }
+    if (screen === 'ieltsQuiz') {
+      ieltsQuizScreen.classList.remove('hidden');
     }
 
     if (screen === 'category') {
