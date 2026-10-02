@@ -86,6 +86,26 @@
       background: #fee2e2;
       color: #991b1b;
     }
+    .auth-success {
+      background: #dcfce7;
+      color: #166534;
+    }
+    .auth-forgot {
+      justify-self: start;
+      padding: 2px 0;
+      border: 0;
+      background: transparent;
+      box-shadow: none;
+      color: #2563eb;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .auth-forgot:hover {
+      background: transparent;
+      text-decoration: underline;
+      transform: none;
+    }
     .account-bar {
       display: flex;
       justify-content: space-between;
@@ -877,6 +897,7 @@
       <input id="authPassword" type="password" data-i18n-placeholder="passwordPlaceholder" placeholder="Mot de passe" autocomplete="current-password" minlength="6" required>
       <button id="authSubmitButton" type="submit">Se connecter</button>
     </form>
+    <button id="authForgotPassword" class="auth-forgot" type="button" onclick="sendPasswordReset()">Mot de passe oublié ?</button>
     <div id="authError" class="auth-error hidden"></div>
     <div class="auth-switch">
       <span id="authSwitchText">Pas encore de compte ?</span>
@@ -1091,6 +1112,7 @@
     fr: {
       headerSubtitle:'Regarde une video et teste tes connaissances', points:'Points', logout:'Deconnexion',
       login:'Connexion', loginDesc:'Connecte-toi pour sauvegarder ton score.', register:'Creer un compte', registerDesc:'Cree un compte pour sauvegarder ton score.',
+      forgotPassword:'Mot de passe oublié ?', resetEmailRequired:'Saisis ton adresse email pour recevoir le lien de réinitialisation.', resetEmailSent:'Si un compte existe pour cette adresse, un lien de réinitialisation a été envoyé.',
       emailPlaceholder:'Adresse email', passwordPlaceholder:'Mot de passe', connect:'Se connecter', createAccount:'Creer mon compte', noAccount:'Pas encore de compte ?', alreadyAccount:'Deja un compte ?',
       heroKicker:'QUIZ VIDEO + IA', heroTitle:'Regarde. Reponds. Gagne des points.', heroText:'Choisis une langue, regarde une video adaptee a ton theme et reponds a 4 questions generees a partir de son contenu.', chooseLanguage:'Choisir ma langue', seeRules:'Voir les regles',
       languageTitle:'Choisis ta langue de jeu', languageSubtitle:'Les videos et les questions seront recherches dans la langue choisie.', featureVideoTitle:'Videos selectionnees', featureVideoText:'Des videos publiques et adaptees au theme choisi.', featureAiTitle:'Questions par IA', featureAiText:'4 questions sont generees a partir du contenu de la video.', featureScoreTitle:'Score cumulatif', featureScoreText:'4 bonnes reponses donnent 1 point.',
@@ -1102,7 +1124,7 @@
     },
     en: {
       headerSubtitle:'Watch a video and test your knowledge', points:'Points', logout:'Log out',
-      login:'Sign in', loginDesc:'Sign in to save your score.', register:'Create an account', registerDesc:'Create an account to save your score.', emailPlaceholder:'Email address', passwordPlaceholder:'Password', connect:'Sign in', createAccount:'Create my account', noAccount:"Don't have an account yet?", alreadyAccount:'Already have an account?',
+      login:'Sign in', loginDesc:'Sign in to save your score.', register:'Create an account', registerDesc:'Create an account to save your score.', forgotPassword:'Forgot password?', resetEmailRequired:'Enter your email address to receive a password reset link.', resetEmailSent:'If an account exists for this address, a password reset link has been sent.', emailPlaceholder:'Email address', passwordPlaceholder:'Password', connect:'Sign in', createAccount:'Create my account', noAccount:"Don't have an account yet?", alreadyAccount:'Already have an account?',
       heroKicker:'VIDEO QUIZ + AI', heroTitle:'Watch. Answer. Earn points.', heroText:'Choose a language, watch a video matched to your topic and answer 4 questions generated from its content.', chooseLanguage:'Choose my language', seeRules:'See the rules',
       languageTitle:'Choose your game language', languageSubtitle:'Videos and questions will be searched in the selected language.', featureVideoTitle:'Selected videos', featureVideoText:'Public videos matched to your chosen topic.', featureAiTitle:'AI-generated questions', featureAiText:'4 questions are generated from the video content.', featureScoreTitle:'Cumulative score', featureScoreText:'4 correct answers give you 1 point.',
       rulesBadge:'GAME RULES', rulesTitle:'How to play', rulesSubtitle:'The principle is simple: one video, 4 questions, one point if you answer all 4 correctly.',
@@ -1113,7 +1135,7 @@
     },
     ar: {
       headerSubtitle:'شاهد فيديو واختبر معلوماتك', points:'النقاط', logout:'تسجيل الخروج',
-      login:'تسجيل الدخول', loginDesc:'سجل الدخول لحفظ نقاطك.', register:'إنشاء حساب', registerDesc:'أنشئ حسابا لحفظ نقاطك.', emailPlaceholder:'البريد الإلكتروني', passwordPlaceholder:'كلمة المرور', connect:'تسجيل الدخول', createAccount:'إنشاء حسابي', noAccount:'ليس لديك حساب بعد؟', alreadyAccount:'لديك حساب بالفعل؟',
+      login:'تسجيل الدخول', loginDesc:'سجل الدخول لحفظ نقاطك.', register:'إنشاء حساب', registerDesc:'أنشئ حسابا لحفظ نقاطك.', forgotPassword:'هل نسيت كلمة المرور؟', resetEmailRequired:'أدخل بريدك الإلكتروني لإرسال رابط إعادة تعيين كلمة المرور.', resetEmailSent:'إذا كان هناك حساب بهذا البريد، فسيتم إرسال رابط إعادة تعيين كلمة المرور.', emailPlaceholder:'البريد الإلكتروني', passwordPlaceholder:'كلمة المرور', connect:'تسجيل الدخول', createAccount:'إنشاء حسابي', noAccount:'ليس لديك حساب بعد؟', alreadyAccount:'لديك حساب بالفعل؟',
       heroKicker:'اختبار فيديو + ذكاء اصطناعي', heroTitle:'شاهد. أجب. اكسب النقاط.', heroText:'اختر اللغة، شاهد فيديو مناسبا لموضوعك، ثم أجب عن 4 أسئلة يتم توليدها من محتوى الفيديو.', chooseLanguage:'اختر لغتي', seeRules:'شاهد القواعد',
       languageTitle:'اختر لغة اللعب', languageSubtitle:'سيتم البحث عن الفيديوهات والأسئلة باللغة التي تختارها.', featureVideoTitle:'فيديوهات مختارة', featureVideoText:'فيديوهات عامة مناسبة للموضوع الذي تختاره.', featureAiTitle:'أسئلة بالذكاء الاصطناعي', featureAiText:'يتم توليد 4 أسئلة من محتوى الفيديو.', featureScoreTitle:'نقاط متراكمة', featureScoreText:'الإجابة الصحيحة عن الأسئلة الأربعة تمنحك نقطة واحدة.',
       rulesBadge:'قواعد اللعبة', rulesTitle:'كيف تلعب؟', rulesSubtitle:'الفكرة بسيطة: فيديو واحد، 4 أسئلة، ونقطة واحدة إذا أجبت عن الأسئلة الأربعة بشكل صحيح.',
@@ -1423,6 +1445,8 @@
     authTitle.textContent = authMode === 'register' ? t('register') : t('login');
     authDescription.textContent = authMode === 'register' ? t('registerDesc') : t('loginDesc');
     authSubmitButton.textContent = authMode === 'register' ? t('createAccount') : t('connect');
+    authForgotPassword.textContent = t('forgotPassword');
+    authForgotPassword.classList.toggle('hidden', authMode !== 'login');
     authSwitchText.textContent = authMode === 'register' ? t('alreadyAccount') : t('noAccount');
     authSwitchButton.textContent = authMode === 'register' ? t('connect') : t('createAccount');
     document.getElementById('authLangFr').classList.toggle('active', interfaceLanguage === 'fr');
@@ -1607,6 +1631,7 @@
   const authEmail = document.getElementById('authEmail');
   const authPassword = document.getElementById('authPassword');
   const authSubmitButton = document.getElementById('authSubmitButton');
+  const authForgotPassword = document.getElementById('authForgotPassword');
   const authError = document.getElementById('authError');
   const authSwitchText = document.getElementById('authSwitchText');
   const authSwitchButton = document.getElementById('authSwitchButton');
@@ -1750,9 +1775,10 @@
   }
 
 
-  function setAuthError(message) {
+  function setAuthError(message, isSuccess) {
     authError.textContent = message || '';
     authError.classList.toggle('hidden', !message);
+    authError.classList.toggle('auth-success', Boolean(message && isSuccess));
   }
 
   function toggleAuthMode() {
@@ -1763,6 +1789,28 @@
     applyTranslations();
   }
 
+  async function sendPasswordReset() {
+    setAuthError('');
+    const email = authEmail.value.trim();
+
+    if (!email) {
+      setAuthError(t('resetEmailRequired'));
+      authEmail.focus();
+      return;
+    }
+
+    authForgotPassword.disabled = true;
+    try {
+      await auth.sendPasswordResetEmail(email);
+      setAuthError(t('resetEmailSent'), true);
+    } catch (error) {
+      console.error('Firebase password reset error:', error);
+      setAuthError(firebaseAuthErrorMessage(error));
+    } finally {
+      authForgotPassword.disabled = false;
+    }
+  }
+
   function firebaseAuthErrorMessage(error) {
     const messages = {
       'auth/invalid-email': 'Adresse email invalide.',
@@ -1771,7 +1819,10 @@
       'auth/user-not-found': 'Aucun compte ne correspond a cette adresse email.',
       'auth/wrong-password': 'Mot de passe incorrect.',
       'auth/invalid-credential': 'Email ou mot de passe incorrect.',
-      'auth/too-many-requests': 'Trop de tentatives. Reessaie plus tard.'
+      'auth/too-many-requests': 'Trop de tentatives. Reessaie plus tard.',
+      'auth/operation-not-allowed': 'La connexion par email et mot de passe doit être activée dans Firebase.',
+      'auth/unauthorized-domain': 'Ce domaine doit être autorisé dans Firebase Authentication.',
+      'permission-denied': 'Firebase Firestore refuse l’accès aux données du compte. Vérifie ses règles de sécurité.'
     };
     return messages[error.code] || error.message || 'Une erreur de connexion est survenue.';
   }
