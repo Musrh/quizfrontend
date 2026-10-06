@@ -1521,7 +1521,10 @@
     const title=String((v&&v.title)||'').toLowerCase();
     return title.includes('ielts') && title.includes('listening') && (title.includes('test') || title.includes('practice')) ;
   }
-  function openIeltsPage() { if(!requireLogin()) return; leaveIeltsMode(); state.ieltsScore = 0; showScreen('ielts'); loadIeltsVideos('listening'); }
+  function openIeltsPage() {
+    if (!requireLogin()) return;
+    window.location.href = 'https://ai-video-quiz-backend-production.up.railway.app/ielts-app';
+  }
 
   function refreshScoreDisplay() {
     const value = state.mode === 'ielts' ? state.ieltsScore : state.totalScore;
@@ -1564,16 +1567,22 @@
   function escapeHtml(value){return String(value||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\"/g,'&quot;').replace(/'/g,'&#039;');}
 
   async function loadIeltsVideos(skill){
-    if(!requireLogin()) return;
-    currentIeltsSkill='listening'; setIeltsSkillButton(currentIeltsSkill);
-    // Les tests IELTS viennent de la bibliotheque du serveur (module ielts-library.js)
-    if (window.IeltsLibrary) return window.IeltsLibrary.load();
-    ieltsLoading.classList.add('hidden');
-    ieltsError.textContent=t('ieltsError'); ieltsError.classList.remove('hidden');
+    if(!requireLogin()) return; currentIeltsSkill='listening'; setIeltsSkillButton(currentIeltsSkill);
+    ieltsError.classList.add('hidden'); ieltsLoading.classList.remove('hidden'); ieltsVideoGrid.innerHTML='';
+    try{
+      const r=await fetch(API_BASE+'/api/youtube/ielts?skill=listening&q='+encodeURIComponent(IELTS_LISTENING_QUERY));
+      const data=await r.json(); if(!r.ok||!data.ok) throw new Error(data.message||t('ieltsError'));
+      ieltsVideos=(Array.isArray(data.videos)?data.videos:[]).filter(isIeltsListeningTest); renderIeltsVideos();
+    }catch(e){console.error('IELTS loading error:',e); ieltsError.textContent=t('ieltsError'); ieltsError.classList.remove('hidden');}
+    finally{ieltsLoading.classList.add('hidden');}
   }
 
   function renderIeltsVideos(){
-    if (window.IeltsLibrary) window.IeltsLibrary.render();
+    if(!ieltsVideos.length){ieltsVideoGrid.innerHTML='<div class="ielts-empty">'+escapeHtml(t('ieltsNoVideos'))+'</div>';return;}
+    ieltsVideoGrid.innerHTML=ieltsVideos.map(function(v){
+      const thumb=v.thumbnail||('https://i.ytimg.com/vi/'+encodeURIComponent(v.videoId)+'/hqdefault.jpg');
+      return '<article class="ielts-video-card"><img class="ielts-thumbnail" src="'+escapeHtml(thumb)+'" alt="'+escapeHtml(v.title)+'" loading="lazy"><div class="ielts-video-body"><div class="ielts-video-title">'+escapeHtml(v.title)+'</div><div class="ielts-video-channel">'+escapeHtml(t('ieltsChannel'))+': '+escapeHtml(v.channelTitle||'')+'</div><div class="ielts-video-meta"><span class="ielts-meta">'+escapeHtml(t('ieltsEnglish'))+'</span><span class="ielts-meta">'+escapeHtml(t('ieltsDuration'))+': '+escapeHtml(v.durationFormatted||'')+'</span><span class="ielts-meta">'+escapeHtml(t('ieltsPublic'))+'</span></div><button class="ielts-watch" type="button" onclick="watchIeltsVideo(\''+escapeHtml(v.videoId)+'\')">'+escapeHtml(t('ieltsWatch'))+'</button><button class="ielts-watch primary" style="margin-top:8px" type="button" onclick="practiceIeltsVideo(\''+escapeHtml(v.videoId)+'\')">Faire le quiz (score temporaire)</button></div></article>';
+    }).join('');
   }
 
   function watchIeltsVideo(videoId){window.open('https://www.youtube.com/watch?v='+encodeURIComponent(videoId),'_blank','noopener,noreferrer');}
@@ -3797,9 +3806,6 @@
     '0';
 
 </script>
-
-<!-- Preparation IELTS : liste des tests enregistres, test et reponses -->
-<script src="ielts-library.js"></script>
 
 </body>
 </html>
