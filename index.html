@@ -868,6 +868,24 @@
       }
     }
 
+  
+    /* =========================================
+       RECOMPENSES
+       ========================================= */
+    .account-actions { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
+    .account-money { color:#16a34a; font-weight:700; }
+    .account-daily { font-size:13px; color:#64748b; margin-top:2px; }
+    .account-hint { font-size:12px; color:#92400e; margin-top:4px; max-width:520px; line-height:1.4; }
+    .withdraw-button { background:linear-gradient(135deg,#16a34a,#15803d); padding:9px 14px; font-size:14px; box-shadow:none; }
+    .withdraw-button:disabled { background:#94a3b8; opacity:.75; box-shadow:none; }
+    .withdraw-panel { max-width:520px; margin:0 auto 20px; }
+    .withdraw-panel input { width:100%; padding:13px 14px; border:1px solid #cbd5e1; border-radius:10px; font-size:16px; margin:10px 0; }
+    .withdraw-history { margin-top:16px; }
+    .withdraw-history h3 { margin:0 0 8px; font-size:15px; }
+    .withdraw-item { display:flex; justify-content:space-between; gap:10px; padding:8px 0; border-top:1px solid #e2e8f0; font-size:14px; }
+    .withdraw-status-pending { color:#b45309; font-weight:700; }
+    .withdraw-status-paid { color:#15803d; font-weight:700; }
+    .withdraw-status-rejected { color:#b91c1c; font-weight:700; }
   </style>
   <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
@@ -884,10 +902,28 @@
   <div id="accountBar" class="account-bar hidden">
     <div class="account-info">
       <div id="accountEmail"></div>
-      <div><span id="accountPointsLabel" data-i18n="points">Points</span> : <span id="accountScore" class="account-score">0</span></div>
+      <div><span id="accountPointsLabel" data-i18n="points">Points</span> : <span id="accountScore" class="account-score">0</span> <span id="accountMoney" class="account-money"></span></div>
+      <div id="accountDaily" class="account-daily"></div>
+      <div id="accountHint" class="account-hint"></div>
     </div>
-    <button class="logout-button" onclick="logoutUser()" data-i18n="logout">Deconnexion</button>
+    <div class="account-actions">
+      <button id="withdrawButton" class="withdraw-button" type="button" onclick="openWithdrawPanel()" disabled>Retirer</button>
+      <button class="logout-button" onclick="logoutUser()" data-i18n="logout">Deconnexion</button>
+    </div>
   </div>
+
+  <section id="withdrawPanel" class="card withdraw-panel hidden">
+    <h2 id="withdrawTitle"></h2>
+    <p id="withdrawBalance"></p>
+    <p id="withdrawInfo" class="section-subtitle"></p>
+    <input id="withdrawPayout" type="text" maxlength="120" autocomplete="off">
+    <div id="withdrawMessage" class="auth-error hidden"></div>
+    <div class="nav-row">
+      <button id="withdrawConfirm" type="button" onclick="submitWithdraw()"></button>
+      <button id="withdrawCancel" class="ghost-button" type="button" onclick="closeWithdrawPanel()"></button>
+    </div>
+    <div id="withdrawHistory" class="withdraw-history"></div>
+  </section>
 
   <section id="authScreen" class="card auth-card">
     <h2 id="authTitle">Connexion</h2>
@@ -1005,6 +1041,7 @@
       <button id="startQuizButton" class="primary" onclick="startQuiz()" data-i18n="startQuiz">Commencer le quiz</button>
       <div id="quizArea" class="hidden">
         <div class="info" data-i18n="quizInfo">La video reste visible au-dessus. Reponds aux 4 questions en regardant la video.</div>
+        <div id="rewardNote" class="info hidden"></div>
         <div class="progress"><div id="progressBar" class="progress-bar"></div></div>
         <div id="questionsContainer"></div>
         <button id="submitQuizButton" class="primary" onclick="submitQuiz()" data-i18n="submitAnswers">Valider mes reponses</button>
@@ -1467,6 +1504,7 @@
     interfaceLanguage = language;
     localStorage.setItem('aivq_interface_language', language);
     applyTranslations();
+    renderRewardsUi();
   }
 
   function scrollToLanguageChoices() {
@@ -1883,27 +1921,236 @@
     return messages[error.code] || error.message || 'Une erreur de connexion est survenue.';
   }
 
-  async function ensureUserDocument(user) {
-    const ref = db.collection('users').doc(user.uid);
-    const snap = await ref.get();
+  // =====================================================
+  // RECOMPENSES : tout est decide par le serveur.
+  // Le navigateur ne fait que lire le solde et envoyer ses reponses.
+  // =====================================================
 
-    if (!snap.exists) {
-      await ref.set({
-        email: user.email || '',
-        totalPoints: 0,
-        videosCompleted: 0,
-        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-        lastLogin: firebase.firestore.FieldValue.serverTimestamp()
-      });
-      return { totalPoints: 0, videosCompleted: 0 };
+  const REWARD_TEXT = {
+    fr: {
+      withdraw:'Retirer', withdrawalsOff:'Les retraits sont temporairement désactivés.',
+      minNeeded:'Retrait possible à partir de {min} (il te manque {missing}).', pendingRequest:'Demande de retrait en cours de traitement.',
+      dailyCounter:'Vidéos jouées aujourd’hui : {used} / {limit}', dailyLimit:'Tu as atteint la limite de vidéos du jour. Reviens demain !',
+      alreadyPlayed:'Tu as déjà joué cette vidéo : pas de point cette fois.', passedNoPoint:'Bravo, mais cette vidéo a déjà été jouée : pas de point.',
+      withdrawTitle:'Retirer mes gains', withdrawBalance:'Solde disponible : {amount} ({points} points)',
+      withdrawInfo:'Indique où recevoir ton paiement (par exemple ton e-mail PayPal). Ta demande sera vérifiée puis payée par l’administrateur.',
+      payoutPlaceholder:'E-mail PayPal ou autre moyen de paiement', confirmRequest:'Envoyer la demande', cancel:'Fermer',
+      requestSent:'Demande envoyée ! Elle sera traitée prochainement.', payoutRequired:'Indique où recevoir ton paiement.',
+      withdrawFailed:'La demande a échoué. Réessaie plus tard.', historyTitle:'Mes demandes',
+      statusPending:'En attente', statusPaid:'Payée', statusRejected:'Refusée',
+      loadError:'Impossible de charger ton compte. Réessaie dans un instant.', submitError:'Impossible de valider le quiz.',
+      quizExpired:'Ce quiz a expiré : relance-le.'
+    },
+    en: {
+      withdraw:'Withdraw', withdrawalsOff:'Withdrawals are temporarily disabled.',
+      minNeeded:'Withdrawal available from {min} ({missing} to go).', pendingRequest:'Withdrawal request being processed.',
+      dailyCounter:'Videos played today: {used} / {limit}', dailyLimit:'You have reached today’s video limit. Come back tomorrow!',
+      alreadyPlayed:'You already played this video: no point this time.', passedNoPoint:'Well done, but this video was already played: no point.',
+      withdrawTitle:'Withdraw my earnings', withdrawBalance:'Available balance: {amount} ({points} points)',
+      withdrawInfo:'Tell us where to send your payment (for example your PayPal email). Your request will be checked and paid by the administrator.',
+      payoutPlaceholder:'PayPal email or other payment method', confirmRequest:'Send request', cancel:'Close',
+      requestSent:'Request sent! It will be processed soon.', payoutRequired:'Tell us where to send your payment.',
+      withdrawFailed:'The request failed. Please try again later.', historyTitle:'My requests',
+      statusPending:'Pending', statusPaid:'Paid', statusRejected:'Rejected',
+      loadError:'Unable to load your account. Please try again in a moment.', submitError:'Unable to validate the quiz.',
+      quizExpired:'This quiz has expired: start it again.'
+    },
+    ar: {
+      withdraw:'سحب', withdrawalsOff:'السحب معطل مؤقتا.',
+      minNeeded:'السحب متاح ابتداء من {min} (ينقصك {missing}).', pendingRequest:'طلب السحب قيد المعالجة.',
+      dailyCounter:'الفيديوهات التي لعبتها اليوم: {used} / {limit}', dailyLimit:'وصلت إلى حد الفيديوهات اليومي. عد غدا!',
+      alreadyPlayed:'لقد لعبت هذا الفيديو من قبل: لا نقطة هذه المرة.', passedNoPoint:'أحسنت، لكن هذا الفيديو لعب من قبل: لا نقطة.',
+      withdrawTitle:'سحب أرباحي', withdrawBalance:'الرصيد المتاح: {amount} ({points} نقطة)',
+      withdrawInfo:'أخبرنا أين تريد استلام دفعتك (مثلا بريد PayPal). سيتم التحقق من طلبك ثم دفعه من طرف المشرف.',
+      payoutPlaceholder:'بريد PayPal أو وسيلة دفع أخرى', confirmRequest:'إرسال الطلب', cancel:'إغلاق',
+      requestSent:'تم إرسال الطلب! ستتم معالجته قريبا.', payoutRequired:'أخبرنا أين تريد استلام دفعتك.',
+      withdrawFailed:'فشل الطلب. حاول لاحقا.', historyTitle:'طلباتي',
+      statusPending:'قيد الانتظار', statusPaid:'تم الدفع', statusRejected:'مرفوض',
+      loadError:'تعذر تحميل حسابك. حاول بعد قليل.', submitError:'تعذر تأكيد الاختبار.',
+      quizExpired:'انتهت صلاحية هذا الاختبار: ابدأه من جديد.'
+    }
+  };
+
+  function rt(key) {
+    const pack = REWARD_TEXT[interfaceLanguage] || REWARD_TEXT.fr;
+    return pack[key] !== undefined ? pack[key] : REWARD_TEXT.fr[key];
+  }
+
+  const rewardsState = { me: null };
+
+  // Requete avec le jeton Firebase de l'eleve (le serveur verifie qui il est)
+  async function authedFetch(url, options) {
+    options = options || {};
+
+    for (let attempt = 0; attempt < 2; attempt++) {
+      const token = await auth.currentUser.getIdToken(attempt > 0);
+      const headers = Object.assign({}, options.headers, { 'Authorization': 'Bearer ' + token });
+      const response = await fetch(url, Object.assign({}, options, { headers: headers }));
+
+      if (attempt === 0 && (response.status === 401 || response.status === 403)) {
+        const body = await response.clone().json().catch(function() { return {}; });
+        if (body.code === 'email_not_verified' || body.code === 'auth') continue;
+      }
+
+      return response;
+    }
+  }
+
+  async function rewardsApi(path, options) {
+    const response = await authedFetch(API_BASE + '/api/rewards' + path, options);
+    const data = await response.json().catch(function() { return {}; });
+    return { status: response.status, ok: response.ok && data.ok !== false, data: data };
+  }
+
+  async function loadRewards() {
+    const result = await rewardsApi('/me');
+    if (!result.ok) throw new Error(result.data.error || rt('loadError'));
+    rewardsState.me = result.data;
+    state.totalScore = result.data.user.points;
+    return result.data;
+  }
+
+  function formatMoney(cents) {
+    try {
+      return new Intl.NumberFormat(interfaceLanguage, { style: 'currency', currency: 'USD' }).format(cents / 100);
+    } catch (e) {
+      return '$' + (cents / 100).toFixed(2);
+    }
+  }
+
+  function setWithdrawMessage(text, isSuccess) {
+    const box = document.getElementById('withdrawMessage');
+    box.textContent = text || '';
+    box.classList.toggle('hidden', !text);
+    box.classList.toggle('auth-success', Boolean(text && isSuccess));
+  }
+
+  function renderWithdrawHistory() {
+    const box = document.getElementById('withdrawHistory');
+    const me = rewardsState.me;
+    box.innerHTML = '';
+    if (!me || !me.user.withdrawals.length) return;
+
+    const title = document.createElement('h3');
+    title.textContent = rt('historyTitle');
+    box.appendChild(title);
+
+    me.user.withdrawals.forEach(function(item) {
+      const row = document.createElement('div');
+      row.className = 'withdraw-item';
+      const left = document.createElement('span');
+      left.textContent = formatMoney(item.amountCents) + ' · ' + new Date(item.createdAt).toLocaleDateString(interfaceLanguage);
+      const right = document.createElement('span');
+      right.className = 'withdraw-status-' + item.status;
+      right.textContent = rt(item.status === 'paid' ? 'statusPaid' : item.status === 'rejected' ? 'statusRejected' : 'statusPending');
+      row.appendChild(left);
+      row.appendChild(right);
+      box.appendChild(row);
+    });
+  }
+
+  // Met a jour solde, compteur du jour, bouton "Retirer" (actif seulement si le serveur l'autorise)
+  function renderRewardsUi() {
+    const button = document.getElementById('withdrawButton');
+    if (!button) return;
+
+    const money = document.getElementById('accountMoney');
+    const daily = document.getElementById('accountDaily');
+    const hint = document.getElementById('accountHint');
+    const me = rewardsState.me;
+
+    button.textContent = rt('withdraw');
+
+    if (!me || !state.user) {
+      button.disabled = true;
+      money.textContent = '';
+      daily.textContent = '';
+      hint.textContent = '';
+      return;
     }
 
-    await ref.update({
-      email: user.email || '',
-      lastLogin: firebase.firestore.FieldValue.serverTimestamp()
-    });
+    const config = me.config;
+    const user = me.user;
 
-    return snap.data();
+    money.textContent = '· ' + formatMoney(user.balanceCents);
+    daily.textContent = rt('dailyCounter').replace('{used}', me.today.used).replace('{limit}', me.today.limit);
+    button.disabled = !me.canWithdraw;
+
+    let message = '';
+    if (!config.withdrawalsEnabled) {
+      message = rt('withdrawalsOff');
+    } else if (user.withdrawals.some(function(item) { return item.status === 'pending'; })) {
+      message = rt('pendingRequest');
+    } else if (user.balanceCents < config.minWithdrawalCents) {
+      message = rt('minNeeded')
+        .replace('{min}', formatMoney(config.minWithdrawalCents))
+        .replace('{missing}', formatMoney(config.minWithdrawalCents - user.balanceCents));
+    }
+    hint.textContent = message;
+
+    // Panneau de retrait (s'il est ouvert)
+    document.getElementById('withdrawTitle').textContent = rt('withdrawTitle');
+    document.getElementById('withdrawBalance').textContent = rt('withdrawBalance')
+      .replace('{amount}', formatMoney(user.balanceCents)).replace('{points}', user.points);
+    document.getElementById('withdrawInfo').textContent = rt('withdrawInfo');
+    document.getElementById('withdrawPayout').placeholder = rt('payoutPlaceholder');
+    document.getElementById('withdrawConfirm').textContent = rt('confirmRequest');
+    document.getElementById('withdrawConfirm').disabled = !me.canWithdraw;
+    document.getElementById('withdrawCancel').textContent = rt('cancel');
+    renderWithdrawHistory();
+  }
+
+  function openWithdrawPanel() {
+    if (!rewardsState.me || !rewardsState.me.canWithdraw) return;
+    setWithdrawMessage('');
+    document.getElementById('withdrawPayout').value = '';
+    renderRewardsUi();
+    document.getElementById('withdrawPanel').classList.remove('hidden');
+    document.getElementById('withdrawPanel').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  function closeWithdrawPanel() {
+    document.getElementById('withdrawPanel').classList.add('hidden');
+  }
+
+  async function submitWithdraw() {
+    const input = document.getElementById('withdrawPayout');
+    const confirmButton = document.getElementById('withdrawConfirm');
+    const payoutInfo = input.value.trim();
+
+    if (payoutInfo.length < 3) {
+      setWithdrawMessage(rt('payoutRequired'));
+      return;
+    }
+
+    confirmButton.disabled = true;
+
+    try {
+      const result = await rewardsApi('/withdraw', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ payoutInfo: payoutInfo })
+      });
+
+      if (!result.ok) throw new Error(result.data.error || rt('withdrawFailed'));
+
+      rewardsState.me = result.data;
+      state.totalScore = result.data.user.points;
+      input.value = '';
+      refreshScoreDisplay();
+      updateAccountBar();
+      setWithdrawMessage(rt('requestSent'), true);
+    } catch (error) {
+      console.error('Withdraw error:', error);
+      setWithdrawMessage(error.message || rt('withdrawFailed'));
+      confirmButton.disabled = false;
+    }
+  }
+
+  // Appelee a la connexion : le solde vient du serveur (plus de points ecrits par la page)
+  async function ensureUserDocument(user) {
+    const me = await loadRewards();
+    return { totalPoints: me.user.points };
   }
 
   async function handleAuthSubmit(event) {
@@ -1932,6 +2179,7 @@
       } else {
         const cred = await auth.signInWithEmailAndPassword(email, password);
         await cred.user.reload();
+        await cred.user.getIdToken(true);
         if (!cred.user.emailVerified) {
           try { await cred.user.sendEmailVerification(); } catch (e) { console.warn('Verification resend failed:', e); }
           await auth.signOut();
@@ -1954,37 +2202,17 @@
   function updateAccountBar() {
     if (!state.user) {
       accountBar.classList.add('hidden');
+      document.getElementById('withdrawPanel').classList.add('hidden');
       return;
     }
 
     accountEmail.textContent = state.user.email || '';
     accountScore.textContent = String(state.totalScore);
     accountBar.classList.remove('hidden');
+    renderRewardsUi();
   }
 
-  async function saveUserScore(points) {
-    if (!state.user) return;
-
-    const ref = db.collection('users').doc(state.user.uid);
-
-    const data = {
-      lastLogin: firebase.firestore.FieldValue.serverTimestamp()
-    };
-    if (points > 0) {
-      data.totalPoints = firebase.firestore.FieldValue.increment(points);
-    }
-
-    if (points === 1) {
-      data.videosCompleted =
-        firebase.firestore.FieldValue.increment(1);
-    }
-
-    await ref.set(data, { merge: true });
-    const fresh = await ref.get();
-    if (fresh.exists) state.totalScore = Number(fresh.data().totalPoints) || 0;
-    if (state.mode !== 'ielts') refreshScoreDisplay();
-    updateAccountBar();
-  }
+  // Les points sont credites uniquement par le serveur (voir submitQuiz).
 
   applyTranslations();
 
@@ -2020,7 +2248,7 @@
     } catch (error) {
       console.error('Firestore error:', error);
       state.user = null;
-      setAuthError('Impossible de charger ton compte. Verifie les regles Firestore.');
+      setAuthError(rt('loadError'));
       showScreen('auth');
     }
   });
@@ -2722,10 +2950,7 @@
       );
 
 
-      const response =
-        await fetch(
-          url
-        );
+      const response = await authedFetch(url);
 
 
       const data =
@@ -2743,10 +2968,7 @@
         !data.ok
       ) {
 
-        throw new Error(
-          data.error ||
-          'Impossible de generer le quiz.'
-        );
+        throw new Error(data.code === 'daily_limit' ? rt('dailyLimit') : (data.error || 'Impossible de generer le quiz.'));
 
       }
 
@@ -2765,8 +2987,22 @@
       }
 
 
-      state.questions =
-        data.questions.slice(0, QUIZ_QUESTION_COUNT);
+      if (!data.quizId) {
+        throw new Error('Reponse du serveur invalide (quiz non securise).');
+      }
+
+      state.quizId = data.quizId;
+
+      if (rewardsState.me && data.daily) {
+        rewardsState.me.today = data.daily;
+        renderRewardsUi();
+      }
+
+      const note = document.getElementById('rewardNote');
+      note.textContent = data.rewardEligible === false ? rt('alreadyPlayed') : '';
+      note.classList.toggle('hidden', data.rewardEligible !== false);
+
+      state.questions = data.questions.slice(0, QUIZ_QUESTION_COUNT);
 
 
       state.answers =
@@ -3063,149 +3299,79 @@
   // SUBMIT QUIZ
   // =====================================================
 
-  function submitQuiz() {
+  async function submitQuiz() {
 
-    if (
-      state.submitted
-    ) {
-
+    if (state.submitted) {
       return;
-
     }
 
-
-    const unanswered =
-      state.answers.some(
-        function(answer) {
-
-          return (
-            answer === null
-          );
-
-        }
-      );
-
+    const unanswered = state.answers.some(function(answer) { return answer === null; });
 
     if (unanswered) {
-
-      alert(
-        'Tu dois repondre a toutes les questions (' + state.questions.length + ') avant de valider.'
-      );
-
+      alert('Tu dois repondre a toutes les questions (' + state.questions.length + ') avant de valider.');
       return;
-
     }
 
+    state.submitted = true;
 
-    state.submitted =
-      true;
+    const submitButton = document.getElementById('submitQuizButton');
+    submitButton.disabled = true;
 
+    // C'est le SERVEUR qui corrige et qui credite le point : la page ne connait pas les bonnes reponses
+    let result;
 
-    let correct =
-      0;
+    try {
+      const response = await rewardsApi('/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ quizId: state.quizId, answers: state.answers })
+      });
 
-
-    for (
-      let i = 0;
-      i < state.questions.length;
-      i++
-    ) {
-
-      const question =
-        state.questions[i];
-
-
-      const answer =
-        state.answers[i];
-
-
-      if (
-        answer ===
-        question.correctAnswer
-      ) {
-
-        correct++;
-
+      if (!response.ok) {
+        throw new Error(response.data.code === 'quiz_expired' ? rt('quizExpired') : (response.data.error || rt('submitError')));
       }
 
-
-      showQuestionCorrection(
-        i,
-        answer,
-        question.correctAnswer
-      );
-
+      result = response.data;
+    } catch (error) {
+      console.error('submitQuiz error:', error);
+      state.submitted = false;
+      submitButton.disabled = false;
+      alert(error.message || rt('submitError'));
+      return;
     }
 
-
-    let points =
-      0;
-
-
-    const total = state.questions.length;
-    const needed = total >= QUIZ_QUESTION_COUNT ? QUIZ_PASS_THRESHOLD : total;
-    const passed = correct >= needed;
-
-    if (
-      passed
-    ) {
-
-      points =
-        1;
-
+    for (let i = 0; i < state.questions.length; i++) {
+      showQuestionCorrection(i, state.answers[i], result.correctAnswers[i]);
     }
 
+    const correct = result.correct;
+    const total = result.total;
+    const needed = result.needed;
+    const points = result.awarded ? 1 : 0;
 
-    if (state.mode === 'ielts') {
-      // Score IELTS : temporaire, jamais enregistre sur le compte
-      state.ieltsScore += points;
-    } else {
-      // Jeu general : score cumule et enregistre sur le compte
-      state.totalScore += points;
-      saveUserScore(points).catch(function(error) {
-        console.error('Firestore score save error:', error);
-      });
-    }
+    rewardsState.me = result;
+    state.totalScore = result.user.points;
 
     refreshScoreDisplay();
+    updateAccountBar();
 
+    roundScore.textContent = String(points);
 
-    roundScore.textContent =
-      String(
-        points
-      );
-
-
-    refreshScoreDisplay();
-
-
-    if (passed) {
+    if (result.passed && result.awarded) {
       resultMessage.textContent = t('perfect').replace('4/4', correct + '/' + total);
+      resultMessage.className = 'result-success';
+    } else if (result.passed) {
+      resultMessage.textContent = rt('passedNoPoint');
       resultMessage.className = 'result-success';
     } else {
       resultMessage.textContent = correct + '/' + total + ' — ' + t('notPerfect').replace(/\b4\b/g, String(needed));
       resultMessage.className = 'result-fail';
     }
 
-
-    document
-      .getElementById(
-        'submitQuizButton'
-      )
-      .disabled =
-      true;
-
-
     setTimeout(
       function() {
-
         prepareEvaluation();
-
-
-        showScreen(
-          'result'
-        );
-
+        showScreen('result');
       },
       1500
     );
