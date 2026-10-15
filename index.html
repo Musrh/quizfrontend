@@ -880,6 +880,8 @@
     .withdraw-button:disabled { background:#94a3b8; opacity:.75; box-shadow:none; }
     .withdraw-panel { max-width:520px; margin:0 auto 20px; }
     .withdraw-panel input { width:100%; padding:13px 14px; border:1px solid #cbd5e1; border-radius:10px; font-size:16px; margin:10px 0; }
+    .withdraw-panel select { width:100%; padding:13px 14px; border:1px solid #cbd5e1; border-radius:10px; font-size:16px; margin:10px 0; background:#fff; }
+    .withdraw-panel .section-subtitle { margin:4px 0 8px; }
     .withdraw-history { margin-top:16px; }
     .withdraw-history h3 { margin:0 0 8px; font-size:15px; }
     .withdraw-item { display:flex; justify-content:space-between; gap:10px; padding:8px 0; border-top:1px solid #e2e8f0; font-size:14px; }
@@ -916,7 +918,30 @@
     <h2 id="withdrawTitle"></h2>
     <p id="withdrawBalance"></p>
     <p id="withdrawInfo" class="section-subtitle"></p>
-    <input id="withdrawPayout" type="text" maxlength="120" autocomplete="off">
+    <label id="wdMethodLabel" for="wdMethod"></label>
+    <select id="wdMethod" onchange="renderWithdrawFields()">
+      <option value="paypal"></option>
+      <option value="card"></option>
+      <option value="cash"></option>
+    </select>
+    <input id="wdFullName" type="text" maxlength="80" autocomplete="name">
+    <input id="wdCountry" type="text" maxlength="60" autocomplete="country-name">
+    <div id="wdFieldsPaypal">
+      <input id="wdPaypalEmail" type="email" maxlength="120" autocomplete="off">
+    </div>
+    <div id="wdFieldsCard" class="hidden">
+      <input id="wdContactEmail" type="email" maxlength="120" autocomplete="email">
+      <p id="wdCardNote" class="section-subtitle"></p>
+    </div>
+    <div id="wdFieldsCash" class="hidden">
+      <select id="wdNetwork">
+        <option value="western_union"></option>
+        <option value="wafacash"></option>
+      </select>
+      <input id="wdPhone" type="tel" maxlength="25" autocomplete="tel">
+      <input id="wdCity" type="text" maxlength="60" autocomplete="address-level2">
+      <p id="wdCashNote" class="section-subtitle"></p>
+    </div>
     <div id="withdrawMessage" class="auth-error hidden"></div>
     <div class="nav-row">
       <button id="withdrawConfirm" type="button" onclick="submitWithdraw()"></button>
@@ -1933,7 +1958,13 @@
       dailyCounter:'Vidéos jouées aujourd’hui : {used} / {limit}', dailyLimit:'Tu as atteint la limite de vidéos du jour. Reviens demain !',
       alreadyPlayed:'Tu as déjà joué cette vidéo : pas de point cette fois.', passedNoPoint:'Bravo, mais cette vidéo a déjà été jouée : pas de point.',
       withdrawTitle:'Retirer mes gains', withdrawBalance:'Solde disponible : {amount} ({points} points)',
-      withdrawInfo:'Indique où recevoir ton paiement (par exemple ton e-mail PayPal). Ta demande sera vérifiée puis payée par l’administrateur.',
+      withdrawInfo:'Choisis comment recevoir ton paiement et donne tes coordonnées. Ta demande sera vérifiée puis payée par l’administrateur.',
+      payMethod:'Moyen de paiement', methodPaypal:'PayPal', methodCard:'Carte bancaire (Stripe)', methodCash:'Western Union / Wafacash (code envoyé par e-mail)',
+      fullName:'Nom et prénom complets', country:'Pays', paypalEmail:'E-mail de ton compte PayPal', contactEmail:'E-mail de contact',
+      cardNote:'Ne saisis jamais ton numéro de carte ici : le paiement passe par Stripe et tu seras contacté par e-mail si une étape est nécessaire.',
+      networkWU:'Western Union', networkWafa:'Wafacash', phone:'Téléphone (avec indicatif, ex. +212…)', city:'Ville',
+      cashNote:'Le code de retrait sera envoyé par e-mail à : {email}.',
+      fieldsRequired:'Complète tous les champs.', invalidEmail:'Adresse e-mail invalide.', codeSent:'code envoyé par e-mail',
       payoutPlaceholder:'E-mail PayPal ou autre moyen de paiement', confirmRequest:'Envoyer la demande', cancel:'Fermer',
       requestSent:'Demande envoyée ! Elle sera traitée prochainement.', payoutRequired:'Indique où recevoir ton paiement.',
       withdrawFailed:'La demande a échoué. Réessaie plus tard.', historyTitle:'Mes demandes',
@@ -1947,7 +1978,13 @@
       dailyCounter:'Videos played today: {used} / {limit}', dailyLimit:'You have reached today’s video limit. Come back tomorrow!',
       alreadyPlayed:'You already played this video: no point this time.', passedNoPoint:'Well done, but this video was already played: no point.',
       withdrawTitle:'Withdraw my earnings', withdrawBalance:'Available balance: {amount} ({points} points)',
-      withdrawInfo:'Tell us where to send your payment (for example your PayPal email). Your request will be checked and paid by the administrator.',
+      withdrawInfo:'Choose how to receive your payment and give your details. Your request will be checked and paid by the administrator.',
+      payMethod:'Payment method', methodPaypal:'PayPal', methodCard:'Bank card (Stripe)', methodCash:'Western Union / Wafacash (code sent by email)',
+      fullName:'Full name', country:'Country', paypalEmail:'Your PayPal account email', contactEmail:'Contact email',
+      cardNote:'Never enter your card number here: payment goes through Stripe and you will be contacted by email if a step is needed.',
+      networkWU:'Western Union', networkWafa:'Wafacash', phone:'Phone (with country code, e.g. +212…)', city:'City',
+      cashNote:'The withdrawal code will be emailed to: {email}.',
+      fieldsRequired:'Please fill in all fields.', invalidEmail:'Invalid email address.', codeSent:'code sent by email',
       payoutPlaceholder:'PayPal email or other payment method', confirmRequest:'Send request', cancel:'Close',
       requestSent:'Request sent! It will be processed soon.', payoutRequired:'Tell us where to send your payment.',
       withdrawFailed:'The request failed. Please try again later.', historyTitle:'My requests',
@@ -1961,7 +1998,13 @@
       dailyCounter:'الفيديوهات التي لعبتها اليوم: {used} / {limit}', dailyLimit:'وصلت إلى حد الفيديوهات اليومي. عد غدا!',
       alreadyPlayed:'لقد لعبت هذا الفيديو من قبل: لا نقطة هذه المرة.', passedNoPoint:'أحسنت، لكن هذا الفيديو لعب من قبل: لا نقطة.',
       withdrawTitle:'سحب أرباحي', withdrawBalance:'الرصيد المتاح: {amount} ({points} نقطة)',
-      withdrawInfo:'أخبرنا أين تريد استلام دفعتك (مثلا بريد PayPal). سيتم التحقق من طلبك ثم دفعه من طرف المشرف.',
+      withdrawInfo:'اختر طريقة استلام دفعتك وأدخل بياناتك. سيتم التحقق من طلبك ثم دفعه من طرف المشرف.',
+      payMethod:'طريقة الدفع', methodPaypal:'PayPal', methodCard:'بطاقة بنكية (Stripe)', methodCash:'Western Union / Wafacash (يُرسل الرمز بالبريد الإلكتروني)',
+      fullName:'الاسم الكامل', country:'البلد', paypalEmail:'بريد حساب PayPal', contactEmail:'بريد التواصل',
+      cardNote:'لا تدخل رقم بطاقتك هنا أبدا: يتم الدفع عبر Stripe وسنتواصل معك بالبريد إذا لزم أي إجراء.',
+      networkWU:'Western Union', networkWafa:'Wafacash', phone:'الهاتف (مع رمز البلد، مثال +212…)', city:'المدينة',
+      cashNote:'سيتم إرسال رمز السحب بالبريد الإلكتروني إلى: {email}.',
+      fieldsRequired:'املأ جميع الحقول.', invalidEmail:'بريد إلكتروني غير صالح.', codeSent:'تم إرسال الرمز بالبريد',
       payoutPlaceholder:'بريد PayPal أو وسيلة دفع أخرى', confirmRequest:'إرسال الطلب', cancel:'إغلاق',
       requestSent:'تم إرسال الطلب! ستتم معالجته قريبا.', payoutRequired:'أخبرنا أين تريد استلام دفعتك.',
       withdrawFailed:'فشل الطلب. حاول لاحقا.', historyTitle:'طلباتي',
@@ -2025,6 +2068,91 @@
     box.classList.toggle('auth-success', Boolean(text && isSuccess));
   }
 
+  function methodName(item) {
+    if (item.method === 'paypal') return rt('methodPaypal');
+    if (item.method === 'card') return rt('methodCard').replace(/ \(.*/, ' (Stripe)');
+    if (item.method === 'cash') return item.network === 'wafacash' ? rt('networkWafa') : rt('networkWU');
+    return '';
+  }
+
+  function wdValue(id) {
+    return document.getElementById(id).value.trim();
+  }
+
+  function renderWithdrawFields() {
+    const method = document.getElementById('wdMethod').value;
+    document.getElementById('wdFieldsPaypal').classList.toggle('hidden', method !== 'paypal');
+    document.getElementById('wdFieldsCard').classList.toggle('hidden', method !== 'card');
+    document.getElementById('wdFieldsCash').classList.toggle('hidden', method !== 'cash');
+  }
+
+  // Textes du formulaire (langue de l'interface)
+  function applyWithdrawTexts() {
+    const methodSelect = document.getElementById('wdMethod');
+    methodSelect.options[0].textContent = rt('methodPaypal');
+    methodSelect.options[1].textContent = rt('methodCard');
+    methodSelect.options[2].textContent = rt('methodCash');
+    document.getElementById('wdMethodLabel').textContent = rt('payMethod');
+    document.getElementById('wdFullName').placeholder = rt('fullName');
+    document.getElementById('wdCountry').placeholder = rt('country');
+    document.getElementById('wdPaypalEmail').placeholder = rt('paypalEmail');
+    document.getElementById('wdContactEmail').placeholder = rt('contactEmail');
+    document.getElementById('wdCardNote').textContent = rt('cardNote');
+    const networkSelect = document.getElementById('wdNetwork');
+    networkSelect.options[0].textContent = rt('networkWU');
+    networkSelect.options[1].textContent = rt('networkWafa');
+    document.getElementById('wdPhone').placeholder = rt('phone');
+    document.getElementById('wdCity').placeholder = rt('city');
+    const email = rewardsState.me && rewardsState.me.user ? rewardsState.me.user.email : '';
+    document.getElementById('wdCashNote').textContent = rt('cashNote').replace('{email}', email);
+    renderWithdrawFields();
+  }
+
+  function resetWithdrawForm() {
+    ['wdFullName', 'wdCountry', 'wdPaypalEmail', 'wdContactEmail', 'wdPhone', 'wdCity'].forEach(function(id) {
+      document.getElementById(id).value = '';
+    });
+    document.getElementById('wdMethod').value = 'paypal';
+    document.getElementById('wdNetwork').value = 'western_union';
+    renderWithdrawFields();
+  }
+
+  // Rassemble et verifie les coordonnees (le serveur reverifie tout)
+  function collectWithdrawPayload() {
+    const emailOk = function(value) { return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(value); };
+    const method = wdValue('wdMethod');
+    const payload = { method: method, fullName: wdValue('wdFullName'), country: wdValue('wdCountry') };
+
+    if (payload.fullName.length < 2 || payload.country.length < 2) {
+      setWithdrawMessage(rt('fieldsRequired'));
+      return null;
+    }
+
+    if (method === 'paypal') {
+      payload.paypalEmail = wdValue('wdPaypalEmail');
+      if (!emailOk(payload.paypalEmail)) {
+        setWithdrawMessage(rt('invalidEmail'));
+        return null;
+      }
+    } else if (method === 'card') {
+      payload.contactEmail = wdValue('wdContactEmail') || (state.user && state.user.email) || '';
+      if (!emailOk(payload.contactEmail)) {
+        setWithdrawMessage(rt('invalidEmail'));
+        return null;
+      }
+    } else if (method === 'cash') {
+      payload.network = wdValue('wdNetwork');
+      payload.phone = wdValue('wdPhone');
+      payload.city = wdValue('wdCity');
+      if (payload.phone.length < 6 || payload.city.length < 2) {
+        setWithdrawMessage(rt('fieldsRequired'));
+        return null;
+      }
+    }
+
+    return payload;
+  }
+
   function renderWithdrawHistory() {
     const box = document.getElementById('withdrawHistory');
     const me = rewardsState.me;
@@ -2039,10 +2167,11 @@
       const row = document.createElement('div');
       row.className = 'withdraw-item';
       const left = document.createElement('span');
-      left.textContent = formatMoney(item.amountCents) + ' · ' + new Date(item.createdAt).toLocaleDateString(interfaceLanguage);
+      left.textContent = formatMoney(item.amountCents) + ' · ' + (item.method ? methodName(item) + ' · ' : '') + new Date(item.createdAt).toLocaleDateString(interfaceLanguage);
       const right = document.createElement('span');
       right.className = 'withdraw-status-' + item.status;
-      right.textContent = rt(item.status === 'paid' ? 'statusPaid' : item.status === 'rejected' ? 'statusRejected' : 'statusPending');
+      right.textContent = rt(item.status === 'paid' ? 'statusPaid' : item.status === 'rejected' ? 'statusRejected' : 'statusPending') +
+        (item.status === 'paid' && item.codeSent ? ' · ' + rt('codeSent') : '');
       row.appendChild(left);
       row.appendChild(right);
       box.appendChild(row);
@@ -2093,7 +2222,7 @@
     document.getElementById('withdrawBalance').textContent = rt('withdrawBalance')
       .replace('{amount}', formatMoney(user.balanceCents)).replace('{points}', user.points);
     document.getElementById('withdrawInfo').textContent = rt('withdrawInfo');
-    document.getElementById('withdrawPayout').placeholder = rt('payoutPlaceholder');
+    applyWithdrawTexts();
     document.getElementById('withdrawConfirm').textContent = rt('confirmRequest');
     document.getElementById('withdrawConfirm').disabled = !me.canWithdraw;
     document.getElementById('withdrawCancel').textContent = rt('cancel');
@@ -2103,7 +2232,7 @@
   function openWithdrawPanel() {
     if (!rewardsState.me || !rewardsState.me.canWithdraw) return;
     setWithdrawMessage('');
-    document.getElementById('withdrawPayout').value = '';
+    resetWithdrawForm();
     renderRewardsUi();
     document.getElementById('withdrawPanel').classList.remove('hidden');
     document.getElementById('withdrawPanel').scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -2114,14 +2243,10 @@
   }
 
   async function submitWithdraw() {
-    const input = document.getElementById('withdrawPayout');
     const confirmButton = document.getElementById('withdrawConfirm');
-    const payoutInfo = input.value.trim();
+    const payload = collectWithdrawPayload();
 
-    if (payoutInfo.length < 3) {
-      setWithdrawMessage(rt('payoutRequired'));
-      return;
-    }
+    if (!payload) return;
 
     confirmButton.disabled = true;
 
@@ -2129,14 +2254,14 @@
       const result = await rewardsApi('/withdraw', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ payoutInfo: payoutInfo })
+        body: JSON.stringify(payload)
       });
 
       if (!result.ok) throw new Error(result.data.error || rt('withdrawFailed'));
 
       rewardsState.me = result.data;
       state.totalScore = result.data.user.points;
-      input.value = '';
+      resetWithdrawForm();
       refreshScoreDisplay();
       updateAccountBar();
       setWithdrawMessage(rt('requestSent'), true);
