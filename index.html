@@ -931,6 +931,7 @@
     </div>
     <div id="wdFieldsCard" class="hidden">
       <input id="wdContactEmail" type="email" maxlength="120" autocomplete="email">
+      <input id="wdBankAccount" type="text" maxlength="50" autocomplete="off" inputmode="text">
       <p id="wdCardNote" class="section-subtitle"></p>
     </div>
     <div id="wdFieldsCash" class="hidden">
@@ -1959,9 +1960,9 @@
       alreadyPlayed:'Tu as déjà joué cette vidéo : pas de point cette fois.', passedNoPoint:'Bravo, mais cette vidéo a déjà été jouée : pas de point.',
       withdrawTitle:'Retirer mes gains', withdrawBalance:'Solde disponible : {amount} ({points} points)',
       withdrawInfo:'Choisis comment recevoir ton paiement et donne tes coordonnées. Ta demande sera vérifiée puis payée par l’administrateur.',
-      payMethod:'Moyen de paiement', methodPaypal:'PayPal', methodCard:'Carte bancaire (Stripe)', methodCash:'Western Union / Wafacash (code envoyé par e-mail)',
+      payMethod:'Moyen de paiement', methodPaypal:'PayPal', methodCard:'Carte / virement bancaire', methodCash:'Western Union / Wafacash (code envoyé par e-mail)',
       fullName:'Nom et prénom complets', country:'Pays', paypalEmail:'E-mail de ton compte PayPal', contactEmail:'E-mail de contact',
-      cardNote:'Ne saisis jamais ton numéro de carte ici : le paiement passe par Stripe et tu seras contacté par e-mail si une étape est nécessaire.',
+      bankAccount:'RIB (24 chiffres) ou IBAN', cardNote:'Ton RIB ou ton IBAN suffit pour recevoir un virement. Il sert uniquement à te verser ton paiement, il n’est visible que par l’administrateur et il est effacé une fois ta demande traitée. Si tu es mineur, demande l’accord d’un parent. Ne saisis jamais ton numéro de carte, sa date d’expiration ni le code au dos.',
       networkWU:'Western Union', networkWafa:'Wafacash', phone:'Téléphone (avec indicatif, ex. +212…)', city:'Ville',
       cashNote:'Le code de retrait sera envoyé par e-mail à : {email}.',
       fieldsRequired:'Complète tous les champs.', invalidEmail:'Adresse e-mail invalide.', codeSent:'code envoyé par e-mail',
@@ -1979,9 +1980,9 @@
       alreadyPlayed:'You already played this video: no point this time.', passedNoPoint:'Well done, but this video was already played: no point.',
       withdrawTitle:'Withdraw my earnings', withdrawBalance:'Available balance: {amount} ({points} points)',
       withdrawInfo:'Choose how to receive your payment and give your details. Your request will be checked and paid by the administrator.',
-      payMethod:'Payment method', methodPaypal:'PayPal', methodCard:'Bank card (Stripe)', methodCash:'Western Union / Wafacash (code sent by email)',
+      payMethod:'Payment method', methodPaypal:'PayPal', methodCard:'Bank card / bank transfer', methodCash:'Western Union / Wafacash (code sent by email)',
       fullName:'Full name', country:'Country', paypalEmail:'Your PayPal account email', contactEmail:'Contact email',
-      cardNote:'Never enter your card number here: payment goes through Stripe and you will be contacted by email if a step is needed.',
+      bankAccount:'RIB (24 digits) or IBAN', cardNote:'Your RIB or IBAN is enough to receive a transfer. It is used only to send you your payment, only the administrator can see it, and it is erased once your request is processed. If you are a minor, ask a parent for permission. Never enter your card number, expiry date or the code on the back.',
       networkWU:'Western Union', networkWafa:'Wafacash', phone:'Phone (with country code, e.g. +212…)', city:'City',
       cashNote:'The withdrawal code will be emailed to: {email}.',
       fieldsRequired:'Please fill in all fields.', invalidEmail:'Invalid email address.', codeSent:'code sent by email',
@@ -1999,9 +2000,9 @@
       alreadyPlayed:'لقد لعبت هذا الفيديو من قبل: لا نقطة هذه المرة.', passedNoPoint:'أحسنت، لكن هذا الفيديو لعب من قبل: لا نقطة.',
       withdrawTitle:'سحب أرباحي', withdrawBalance:'الرصيد المتاح: {amount} ({points} نقطة)',
       withdrawInfo:'اختر طريقة استلام دفعتك وأدخل بياناتك. سيتم التحقق من طلبك ثم دفعه من طرف المشرف.',
-      payMethod:'طريقة الدفع', methodPaypal:'PayPal', methodCard:'بطاقة بنكية (Stripe)', methodCash:'Western Union / Wafacash (يُرسل الرمز بالبريد الإلكتروني)',
+      payMethod:'طريقة الدفع', methodPaypal:'PayPal', methodCard:'بطاقة / تحويل بنكي', methodCash:'Western Union / Wafacash (يُرسل الرمز بالبريد الإلكتروني)',
       fullName:'الاسم الكامل', country:'البلد', paypalEmail:'بريد حساب PayPal', contactEmail:'بريد التواصل',
-      cardNote:'لا تدخل رقم بطاقتك هنا أبدا: يتم الدفع عبر Stripe وسنتواصل معك بالبريد إذا لزم أي إجراء.',
+      bankAccount:'رقم الحساب البنكي RIB (24 رقما) أو IBAN', cardNote:'يكفي رقم RIB أو IBAN لاستلام التحويل. يُستعمل فقط لإرسال دفعتك، ولا يراه إلا المشرف، ويُمحى بعد معالجة طلبك. إذا كنت قاصرا فاطلب موافقة أحد والديك. لا تدخل أبدا رقم بطاقتك أو تاريخ انتهائها أو الرمز الموجود خلفها.',
       networkWU:'Western Union', networkWafa:'Wafacash', phone:'الهاتف (مع رمز البلد، مثال +212…)', city:'المدينة',
       cashNote:'سيتم إرسال رمز السحب بالبريد الإلكتروني إلى: {email}.',
       fieldsRequired:'املأ جميع الحقول.', invalidEmail:'بريد إلكتروني غير صالح.', codeSent:'تم إرسال الرمز بالبريد',
@@ -2070,7 +2071,7 @@
 
   function methodName(item) {
     if (item.method === 'paypal') return rt('methodPaypal');
-    if (item.method === 'card') return rt('methodCard').replace(/ \(.*/, ' (Stripe)');
+    if (item.method === 'card') return rt('methodCard');
     if (item.method === 'cash') return item.network === 'wafacash' ? rt('networkWafa') : rt('networkWU');
     return '';
   }
@@ -2097,6 +2098,7 @@
     document.getElementById('wdCountry').placeholder = rt('country');
     document.getElementById('wdPaypalEmail').placeholder = rt('paypalEmail');
     document.getElementById('wdContactEmail').placeholder = rt('contactEmail');
+    document.getElementById('wdBankAccount').placeholder = rt('bankAccount');
     document.getElementById('wdCardNote').textContent = rt('cardNote');
     const networkSelect = document.getElementById('wdNetwork');
     networkSelect.options[0].textContent = rt('networkWU');
@@ -2109,7 +2111,7 @@
   }
 
   function resetWithdrawForm() {
-    ['wdFullName', 'wdCountry', 'wdPaypalEmail', 'wdContactEmail', 'wdPhone', 'wdCity'].forEach(function(id) {
+    ['wdFullName', 'wdCountry', 'wdPaypalEmail', 'wdContactEmail', 'wdBankAccount', 'wdPhone', 'wdCity'].forEach(function(id) {
       document.getElementById(id).value = '';
     });
     document.getElementById('wdMethod').value = 'paypal';
@@ -2138,6 +2140,11 @@
       payload.contactEmail = wdValue('wdContactEmail') || (state.user && state.user.email) || '';
       if (!emailOk(payload.contactEmail)) {
         setWithdrawMessage(rt('invalidEmail'));
+        return null;
+      }
+      payload.bankAccount = wdValue('wdBankAccount');
+      if (payload.bankAccount.replace(/\s+/g, '').length < 10) {
+        setWithdrawMessage(rt('fieldsRequired'));
         return null;
       }
     } else if (method === 'cash') {
