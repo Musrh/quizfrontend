@@ -880,6 +880,7 @@
     .withdraw-button:disabled { background:#94a3b8; opacity:.75; box-shadow:none; }
     .mode-button { background:linear-gradient(135deg,#4f46e5,#4338ca); }
     .mode-line { font-size:13px; color:#475569; margin-top:2px; }
+    .account-hint, .mode-line, .account-info { overflow-wrap:anywhere; }
     .withdraw-panel { max-width:520px; margin:0 auto 20px; }
     .withdraw-panel input { width:100%; padding:13px 14px; border:1px solid #cbd5e1; border-radius:10px; font-size:16px; margin:10px 0; }
     .withdraw-panel select { width:100%; padding:13px 14px; border:1px solid #cbd5e1; border-radius:10px; font-size:16px; margin:10px 0; background:#fff; }
@@ -960,7 +961,11 @@
     <p id="modeText" class="section-subtitle"></p>
     <p id="modeInstructions" class="section-subtitle" style="white-space:pre-wrap"></p>
     <div id="depositFields" class="hidden">
-      <input id="depPayMethod" type="text" maxlength="40" autocomplete="off">
+      <select id="depPayMethod">
+        <option value="Virement / RIB"></option>
+        <option value="Western Union"></option>
+        <option value="Wafacash"></option>
+      </select>
       <input id="depPayerName" type="text" maxlength="80" autocomplete="name">
       <input id="depReference" type="text" maxlength="80" autocomplete="off">
     </div>
@@ -2001,6 +2006,12 @@
       confirmLeave:'Quitter et demander le remboursement', leaveSent:'Demande envoyée : ton dépôt sera remboursé dans le délai annoncé.',
       depositBack:'+ dépôt remboursé : {amount}', depositRefundLabel:'Remboursement du dépôt', depositSent:'Merci ! Ton paiement va être vérifié.',
       freePlayResult:'Bravo ! En jeu libre, on ne gagne pas de points.',
+      payChoose:'Choisis comment payer le dépôt :', payStripe:'Payer par carte bancaire (Stripe)', payStripeTest:'Payer par carte (Stripe, mode test)', payPaypal:'Payer avec PayPal',
+      payManual:'RIB, Western Union ou Wafacash', depMethodRib:'Virement / RIB', depMethodWU:'Western Union', depMethodWafa:'Wafacash',
+      payRedirect:'Redirection vers le paiement sécurisé…', depositChecking:'Vérification de ton paiement…',
+      depositActivated:'Paiement confirmé ! Le mode récompense est actif.', depositCancelled:'Paiement annulé : rien n’a été débité.',
+      refundDone:'Ton dépôt a été remboursé sur ton moyen de paiement.',
+      leaveConfirmRefund:'Quitter le mode récompense ? Ton dépôt de {amount} sera remboursé sur ton moyen de paiement. Tes points restent sur ton compte, gelés.',
       payoutPlaceholder:'E-mail PayPal ou autre moyen de paiement', confirmRequest:'Envoyer la demande', cancel:'Fermer',
       requestSent:'Demande envoyée ! Elle sera traitée prochainement.', payoutRequired:'Indique où recevoir ton paiement.',
       withdrawFailed:'La demande a échoué. Réessaie plus tard.', historyTitle:'Mes demandes',
@@ -2039,6 +2050,12 @@
       confirmLeave:'Leave and request refund', leaveSent:'Request sent: your deposit will be refunded within the stated time.',
       depositBack:'+ deposit refunded: {amount}', depositRefundLabel:'Deposit refund', depositSent:'Thank you! Your payment will be checked.',
       freePlayResult:'Well done! In free play, you do not earn points.',
+      payChoose:'Choose how to pay the deposit:', payStripe:'Pay by bank card (Stripe)', payStripeTest:'Pay by card (Stripe, test mode)', payPaypal:'Pay with PayPal',
+      payManual:'RIB, Western Union or Wafacash', depMethodRib:'Bank transfer / RIB', depMethodWU:'Western Union', depMethodWafa:'Wafacash',
+      payRedirect:'Redirecting to secure payment…', depositChecking:'Checking your payment…',
+      depositActivated:'Payment confirmed! Reward mode is on.', depositCancelled:'Payment cancelled: nothing was charged.',
+      refundDone:'Your deposit has been refunded to your payment method.',
+      leaveConfirmRefund:'Leave reward mode? Your {amount} deposit will be refunded to your payment method. Your points stay on your account, frozen.',
       payoutPlaceholder:'PayPal email or other payment method', confirmRequest:'Send request', cancel:'Close',
       requestSent:'Request sent! It will be processed soon.', payoutRequired:'Tell us where to send your payment.',
       withdrawFailed:'The request failed. Please try again later.', historyTitle:'My requests',
@@ -2077,6 +2094,12 @@
       confirmLeave:'مغادرة وطلب الاسترجاع', leaveSent:'تم إرسال الطلب: سيُرد إليك ضمانك خلال المدة المعلنة.',
       depositBack:'+ استرجاع الضمان: {amount}', depositRefundLabel:'استرجاع الضمان', depositSent:'شكرا! سيتم التحقق من دفعتك.',
       freePlayResult:'أحسنت! في اللعب الحر لا تُكسب نقاط.',
+      payChoose:'اختر طريقة دفع الضمان:', payStripe:'الدفع بالبطاقة البنكية (Stripe)', payStripeTest:'الدفع بالبطاقة (Stripe، وضع تجريبي)', payPaypal:'الدفع عبر PayPal',
+      payManual:'RIB أو Western Union أو Wafacash', depMethodRib:'تحويل بنكي / RIB', depMethodWU:'Western Union', depMethodWafa:'Wafacash',
+      payRedirect:'جار التحويل إلى صفحة الدفع الآمن…', depositChecking:'جار التحقق من دفعتك…',
+      depositActivated:'تم تأكيد الدفع! نمط المكافآت مفعّل.', depositCancelled:'تم إلغاء الدفع: لم يُخصم أي مبلغ.',
+      refundDone:'تم رد ضمانك إلى وسيلة الدفع الخاصة بك.',
+      leaveConfirmRefund:'مغادرة نمط المكافآت؟ سيُرد ضمانك البالغ {amount} إلى وسيلة الدفع الخاصة بك. تبقى نقاطك في حسابك لكنها مجمّدة.',
       payoutPlaceholder:'بريد PayPal أو وسيلة دفع أخرى', confirmRequest:'إرسال الطلب', cancel:'إغلاق',
       requestSent:'تم إرسال الطلب! ستتم معالجته قريبا.', payoutRequired:'أخبرنا أين تريد استلام دفعتك.',
       withdrawFailed:'فشل الطلب. حاول لاحقا.', historyTitle:'طلباتي',
@@ -2094,7 +2117,9 @@
   const rewardsState = { me: null };
   let withdrawIntent = 'withdraw'; // 'withdraw' (retrait) ou 'leave' (sortie du mode récompense)
   let showDepositForm = false;
+  let manualDeposit = false;
   let modePromptShown = false;
+  let depositReturnHandled = false;
 
   // Requete avec le jeton Firebase de l'eleve (le serveur verifie qui il est)
   async function authedFetch(url, options) {
@@ -2300,7 +2325,7 @@
         .replace('{min}', formatMoney(config.minWithdrawalCents))
         .replace('{missing}', formatMoney(config.minWithdrawalCents - user.balanceCents));
     }
-    if (me.legacy && (me.legacy.status === 'error' || me.legacy.status === 'notfound' || me.legacy.status === 'nofield')) {
+    if (me.legacy && me.legacy.status === 'error') {
       message = (message ? message + ' ' : '') + 'Anciens points non repris : ' + me.legacy.message;
     }
     hint.textContent = message;
@@ -2385,13 +2410,31 @@
       text.textContent = rt('chooseText').replace('{amount}', amount).replace('{days}', config.depositRefundDays);
 
       if (showDepositForm) {
-        fields.classList.remove('hidden');
-        instructions.textContent = config.depositInstructions || rt('noInstructions');
-        document.getElementById('depPayMethod').placeholder = rt('depPayMethod');
-        document.getElementById('depPayerName').placeholder = rt('depPayerName');
-        document.getElementById('depReference').placeholder = rt('depReference');
-        addButton(rt('depositPaid'), submitDeposit);
-        addButton(rt('back'), function() { showDepositForm = false; setModeMessage(''); renderModePanel(); }, true);
+        const gateways = config.depositProviders || {};
+
+        if (manualDeposit || (!gateways.stripe && !gateways.paypal)) {
+          // Paiement à la main (RIB, Western Union, Wafacash) : confirmé ensuite par l'administrateur
+          fields.classList.remove('hidden');
+          instructions.textContent = config.depositInstructions || rt('noInstructions');
+          const methods = document.getElementById('depPayMethod').options;
+          methods[0].textContent = rt('depMethodRib');
+          methods[1].textContent = rt('depMethodWU');
+          methods[2].textContent = rt('depMethodWafa');
+          document.getElementById('depPayerName').placeholder = rt('depPayerName');
+          document.getElementById('depReference').placeholder = rt('depReference');
+          addButton(rt('depositPaid'), submitDeposit);
+          addButton(rt('back'), function() {
+            if (manualDeposit) { manualDeposit = false; } else { showDepositForm = false; }
+            setModeMessage('');
+            renderModePanel();
+          }, true);
+        } else {
+          instructions.textContent = rt('payChoose');
+          if (gateways.stripe) addButton(rt(gateways.stripeTest ? 'payStripeTest' : 'payStripe'), function() { startCheckout('stripe'); });
+          if (gateways.paypal) addButton(rt('payPaypal'), function() { startCheckout('paypal'); });
+          addButton(rt('payManual'), function() { manualDeposit = true; setModeMessage(''); renderModePanel(); }, true);
+          addButton(rt('back'), function() { showDepositForm = false; setModeMessage(''); renderModePanel(); }, true);
+        }
       } else {
         addButton(rt('playFree'), chooseFree, user.mode !== 'free');
         addButton(rt('activateReward').replace('{amount}', amount), function() { showDepositForm = true; setModeMessage(''); renderModePanel(); });
@@ -2405,6 +2448,7 @@
     if (!rewardsState.me) return;
     setModeMessage('');
     showDepositForm = false;
+    manualDeposit = false;
     renderModePanel();
     document.getElementById('modePanel').classList.remove('hidden');
     document.getElementById('modePanel').scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -2429,6 +2473,7 @@
       rewardsState.me = result.data;
       state.totalScore = result.data.user.points;
       showDepositForm = false;
+      manualDeposit = false;
       refreshScoreDisplay();
       updateAccountBar();
       renderModePanel();
@@ -2439,6 +2484,43 @@
       setModeMessage(error.message || rt('withdrawFailed'));
       return false;
     }
+  }
+
+  async function startCheckout(provider) {
+    setModeMessage(rt('payRedirect'), true);
+
+    try {
+      const result = await rewardsApi('/deposit/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ provider: provider, returnUrl: location.origin + location.pathname })
+      });
+
+      if (!result.ok) throw new Error(result.data.error || rt('withdrawFailed'));
+
+      window.location.href = result.data.url;
+    } catch (error) {
+      console.error('Checkout error:', error);
+      setModeMessage(error.message || rt('withdrawFailed'));
+    }
+  }
+
+  // Retour de Stripe / PayPal : le serveur vérifie le paiement chez le fournisseur
+  async function handleDepositReturn() {
+    const params = new URLSearchParams(location.search);
+    const kind = params.get('deposit');
+    const id = kind === 'stripe' ? params.get('session_id') : kind === 'paypal' ? params.get('token') : null;
+
+    history.replaceState(null, '', location.pathname);
+    openModePanel();
+
+    if (!id) {
+      setModeMessage(rt('depositCancelled'));
+      return;
+    }
+
+    setModeMessage(rt('depositChecking'), true);
+    await modeCall('/deposit/confirm', { provider: kind, id: id }, rt('depositActivated'));
   }
 
   function chooseFree() {
@@ -2463,8 +2545,15 @@
   function startLeave() {
     const user = rewardsState.me.user;
 
+    if (user.deposit.status === 'held' && (user.deposit.provider === 'stripe' || user.deposit.provider === 'paypal')) {
+      if (confirm(rt('leaveConfirmRefund').replace('{amount}', formatMoney(user.deposit.heldCents)))) {
+        modeCall('/leave', {}, rt('refundDone'));
+      }
+      return;
+    }
+
     if (user.deposit.status === 'held') {
-      // Il faut des coordonnées pour rembourser le dépôt : on réutilise le formulaire de retrait
+      // Dépôt payé à la main : il faut des coordonnées pour le rembourser, on réutilise le formulaire de retrait
       withdrawIntent = 'leave';
       closeModePanel();
       setWithdrawMessage('');
@@ -2591,6 +2680,16 @@
     accountScore.textContent = String(state.totalScore);
     accountBar.classList.remove('hidden');
     renderRewardsUi();
+
+    if (rewardsState.me && !depositReturnHandled) {
+      depositReturnHandled = true;
+
+      if (new URLSearchParams(location.search).has('deposit')) {
+        modePromptShown = true;
+        handleDepositReturn();
+        return;
+      }
+    }
 
     if (rewardsState.me && rewardsState.me.user.mode === null && !modePromptShown) {
       modePromptShown = true;
