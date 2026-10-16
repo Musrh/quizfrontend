@@ -2215,6 +2215,9 @@
         .replace('{min}', formatMoney(config.minWithdrawalCents))
         .replace('{missing}', formatMoney(config.minWithdrawalCents - user.balanceCents));
     }
+    if (me.legacy && (me.legacy.status === 'error' || me.legacy.status === 'notfound' || me.legacy.status === 'nofield')) {
+      message = (message ? message + ' ' : '') + 'Anciens points non repris : ' + me.legacy.message;
+    }
     hint.textContent = message;
 
     // Panneau de retrait (s'il est ouvert)
