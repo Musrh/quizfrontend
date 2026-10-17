@@ -2011,6 +2011,9 @@
       payRedirect:'Redirection vers le paiement sécurisé…', depositChecking:'Vérification de ton paiement…',
       depositActivated:'Paiement confirmé ! Le mode récompense est actif.', depositCancelled:'Paiement annulé : rien n’a été débité.',
       refundDone:'Ton dépôt a été remboursé sur ton moyen de paiement.',
+      rewardSoon:'Le mode récompense arrive bientôt : pour l’instant, tout le monde joue en jeu libre.',
+      rewardSoonText:'Le mode récompense n’est pas encore ouvert. Pour l’instant, tout le monde joue en jeu libre, sans points ni cumul. Reviens bientôt !',
+      pointsFrozenSoon:'Tes points sont gelés jusqu’à l’ouverture du mode récompense.',
       leaveConfirmNoRefund:'Ton dépôt t’a déjà été remboursé avec ton premier retrait. Si tu quittes le mode récompense, il n’y aura aucun nouveau remboursement et tes points seront gelés. Pour reprendre le mode récompense, il faudra verser un nouveau dépôt. Quitter quand même ?',
       leaveConfirmRefund:'Quitter le mode récompense ? Ton dépôt de {amount} sera remboursé sur ton moyen de paiement. Tes points restent sur ton compte, gelés.',
       payoutPlaceholder:'E-mail PayPal ou autre moyen de paiement', confirmRequest:'Envoyer la demande', cancel:'Fermer',
@@ -2056,6 +2059,9 @@
       payRedirect:'Redirecting to secure payment…', depositChecking:'Checking your payment…',
       depositActivated:'Payment confirmed! Reward mode is on.', depositCancelled:'Payment cancelled: nothing was charged.',
       refundDone:'Your deposit has been refunded to your payment method.',
+      rewardSoon:'Reward mode is coming soon: for now everyone plays in free play.',
+      rewardSoonText:'Reward mode is not open yet. For now everyone plays in free play, with no points or balance. Come back soon!',
+      pointsFrozenSoon:'Your points are frozen until reward mode opens.',
       leaveConfirmNoRefund:'Your deposit was already refunded with your first withdrawal. If you leave reward mode, there will be no new refund and your points will be frozen. To return to reward mode, you will need to pay a new deposit. Leave anyway?',
       leaveConfirmRefund:'Leave reward mode? Your {amount} deposit will be refunded to your payment method. Your points stay on your account, frozen.',
       payoutPlaceholder:'PayPal email or other payment method', confirmRequest:'Send request', cancel:'Close',
@@ -2101,6 +2107,9 @@
       payRedirect:'جار التحويل إلى صفحة الدفع الآمن…', depositChecking:'جار التحقق من دفعتك…',
       depositActivated:'تم تأكيد الدفع! نمط المكافآت مفعّل.', depositCancelled:'تم إلغاء الدفع: لم يُخصم أي مبلغ.',
       refundDone:'تم رد ضمانك إلى وسيلة الدفع الخاصة بك.',
+      rewardSoon:'نمط المكافآت قادم قريبا: في الوقت الحالي يلعب الجميع في اللعب الحر.',
+      rewardSoonText:'نمط المكافآت غير متاح بعد. في الوقت الحالي يلعب الجميع في اللعب الحر، بدون نقاط ولا رصيد. عد قريبا!',
+      pointsFrozenSoon:'نقاطك مجمّدة إلى أن يفتح نمط المكافآت.',
       leaveConfirmNoRefund:'سبق أن رُدّ إليك ضمانك مع أول سحب. إذا غادرت نمط المكافآت فلن يكون هناك أي استرجاع جديد وستُجمَّد نقاطك. وللعودة إلى نمط المكافآت ستحتاج إلى دفع ضمان جديد. هل تريد المغادرة رغم ذلك؟',
       leaveConfirmRefund:'مغادرة نمط المكافآت؟ سيُرد ضمانك البالغ {amount} إلى وسيلة الدفع الخاصة بك. تبقى نقاطك في حسابك لكنها مجمّدة.',
       payoutPlaceholder:'بريد PayPal أو وسيلة دفع أخرى', confirmRequest:'إرسال الطلب', cancel:'إغلاق',
@@ -2299,6 +2308,7 @@
 
     button.textContent = rt('withdraw');
     document.getElementById('modeButton').textContent = rt('modeButton');
+    document.getElementById('modeButton').disabled = Boolean(me && state.user && rewardLocked(me));
     document.getElementById('accountMode').textContent = me && state.user ? modeLine(me) : '';
 
     if (!me || !state.user) {
@@ -2318,7 +2328,7 @@
 
     let message = '';
     if (!user.rewardActive) {
-      message = user.points > 0 ? rt('pointsFrozen') : '';
+      message = user.points > 0 ? rt(rewardLocked(me) ? 'pointsFrozenSoon' : 'pointsFrozen') : '';
     } else if (!config.withdrawalsEnabled) {
       message = rt('withdrawalsOff');
     } else if (user.withdrawals.some(function(item) { return item.status === 'pending'; })) {
@@ -2352,7 +2362,16 @@
 
   // ----- Mode de jeu : jeu libre ou mode récompense (dépôt de garantie) -----
 
+  // Mode récompense fermé (interrupteur de l'administrateur) pour les élèves qui n'y sont pas déjà
+  function rewardLocked(me) {
+    const user = me.user;
+    const inFlow = user.rewardActive || ['pending', 'leaving'].includes(user.deposit.status);
+    return !me.config.withdrawalsEnabled && !inFlow;
+  }
+
   function modeLine(me) {
+    if (rewardLocked(me)) return rt('rewardSoon');
+
     const user = me.user;
     const status = user.deposit.status;
 
@@ -2409,6 +2428,8 @@
       text.textContent = rt('refundPendingText')
         .replace('{amount}', formatMoney(user.deposit.heldCents))
         .replace('{date}', user.deposit.refundDueBy ? new Date(user.deposit.refundDueBy).toLocaleDateString(interfaceLanguage) : '');
+    } else if (rewardLocked(me)) {
+      text.textContent = rt('rewardSoonText');
     } else {
       text.textContent = rt('chooseText').replace('{amount}', amount).replace('{days}', config.depositRefundDays);
 
@@ -2695,7 +2716,7 @@
       }
     }
 
-    if (rewardsState.me && rewardsState.me.user.mode === null && !modePromptShown) {
+    if (rewardsState.me && rewardsState.me.user.mode === null && !modePromptShown && !rewardLocked(rewardsState.me)) {
       modePromptShown = true;
       openModePanel();
     }
