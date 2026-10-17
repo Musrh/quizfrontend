@@ -1999,7 +1999,7 @@
       noInstructions:'Demande à l’administrateur comment payer le dépôt, puis remplis les champs ci-dessous.',
       depositPendingText:'Ton paiement est en cours de vérification par l’administrateur. Dès qu’il est confirmé, le mode récompense s’active.',
       refundPendingText:'Ton dépôt de {amount} sera remboursé au plus tard le {date}. Tu es revenu en jeu libre ; tes points restent gelés.',
-      rewardOnHeld:'Mode récompense actif. Ton dépôt de {amount} te sera rendu avec ton premier retrait.', rewardOnRefunded:'Mode récompense actif. Ton dépôt t’a déjà été rendu.',
+      rewardOnHeld:'Mode récompense actif. Ton dépôt de {amount} te sera rendu avec ton premier retrait.', rewardOnRefunded:'Mode récompense actif. Ton dépôt t’a déjà été rendu avec ton premier retrait : si tu quittes ce mode, il n’y aura aucun remboursement et tes points seront gelés. Pour y revenir, il faudra un nouveau dépôt.',
       leaveReward:'Quitter le mode récompense', leaveConfirm:'Quitter le mode récompense ? Tes points restent sur ton compte mais sont gelés tant que tu ne reprends pas le mode récompense.',
       leaveTitle:'Quitter le mode récompense', leaveRefund:'Dépôt à rembourser : {amount}',
       leaveInfo:'Choisis comment recevoir ton dépôt et donne tes coordonnées. Il te sera remboursé dans les {days} jours. Tes points restent sur ton compte mais sont gelés.',
@@ -2011,6 +2011,7 @@
       payRedirect:'Redirection vers le paiement sécurisé…', depositChecking:'Vérification de ton paiement…',
       depositActivated:'Paiement confirmé ! Le mode récompense est actif.', depositCancelled:'Paiement annulé : rien n’a été débité.',
       refundDone:'Ton dépôt a été remboursé sur ton moyen de paiement.',
+      leaveConfirmNoRefund:'Ton dépôt t’a déjà été remboursé avec ton premier retrait. Si tu quittes le mode récompense, il n’y aura aucun nouveau remboursement et tes points seront gelés. Pour reprendre le mode récompense, il faudra verser un nouveau dépôt. Quitter quand même ?',
       leaveConfirmRefund:'Quitter le mode récompense ? Ton dépôt de {amount} sera remboursé sur ton moyen de paiement. Tes points restent sur ton compte, gelés.',
       payoutPlaceholder:'E-mail PayPal ou autre moyen de paiement', confirmRequest:'Envoyer la demande', cancel:'Fermer',
       requestSent:'Demande envoyée ! Elle sera traitée prochainement.', payoutRequired:'Indique où recevoir ton paiement.',
@@ -2043,7 +2044,7 @@
       noInstructions:'Ask the administrator how to pay the deposit, then fill in the fields below.',
       depositPendingText:'Your payment is being checked by the administrator. Reward mode turns on as soon as it is confirmed.',
       refundPendingText:'Your {amount} deposit will be refunded by {date} at the latest. You are back in free play; your points stay frozen.',
-      rewardOnHeld:'Reward mode on. Your {amount} deposit will be returned with your first withdrawal.', rewardOnRefunded:'Reward mode on. Your deposit has already been returned.',
+      rewardOnHeld:'Reward mode on. Your {amount} deposit will be returned with your first withdrawal.', rewardOnRefunded:'Reward mode on. Your deposit was already returned with your first withdrawal: if you leave this mode, there will be no refund and your points will be frozen. To come back, you will need a new deposit.',
       leaveReward:'Leave reward mode', leaveConfirm:'Leave reward mode? Your points stay on your account but are frozen until you turn reward mode back on.',
       leaveTitle:'Leave reward mode', leaveRefund:'Deposit to refund: {amount}',
       leaveInfo:'Choose how to receive your deposit and give your details. It will be refunded within {days} days. Your points stay on your account but are frozen.',
@@ -2055,6 +2056,7 @@
       payRedirect:'Redirecting to secure payment…', depositChecking:'Checking your payment…',
       depositActivated:'Payment confirmed! Reward mode is on.', depositCancelled:'Payment cancelled: nothing was charged.',
       refundDone:'Your deposit has been refunded to your payment method.',
+      leaveConfirmNoRefund:'Your deposit was already refunded with your first withdrawal. If you leave reward mode, there will be no new refund and your points will be frozen. To return to reward mode, you will need to pay a new deposit. Leave anyway?',
       leaveConfirmRefund:'Leave reward mode? Your {amount} deposit will be refunded to your payment method. Your points stay on your account, frozen.',
       payoutPlaceholder:'PayPal email or other payment method', confirmRequest:'Send request', cancel:'Close',
       requestSent:'Request sent! It will be processed soon.', payoutRequired:'Tell us where to send your payment.',
@@ -2087,7 +2089,7 @@
       noInstructions:'اسأل المشرف عن طريقة دفع الضمان ثم املأ الحقول أدناه.',
       depositPendingText:'المشرف يتحقق من دفعتك. بمجرد التأكيد يتفعل نمط المكافآت.',
       refundPendingText:'سيُسترجع ضمانك البالغ {amount} في أجل أقصاه {date}. عدت إلى اللعب الحر؛ تبقى نقاطك مجمّدة.',
-      rewardOnHeld:'نمط المكافآت مفعّل. سيُرد إليك ضمانك البالغ {amount} مع أول سحب.', rewardOnRefunded:'نمط المكافآت مفعّل. تم رد ضمانك إليك من قبل.',
+      rewardOnHeld:'نمط المكافآت مفعّل. سيُرد إليك ضمانك البالغ {amount} مع أول سحب.', rewardOnRefunded:'نمط المكافآت مفعّل. سبق أن رُدّ إليك ضمانك مع أول سحب: إذا غادرت هذا النمط فلن يكون هناك أي استرجاع وستُجمَّد نقاطك. وللعودة ستحتاج إلى ضمان جديد.',
       leaveReward:'مغادرة نمط المكافآت', leaveConfirm:'مغادرة نمط المكافآت؟ تبقى نقاطك في حسابك لكنها مجمّدة حتى تعود إلى نمط المكافآت.',
       leaveTitle:'مغادرة نمط المكافآت', leaveRefund:'الضمان المسترجع: {amount}',
       leaveInfo:'اختر كيف تريد استلام ضمانك وأدخل بياناتك. سيُرد إليك خلال {days} أيام. تبقى نقاطك في حسابك لكنها مجمّدة.',
@@ -2099,6 +2101,7 @@
       payRedirect:'جار التحويل إلى صفحة الدفع الآمن…', depositChecking:'جار التحقق من دفعتك…',
       depositActivated:'تم تأكيد الدفع! نمط المكافآت مفعّل.', depositCancelled:'تم إلغاء الدفع: لم يُخصم أي مبلغ.',
       refundDone:'تم رد ضمانك إلى وسيلة الدفع الخاصة بك.',
+      leaveConfirmNoRefund:'سبق أن رُدّ إليك ضمانك مع أول سحب. إذا غادرت نمط المكافآت فلن يكون هناك أي استرجاع جديد وستُجمَّد نقاطك. وللعودة إلى نمط المكافآت ستحتاج إلى دفع ضمان جديد. هل تريد المغادرة رغم ذلك؟',
       leaveConfirmRefund:'مغادرة نمط المكافآت؟ سيُرد ضمانك البالغ {amount} إلى وسيلة الدفع الخاصة بك. تبقى نقاطك في حسابك لكنها مجمّدة.',
       payoutPlaceholder:'بريد PayPal أو وسيلة دفع أخرى', confirmRequest:'إرسال الطلب', cancel:'إغلاق',
       requestSent:'تم إرسال الطلب! ستتم معالجته قريبا.', payoutRequired:'أخبرنا أين تريد استلام دفعتك.',
@@ -2564,7 +2567,8 @@
       return;
     }
 
-    if (confirm(rt('leaveConfirm'))) {
+    // Dépôt déjà rendu avec le premier retrait : on prévient qu'il n'y aura pas de nouveau remboursement
+    if (confirm(rt(user.deposit.status === 'refunded' ? 'leaveConfirmNoRefund' : 'leaveConfirm'))) {
       modeCall('/leave', {});
     }
   }
