@@ -2011,6 +2011,7 @@
       payRedirect:'Redirection vers le paiement sécurisé…', depositChecking:'Vérification de ton paiement…',
       depositActivated:'Paiement confirmé ! Le mode récompense est actif.', depositCancelled:'Paiement annulé : rien n’a été débité.',
       refundDone:'Ton dépôt a été remboursé sur ton moyen de paiement.',
+      blockedMsg:'Ton compte est bloqué. Contacte l’administrateur.',
       methodOn:'Activé', methodOff:'Désactivé', noMethods:'Aucun moyen de paiement n’est disponible pour le moment. Réessaie plus tard.',
       rewardSoon:'Le mode récompense arrive bientôt : pour l’instant, tout le monde joue en jeu libre.',
       rewardSoonText:'Le mode récompense n’est pas encore ouvert. Pour l’instant, tout le monde joue en jeu libre, sans points ni cumul. Reviens bientôt !',
@@ -2060,6 +2061,7 @@
       payRedirect:'Redirecting to secure payment…', depositChecking:'Checking your payment…',
       depositActivated:'Payment confirmed! Reward mode is on.', depositCancelled:'Payment cancelled: nothing was charged.',
       refundDone:'Your deposit has been refunded to your payment method.',
+      blockedMsg:'Your account is blocked. Please contact the administrator.',
       methodOn:'Enabled', methodOff:'Disabled', noMethods:'No payment method is available right now. Please try again later.',
       rewardSoon:'Reward mode is coming soon: for now everyone plays in free play.',
       rewardSoonText:'Reward mode is not open yet. For now everyone plays in free play, with no points or balance. Come back soon!',
@@ -2109,6 +2111,7 @@
       payRedirect:'جار التحويل إلى صفحة الدفع الآمن…', depositChecking:'جار التحقق من دفعتك…',
       depositActivated:'تم تأكيد الدفع! نمط المكافآت مفعّل.', depositCancelled:'تم إلغاء الدفع: لم يُخصم أي مبلغ.',
       refundDone:'تم رد ضمانك إلى وسيلة الدفع الخاصة بك.',
+      blockedMsg:'تم حظر حسابك. تواصل مع المشرف.',
       methodOn:'مفعّل', methodOff:'معطّل', noMethods:'لا توجد وسيلة دفع متاحة حاليا. حاول مرة أخرى لاحقا.',
       rewardSoon:'نمط المكافآت قادم قريبا: في الوقت الحالي يلعب الجميع في اللعب الحر.',
       rewardSoonText:'نمط المكافآت غير متاح بعد. في الوقت الحالي يلعب الجميع في اللعب الحر، بدون نقاط ولا رصيد. عد قريبا!',
@@ -2312,7 +2315,7 @@
 
     button.textContent = rt('withdraw');
     document.getElementById('modeButton').textContent = rt('modeButton');
-    document.getElementById('modeButton').disabled = Boolean(me && state.user && rewardLocked(me));
+    document.getElementById('modeButton').disabled = Boolean(me && state.user && (me.user.blocked || rewardLocked(me)));
     document.getElementById('accountMode').textContent = me && state.user ? modeLine(me) : '';
 
     if (!me || !state.user) {
@@ -2374,6 +2377,7 @@
   }
 
   function modeLine(me) {
+    if (me.user.blocked) return rt('blockedMsg');
     if (rewardLocked(me)) return rt('rewardSoon');
 
     const user = me.user;
@@ -3506,7 +3510,7 @@
         !data.ok
       ) {
 
-        throw new Error(data.code === 'daily_limit' ? rt('dailyLimit') : (data.error || 'Impossible de generer le quiz.'));
+        throw new Error(data.code === 'daily_limit' ? rt('dailyLimit') : data.code === 'account_blocked' ? rt('blockedMsg') : (data.error || 'Impossible de generer le quiz.'));
 
       }
 
@@ -3866,7 +3870,7 @@
       });
 
       if (!response.ok) {
-        throw new Error(response.data.code === 'quiz_expired' ? rt('quizExpired') : (response.data.error || rt('submitError')));
+        throw new Error(response.data.code === 'quiz_expired' ? rt('quizExpired') : response.data.code === 'account_blocked' ? rt('blockedMsg') : (response.data.error || rt('submitError')));
       }
 
       result = response.data;
