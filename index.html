@@ -2013,6 +2013,7 @@
       refundDone:'Ton dépôt a été remboursé sur ton moyen de paiement.',
       blockedMsg:'Ton compte est bloqué. Contacte l’administrateur.',
       libraryEmpty:'Tu as déjà vu toutes les vidéos disponibles pour ce thème. Reviens bientôt : de nouvelles vidéos sont ajoutées régulièrement.',
+      libraryNone:'Aucune vidéo n’est encore disponible pour ce thème. Reviens bientôt !',
       methodOn:'Activé', methodOff:'Désactivé', noMethods:'Aucun moyen de paiement n’est disponible pour le moment. Réessaie plus tard.',
       rewardSoon:'Le mode récompense arrive bientôt : pour l’instant, tout le monde joue en jeu libre.',
       rewardSoonText:'Le mode récompense n’est pas encore ouvert. Pour l’instant, tout le monde joue en jeu libre, sans points ni cumul. Reviens bientôt !',
@@ -2064,6 +2065,7 @@
       refundDone:'Your deposit has been refunded to your payment method.',
       blockedMsg:'Your account is blocked. Please contact the administrator.',
       libraryEmpty:'You have already seen all the videos available for this topic. Come back soon: new videos are added regularly.',
+      libraryNone:'No video is available for this topic yet. Come back soon!',
       methodOn:'Enabled', methodOff:'Disabled', noMethods:'No payment method is available right now. Please try again later.',
       rewardSoon:'Reward mode is coming soon: for now everyone plays in free play.',
       rewardSoonText:'Reward mode is not open yet. For now everyone plays in free play, with no points or balance. Come back soon!',
@@ -2115,6 +2117,7 @@
       refundDone:'تم رد ضمانك إلى وسيلة الدفع الخاصة بك.',
       blockedMsg:'تم حظر حسابك. تواصل مع المشرف.',
       libraryEmpty:'لقد شاهدت كل الفيديوهات المتاحة لهذا الموضوع. عد قريبا: تتم إضافة فيديوهات جديدة بانتظام.',
+      libraryNone:'لا توجد فيديوهات متاحة لهذا الموضوع بعد. عد قريبا!',
       methodOn:'مفعّل', methodOff:'معطّل', noMethods:'لا توجد وسيلة دفع متاحة حاليا. حاول مرة أخرى لاحقا.',
       rewardSoon:'نمط المكافآت قادم قريبا: في الوقت الحالي يلعب الجميع في اللعب الحر.',
       rewardSoonText:'نمط المكافآت غير متاح بعد. في الوقت الحالي يلعب الجميع في اللعب الحر، بدون نقاط ولا رصيد. عد قريبا!',
@@ -3148,7 +3151,9 @@
       if (!result.ok) return null;
       if (result.data.video) return result.data.video;
 
-      return result.data.liveFallback === false ? 'none' : null;
+      if (result.data.liveFallback !== false) return null;
+
+      return result.data.total > 0 ? 'none' : 'nothing';
     } catch (error) {
       return null;
     }
@@ -3178,6 +3183,10 @@
 
       if (libraryVideo === 'none') {
         throw new Error(rt('libraryEmpty'));
+      }
+
+      if (libraryVideo === 'nothing') {
+        throw new Error(rt('libraryNone'));
       }
 
       if (libraryVideo) {
