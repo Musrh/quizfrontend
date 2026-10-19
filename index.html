@@ -2012,6 +2012,7 @@
       depositActivated:'Paiement confirmé ! Le mode récompense est actif.', depositCancelled:'Paiement annulé : rien n’a été débité.',
       refundDone:'Ton dépôt a été remboursé sur ton moyen de paiement.',
       blockedMsg:'Ton compte est bloqué. Contacte l’administrateur.',
+      libraryEmpty:'Tu as déjà vu toutes les vidéos disponibles pour ce thème. Reviens bientôt : de nouvelles vidéos sont ajoutées régulièrement.',
       methodOn:'Activé', methodOff:'Désactivé', noMethods:'Aucun moyen de paiement n’est disponible pour le moment. Réessaie plus tard.',
       rewardSoon:'Le mode récompense arrive bientôt : pour l’instant, tout le monde joue en jeu libre.',
       rewardSoonText:'Le mode récompense n’est pas encore ouvert. Pour l’instant, tout le monde joue en jeu libre, sans points ni cumul. Reviens bientôt !',
@@ -2062,6 +2063,7 @@
       depositActivated:'Payment confirmed! Reward mode is on.', depositCancelled:'Payment cancelled: nothing was charged.',
       refundDone:'Your deposit has been refunded to your payment method.',
       blockedMsg:'Your account is blocked. Please contact the administrator.',
+      libraryEmpty:'You have already seen all the videos available for this topic. Come back soon: new videos are added regularly.',
       methodOn:'Enabled', methodOff:'Disabled', noMethods:'No payment method is available right now. Please try again later.',
       rewardSoon:'Reward mode is coming soon: for now everyone plays in free play.',
       rewardSoonText:'Reward mode is not open yet. For now everyone plays in free play, with no points or balance. Come back soon!',
@@ -2112,6 +2114,7 @@
       depositActivated:'تم تأكيد الدفع! نمط المكافآت مفعّل.', depositCancelled:'تم إلغاء الدفع: لم يُخصم أي مبلغ.',
       refundDone:'تم رد ضمانك إلى وسيلة الدفع الخاصة بك.',
       blockedMsg:'تم حظر حسابك. تواصل مع المشرف.',
+      libraryEmpty:'لقد شاهدت كل الفيديوهات المتاحة لهذا الموضوع. عد قريبا: تتم إضافة فيديوهات جديدة بانتظام.',
       methodOn:'مفعّل', methodOff:'معطّل', noMethods:'لا توجد وسيلة دفع متاحة حاليا. حاول مرة أخرى لاحقا.',
       rewardSoon:'نمط المكافآت قادم قريبا: في الوقت الحالي يلعب الجميع في اللعب الحر.',
       rewardSoonText:'نمط المكافآت غير متاح بعد. في الوقت الحالي يلعب الجميع في اللعب الحر، بدون نقاط ولا رصيد. عد قريبا!',
@@ -3129,6 +3132,28 @@
   // LOAD VIDEOS
   // =====================================================
 
+  // Vidéo déjà validée par l'administrateur : aucun appel de recherche (économie d'API).
+  // Renvoie la vidéo, 'none' (rien de neuf et la recherche en direct est fermée) ou null (continuer comme avant).
+  async function fetchLibraryVideo() {
+    if (!rewardsState.me || !state.user) return null;
+
+    try {
+      const exclude = Array.from(state.viewedVideos).slice(-100).join(',');
+      const result = await rewardsApi(
+        '/library/next?language=' + encodeURIComponent(state.language) +
+        '&category=' + encodeURIComponent(state.category || '') +
+        '&exclude=' + encodeURIComponent(exclude)
+      );
+
+      if (!result.ok) return null;
+      if (result.data.video) return result.data.video;
+
+      return result.data.liveFallback === false ? 'none' : null;
+    } catch (error) {
+      return null;
+    }
+  }
+
   async function loadVideos() {
 
     videoLoading.classList.remove(
@@ -3148,6 +3173,18 @@
 
 
     try {
+
+      const libraryVideo = await fetchLibraryVideo();
+
+      if (libraryVideo === 'none') {
+        throw new Error(rt('libraryEmpty'));
+      }
+
+      if (libraryVideo) {
+        state.videos = [libraryVideo];
+        chooseVideo();
+        return;
+      }
 
       const url =
         API_BASE +
@@ -3483,7 +3520,9 @@
         encodeURIComponent(
           state.language
         ) +
-        '&count=' + QUIZ_QUESTION_COUNT;
+        '&count=' + QUIZ_QUESTION_COUNT +
+        '&category=' + encodeURIComponent(state.category || '') +
+        (state.mode === 'ielts' ? '&mode=ielts' : '');
 
 
       console.log(
@@ -3510,7 +3549,7 @@
         !data.ok
       ) {
 
-        throw new Error(data.code === 'daily_limit' ? rt('dailyLimit') : data.code === 'account_blocked' ? rt('blockedMsg') : (data.error || 'Impossible de generer le quiz.'));
+        throw new Error(data.code === 'daily_limit' ? rt('dailyLimit') : data.code === 'account_blocked' ? rt('blockedMsg') : data.code === 'library_only' ? rt('libraryEmpty') : (data.error || 'Impossible de generer le quiz.'));
 
       }
 
