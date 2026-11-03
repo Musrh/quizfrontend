@@ -881,6 +881,43 @@
     .mode-button { background:linear-gradient(135deg,#4f46e5,#4338ca); }
     .mode-line { font-size:13px; color:#475569; margin-top:2px; }
     .account-hint, .mode-line, .account-info { overflow-wrap:anywhere; }
+    .sp-card { max-width:760px; margin:0 auto 20px; }
+    .sp-note { font-size:13px; color:#64748b; margin:8px 0; line-height:1.5; }
+    .sp-label { font-weight:700; margin:16px 0 8px; }
+    .sp-chips { display:flex; flex-wrap:wrap; gap:8px; }
+    .sp-chip { padding:9px 14px; border-radius:999px; background:#fff; color:#1e293b; border:1px solid #cbd5e1; box-shadow:none; font-weight:600; }
+    .sp-chip.active { background:#4f46e5; color:#fff; border-color:#4f46e5; }
+    .sp-formats { display:grid; gap:8px; }
+    .sp-format { border-radius:12px; text-align:start; }
+    #spCustom { width:100%; margin:10px 0 0; padding:12px 14px; border:1px solid #cbd5e1; border-radius:10px; font-size:16px; box-sizing:border-box; }
+    #spStart, #spNext { width:100%; margin-top:16px; }
+    .sp-progress { font-weight:700; color:#4f46e5; margin:6px 0; }
+    .sp-qcard { background:#eef2ff; border-radius:14px; padding:16px; font-size:19px; line-height:1.55; margin:10px 0; }
+    .sp-qcard ul { margin:8px 0 8px 22px; padding:0; }
+    .sp-card-label { font-size:12px; font-weight:800; letter-spacing:.06em; color:#4f46e5; text-transform:uppercase; }
+    .sp-card-title { font-weight:800; margin:4px 0; }
+    .sp-prep { background:#fef9c3; border-radius:12px; padding:10px 14px; margin:8px 0; display:flex; gap:10px; align-items:center; justify-content:space-between; flex-wrap:wrap; }
+    .sp-actions { display:flex; gap:10px; flex-wrap:wrap; margin:12px 0; }
+    .sp-live { background:#dc2626; }
+    #spTranscript { width:100%; padding:12px; border:1px solid #cbd5e1; border-radius:10px; font-size:16px; line-height:1.5; box-sizing:border-box; }
+    .sp-loading { padding:36px 8px; text-align:center; font-weight:700; color:#4f46e5; }
+    .sp-overall-box { text-align:center; background:#eef2ff; border-radius:16px; padding:16px; margin:12px 0; }
+    .sp-overall { font-size:54px; font-weight:800; color:#4338ca; line-height:1.1; }
+    .sp-overall-label { font-weight:700; }
+    .sp-band { margin:14px 0; }
+    .sp-band-head { display:flex; justify-content:space-between; font-weight:700; }
+    .sp-bar { height:10px; background:#e2e8f0; border-radius:99px; overflow:hidden; margin-top:6px; }
+    .sp-bar span { display:block; height:100%; background:linear-gradient(90deg,#6366f1,#22c55e); }
+    .sp-comment { margin:6px 0 0; line-height:1.55; }
+    .sp-block { margin:12px 0; }
+    .sp-block h3, .sp-block h4 { margin:0 0 6px; }
+    .sp-block ul { margin:0; padding-inline-start:20px; line-height:1.6; }
+    .sp-item { border:1px solid #e2e8f0; border-radius:12px; padding:10px 14px; margin:10px 0; }
+    .sp-item summary { cursor:pointer; font-weight:700; line-height:1.5; }
+    .sp-english { line-height:1.6; margin:4px 0; }
+    .sp-fix { margin:8px 0; line-height:1.5; }
+    .sp-before { color:#b91c1c; text-decoration:line-through; }
+    .sp-after { color:#166534; font-weight:700; }
     #modeActions button:disabled { opacity:.6; cursor:not-allowed; }
     .pm-badge { margin-left:10px; font-size:12px; font-weight:700; padding:2px 9px; border-radius:999px; background:#dcfce7; color:#166534; }
     .pm-badge.off { background:#fee2e2; color:#991b1b; }
@@ -1060,6 +1097,42 @@
     <div id="ieltsError" class="error hidden"></div><div id="ieltsLoading" class="ielts-loading hidden" data-i18n="ieltsLoading">Searching for IELTS videos...</div><div id="ieltsVideoGrid" class="ielts-video-grid"></div>
   </section>
 
+  <section id="speakingScreen" class="card sp-card hidden">
+    <div class="nav-row"><button id="spBack" class="back-button" type="button">← Accueil</button></div>
+
+    <div id="spSetup">
+      <h2 id="spTitle" class="section-title"></h2>
+      <p id="spLead" class="section-subtitle"></p>
+      <div id="spStatus" class="sp-note"></div>
+      <div id="spTopicLabel" class="sp-label"></div>
+      <div id="spTopics" class="sp-chips"></div>
+      <input id="spCustom" type="text" maxlength="60" autocomplete="off">
+      <div id="spFormatLabel" class="sp-label"></div>
+      <div id="spFormats" class="sp-formats"></div>
+      <div id="spSetupError" class="error hidden"></div>
+      <button id="spStart" type="button"></button>
+      <p id="spPrivacy" class="sp-note"></p>
+    </div>
+
+    <div id="spTest" class="hidden">
+      <div id="spProgress" class="sp-progress"></div>
+      <div id="spCard" class="sp-qcard" dir="ltr" lang="en"></div>
+      <div id="spPrep" class="sp-prep hidden"></div>
+      <div class="sp-actions">
+        <button id="spListen" type="button" class="ghost-button"></button>
+        <button id="spMic" type="button"></button>
+      </div>
+      <div id="spRecState" class="sp-note"></div>
+      <div id="spTranscriptLabel" class="sp-label"></div>
+      <textarea id="spTranscript" rows="6" dir="ltr" lang="en" autocomplete="off"></textarea>
+      <div id="spTestError" class="error hidden"></div>
+      <button id="spNext" type="button"></button>
+    </div>
+
+    <div id="spLoading" class="sp-loading hidden"></div>
+    <div id="spResult" class="hidden"></div>
+  </section>
+
   <section id="categoryScreen" class="card hidden">
     <div class="nav-row"><button class="back-button" onclick="showScreen('rules')" data-i18n="backRules">← Regles</button></div>
     <h2 class="section-title" data-i18n="categoryTitle">Choisis une categorie</h2>
@@ -1129,6 +1202,7 @@
           <button class="footer-link" type="button" onclick="openInfoPage('rules')" data-i18n="footerRules">Regles du jeu</button>
           <button class="footer-link" type="button" onclick="startCategories()" data-i18n="footerCategories">Categories</button>
           <button class="footer-link" type="button" onclick="openIeltsPage()" data-i18n="footerIelts">IELTS Preparation</button>
+          <button id="footerSpeakingLink" class="footer-link" type="button" onclick="openSpeaking()">IELTS Speaking (IA)</button>
         </div>
       </div>
 
@@ -2818,6 +2892,7 @@
     rulesScreen.classList.add('hidden');
     infoPageScreen.classList.add('hidden');
     ieltsScreen.classList.add('hidden');
+    document.getElementById('speakingScreen').classList.add('hidden');
 
     categoryScreen.classList.add(
       'hidden'
@@ -2853,6 +2928,9 @@
 
     if (screen === 'ielts') {
       ieltsScreen.classList.remove('hidden');
+    }
+    if (screen === 'speaking') {
+      document.getElementById('speakingScreen').classList.remove('hidden');
     }
 
     if (screen === 'category') {
@@ -4560,6 +4638,619 @@
 
   scoreDisplay.textContent =
     '0';
+
+</script>
+
+<script>
+/* ============================================================
+   IELTS SPEAKING : examinateur IA (écran de l'élève)
+   La voix est transformée en texte par le navigateur (SpeechRecognition) ;
+   seul le texte est envoyé au serveur. Sans micro, l'élève peut taper.
+   ============================================================ */
+(function () {
+  var TEXT = {
+    fr: {
+      footer: 'IELTS Speaking (IA)', back: '← Accueil', title: 'IELTS Speaking avec un examinateur IA',
+      lead: 'Choisis un thème : l’examinateur IA te pose des questions comme à l’examen. Tu réponds à voix haute, puis tu reçois une correction et des réponses modèles pour progresser.',
+      remaining: 'Sessions restantes aujourd’hui : {n}', topicLabel: 'Choisis un thème', customTopic: 'Ou écris ton propre thème',
+      formatLabel: 'Format du test', fFull: 'Test complet (parties 1, 2 et 3)', fPart1: 'Partie 1 : questions personnelles', fPart2: 'Partie 2 : parler 1 à 2 minutes', fPart3: 'Partie 3 : discussion',
+      start: 'Commencer le test', privacy: 'Ta voix est transformée en texte par le service de reconnaissance vocale de ton navigateur. Seul le texte de tes réponses est envoyé à notre serveur.',
+      preparing: 'L’examinateur prépare ses questions…', part: 'Partie {p}', question: 'Question {i} sur {n}', cardTitle: 'Sujet de la partie 2',
+      listen: '🔊 Écouter', record: '🎤 Répondre à voix haute', stop: '⏹ Arrêter', recording: '● Enregistrement… parle maintenant',
+      transcript: 'Ta réponse (tu peux la corriger avant de continuer)', noSpeech: 'Ton navigateur ne reconnaît pas la voix : écris ta réponse.',
+      micDenied: 'Micro refusé. Autorise le micro dans ton navigateur, ou écris ta réponse.', recoError: 'La reconnaissance vocale est indisponible. Écris ta réponse.',
+      prep: 'Préparation : {s} s. Réfléchis à ce que tu vas dire.', prepGo: 'Je suis prêt(e)', prepOver: 'Parle pendant 1 à 2 minutes.',
+      next: 'Question suivante', finish: 'Terminer et recevoir la correction', evaluating: 'Correction en cours… cela peut prendre jusqu’à une minute.',
+      resultTitle: 'Ta correction', overall: 'Note globale indicative', fluency: 'Fluidité et cohérence', lexical: 'Vocabulaire', grammar: 'Grammaire',
+      pronunciation: 'Prononciation', disclaimer: 'Estimation faite par une IA à partir du texte de tes réponses : ce n’est pas une note officielle IELTS. La prononciation n’est pas notée.',
+      strengths: 'Tes points forts', priorities: 'À améliorer en priorité', yourAnswer: 'Ta réponse', corrections: 'Corrections', better: 'Réponse modèle',
+      tip: 'Conseil', skipped: 'Tu n’as pas répondu à cette question.', rate: 'Débit : {n} mots par minute', words: '{n} mots',
+      again: 'Refaire un test', home: 'Retour à l’accueil', retry: 'Réessayer la correction', leave: 'Quitter le test ? Tes réponses seront perdues.',
+      eDisabled: 'Le module Speaking n’est pas encore disponible.', eLimit: 'Tu as atteint ta limite de sessions Speaking pour aujourd’hui. Reviens demain.',
+      eBusy: 'Le module Speaking est très demandé aujourd’hui. Réessaie demain.', eGeneric: 'Une erreur est survenue. Réessaie dans un instant.',
+      eExpired: 'La session a expiré. Recommence un test.', eTopic: 'Choisis ou écris un thème.', eEmpty: 'Réponds à au moins une question avant la correction.',
+      t: ['Travail', 'Études', 'Ville natale', 'Famille', 'Cuisine', 'Voyages', 'Technologie', 'Santé', 'Environnement', 'Temps libre', 'Culture', 'Shopping']
+    },
+    en: {
+      footer: 'IELTS Speaking (AI)', back: '← Home', title: 'IELTS Speaking with an AI examiner',
+      lead: 'Choose a topic: the AI examiner asks you questions as in the real exam. You answer aloud, then you get a correction and model answers to improve.',
+      remaining: 'Sessions left today: {n}', topicLabel: 'Choose a topic', customTopic: 'Or write your own topic',
+      formatLabel: 'Test format', fFull: 'Full test (parts 1, 2 and 3)', fPart1: 'Part 1: personal questions', fPart2: 'Part 2: speak for 1 to 2 minutes', fPart3: 'Part 3: discussion',
+      start: 'Start the test', privacy: 'Your voice is turned into text by your browser’s speech recognition service. Only the text of your answers is sent to our server.',
+      preparing: 'The examiner is preparing the questions…', part: 'Part {p}', question: 'Question {i} of {n}', cardTitle: 'Part 2 topic',
+      listen: '🔊 Listen', record: '🎤 Answer aloud', stop: '⏹ Stop', recording: '● Recording… speak now',
+      transcript: 'Your answer (you can fix it before continuing)', noSpeech: 'Your browser cannot recognize speech: type your answer.',
+      micDenied: 'Microphone denied. Allow the microphone in your browser, or type your answer.', recoError: 'Speech recognition is unavailable. Type your answer.',
+      prep: 'Preparation: {s} s. Think about what you will say.', prepGo: 'I am ready', prepOver: 'Speak for 1 to 2 minutes.',
+      next: 'Next question', finish: 'Finish and get my correction', evaluating: 'Correcting… this can take up to a minute.',
+      resultTitle: 'Your correction', overall: 'Indicative overall band', fluency: 'Fluency and coherence', lexical: 'Vocabulary', grammar: 'Grammar',
+      pronunciation: 'Pronunciation', disclaimer: 'Estimate made by an AI from the text of your answers: it is not an official IELTS score. Pronunciation is not scored.',
+      strengths: 'Your strengths', priorities: 'Main things to improve', yourAnswer: 'Your answer', corrections: 'Corrections', better: 'Model answer',
+      tip: 'Tip', skipped: 'You did not answer this question.', rate: 'Speed: {n} words per minute', words: '{n} words',
+      again: 'Take another test', home: 'Back to home', retry: 'Retry the correction', leave: 'Leave the test? Your answers will be lost.',
+      eDisabled: 'The Speaking module is not available yet.', eLimit: 'You have reached your Speaking session limit for today. Come back tomorrow.',
+      eBusy: 'The Speaking module is very busy today. Try again tomorrow.', eGeneric: 'Something went wrong. Please try again in a moment.',
+      eExpired: 'The session has expired. Start a new test.', eTopic: 'Choose or write a topic.', eEmpty: 'Answer at least one question before the correction.',
+      t: ['Work', 'Studies', 'Hometown', 'Family', 'Food', 'Travel', 'Technology', 'Health', 'Environment', 'Free time', 'Culture', 'Shopping']
+    },
+    ar: {
+      footer: 'IELTS Speaking (ذكاء اصطناعي)', back: '← الرئيسية', title: 'IELTS Speaking مع ممتحن بالذكاء الاصطناعي',
+      lead: 'اختر موضوعا: يطرح عليك الممتحن الذكي أسئلة كما في الامتحان. تجيب بصوت عال، ثم تحصل على تصحيح وإجابات نموذجية لتتحسن.',
+      remaining: 'الجلسات المتبقية اليوم: {n}', topicLabel: 'اختر موضوعا', customTopic: 'أو اكتب موضوعك الخاص',
+      formatLabel: 'شكل الاختبار', fFull: 'اختبار كامل (الأجزاء 1 و2 و3)', fPart1: 'الجزء 1: أسئلة شخصية', fPart2: 'الجزء 2: تحدث لمدة دقيقة إلى دقيقتين', fPart3: 'الجزء 3: نقاش',
+      start: 'ابدأ الاختبار', privacy: 'يحول متصفحك صوتك إلى نص بخدمة التعرف على الكلام. لا يُرسل إلى خادمنا سوى نص إجاباتك.',
+      preparing: 'الممتحن يحضر الأسئلة…', part: 'الجزء {p}', question: 'السؤال {i} من {n}', cardTitle: 'موضوع الجزء 2',
+      listen: '🔊 استمع', record: '🎤 أجب بصوت عال', stop: '⏹ إيقاف', recording: '● جار التسجيل… تحدث الآن',
+      transcript: 'إجابتك (يمكنك تصحيحها قبل المتابعة)', noSpeech: 'متصفحك لا يتعرف على الكلام: اكتب إجابتك.',
+      micDenied: 'تم رفض الميكروفون. اسمح به في المتصفح أو اكتب إجابتك.', recoError: 'التعرف على الكلام غير متاح. اكتب إجابتك.',
+      prep: 'التحضير: {s} ثانية. فكر فيما ستقوله.', prepGo: 'أنا جاهز', prepOver: 'تحدث لمدة دقيقة إلى دقيقتين.',
+      next: 'السؤال التالي', finish: 'إنهاء والحصول على التصحيح', evaluating: 'جار التصحيح… قد يستغرق دقيقة.',
+      resultTitle: 'تصحيحك', overall: 'الدرجة الإجمالية التقريبية', fluency: 'الطلاقة والتماسك', lexical: 'المفردات', grammar: 'القواعد',
+      pronunciation: 'النطق', disclaimer: 'تقدير من الذكاء الاصطناعي اعتمادا على نص إجاباتك: ليست درجة رسمية في IELTS. النطق غير مُقيَّم.',
+      strengths: 'نقاط قوتك', priorities: 'أهم ما يجب تحسينه', yourAnswer: 'إجابتك', corrections: 'التصحيحات', better: 'إجابة نموذجية',
+      tip: 'نصيحة', skipped: 'لم تجب عن هذا السؤال.', rate: 'السرعة: {n} كلمة في الدقيقة', words: '{n} كلمة',
+      again: 'اختبار جديد', home: 'العودة إلى الرئيسية', retry: 'أعد محاولة التصحيح', leave: 'مغادرة الاختبار؟ ستضيع إجاباتك.',
+      eDisabled: 'وحدة Speaking غير متاحة بعد.', eLimit: 'بلغت حد جلسات Speaking لهذا اليوم. عد غدا.',
+      eBusy: 'وحدة Speaking عليها إقبال كبير اليوم. حاول غدا.', eGeneric: 'حدث خطأ. حاول مجددا بعد قليل.',
+      eExpired: 'انتهت الجلسة. ابدأ اختبارا جديدا.', eTopic: 'اختر موضوعا أو اكتبه.', eEmpty: 'أجب عن سؤال واحد على الأقل قبل التصحيح.',
+      t: ['العمل', 'الدراسة', 'مسقط الرأس', 'العائلة', 'الطعام', 'السفر', 'التكنولوجيا', 'الصحة', 'البيئة', 'وقت الفراغ', 'الثقافة', 'التسوق']
+    }
+  };
+
+  // Valeur envoyée au serveur (en anglais), dans l'ordre des libellés ci-dessus
+  var TOPICS = ['Work', 'Studies', 'Hometown', 'Family', 'Food', 'Travel', 'Technology', 'Health', 'Environment', 'Free time', 'Culture', 'Shopping'];
+  var FORMATS = ['full', 'part1', 'part2', 'part3'];
+  var FORMAT_KEYS = { full: 'fFull', part1: 'fPart1', part2: 'fPart2', part3: 'fPart3' };
+
+  var status = null;
+  var chosenTopic = '';
+  var chosenFormat = 'full';
+  var session = null;
+  var index = 0;
+  var answers = {};
+  var recog = null;
+  var recording = false;
+  var recStart = 0;
+  var baseText = '';
+  var finalText = '';
+  var prepTimer = null;
+  var busy = false;
+
+  function $(id) { return document.getElementById(id); }
+  function lang() { return TEXT[interfaceLanguage] ? interfaceLanguage : 'fr'; }
+  function tx(key, vars) {
+    var value = (TEXT[lang()][key] !== undefined ? TEXT[lang()][key] : TEXT.fr[key]) || '';
+    Object.keys(vars || {}).forEach(function (name) { value = value.replace('{' + name + '}', vars[name]); });
+    return value;
+  }
+  function make(tag, className, content) {
+    var element = document.createElement(tag);
+    if (className) element.className = className;
+    if (content !== undefined) element.textContent = content;
+    return element;
+  }
+  function show(id, visible) { $(id).classList.toggle('hidden', !visible); }
+  function showError(id, message) { $(id).textContent = message || ''; show(id, Boolean(message)); }
+
+  async function api(path, options) {
+    var response = await authedFetch(API_BASE + '/api/speaking' + path, options);
+    var data = await response.json().catch(function () { return {}; });
+    return { status: response.status, ok: response.ok && data.ok !== false, data: data };
+  }
+
+  function errorText(data) {
+    var map = { speaking_disabled: 'eDisabled', speaking_limit: 'eLimit', speaking_busy: 'eBusy', speaking_session: 'eExpired', speaking_empty: 'eEmpty', speaking_input: 'eTopic' };
+    if (data && data.code === 'account_blocked') return rt('blockedMsg');
+    return tx(map[data && data.code] || 'eGeneric');
+  }
+
+  // ----- Voix : lecture des questions -----
+  function speak(content) {
+    if (!('speechSynthesis' in window)) return;
+    try {
+      window.speechSynthesis.cancel();
+      var utterance = new SpeechSynthesisUtterance(content);
+      var voices = window.speechSynthesis.getVoices();
+      var voice = voices.find(function (v) { return /^en[-_]GB/i.test(v.lang); }) || voices.find(function (v) { return /^en/i.test(v.lang); });
+      if (voice) utterance.voice = voice;
+      utterance.lang = 'en-GB';
+      utterance.rate = 0.95;
+      window.speechSynthesis.speak(utterance);
+    } catch (error) { /* la lecture est facultative */ }
+  }
+
+  function stopSpeaking() {
+    try { if ('speechSynthesis' in window) window.speechSynthesis.cancel(); } catch (error) { /* ignoré */ }
+  }
+
+  function questionAloud(q) {
+    return q.bullets ? q.text + '. You should say: ' + q.bullets.join(', ') + '. ' + q.explain : q.text;
+  }
+
+  // ----- Voix : reconnaissance -----
+  function canRecognize() { return Boolean(window.SpeechRecognition || window.webkitSpeechRecognition); }
+
+  function startRecording() {
+    var Recognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!Recognition) { showError('spTestError', tx('noSpeech')); return; }
+
+    stopSpeaking();
+    showError('spTestError', '');
+    baseText = $('spTranscript').value.trim();
+    finalText = '';
+    recog = new Recognition();
+    recog.lang = 'en-GB';
+    recog.continuous = true;
+    recog.interimResults = true;
+
+    recog.onresult = function (event) {
+      var interim = '';
+      for (var i = event.resultIndex; i < event.results.length; i += 1) {
+        var result = event.results[i];
+        if (result.isFinal) finalText += result[0].transcript + ' ';
+        else interim += result[0].transcript;
+      }
+      $('spTranscript').value = (baseText + ' ' + finalText + interim).replace(/\s+/g, ' ').trim();
+    };
+
+    recog.onerror = function (event) {
+      if (event.error === 'not-allowed' || event.error === 'service-not-allowed') {
+        showError('spTestError', tx('micDenied'));
+        endRecording();
+      } else if (event.error === 'network' || event.error === 'audio-capture' || event.error === 'language-not-supported') {
+        showError('spTestError', tx('recoError'));
+        endRecording();
+      }
+    };
+
+    // Chrome coupe la reconnaissance après un silence : on relance tant que l'élève n'a pas arrêté
+    recog.onend = function () {
+      if (!recording) return;
+      baseText = $('spTranscript').value.trim();
+      finalText = '';
+      try { recog.start(); } catch (error) { endRecording(); }
+    };
+
+    try {
+      recog.start();
+      recording = true;
+      recStart = Date.now();
+      updateMic();
+    } catch (error) {
+      showError('spTestError', tx('recoError'));
+    }
+  }
+
+  function endRecording() {
+    if (recording) {
+      var q = session.questions[index];
+      answers[q.id] = answers[q.id] || { text: '', seconds: 0 };
+      answers[q.id].seconds += (Date.now() - recStart) / 1000;
+    }
+    recording = false;
+    try { if (recog) recog.stop(); } catch (error) { /* déjà arrêtée */ }
+    updateMic();
+  }
+
+  function updateMic() {
+    $('spMic').textContent = recording ? tx('stop') : tx('record');
+    $('spMic').classList.toggle('sp-live', recording);
+    $('spRecState').textContent = recording ? tx('recording') : '';
+  }
+
+  function toggleMic() {
+    if (recording) endRecording(); else startRecording();
+  }
+
+  // ----- Écran de préparation -----
+  function renderSetup() {
+    $('spTitle').textContent = tx('title');
+    $('spLead').textContent = tx('lead');
+    $('spBack').textContent = tx('back');
+    $('spTopicLabel').textContent = tx('topicLabel');
+    $('spCustom').placeholder = tx('customTopic');
+    $('spFormatLabel').textContent = tx('formatLabel');
+    $('spStart').textContent = tx('start');
+    $('spPrivacy').textContent = tx('privacy');
+
+    var chips = $('spTopics');
+    chips.innerHTML = '';
+    TOPICS.forEach(function (value, i) {
+      var chip = make('button', 'sp-chip' + (chosenTopic === value ? ' active' : ''), TEXT[lang()].t[i]);
+      chip.type = 'button';
+      chip.addEventListener('click', function () { chosenTopic = value; $('spCustom').value = ''; renderSetup(); });
+      chips.appendChild(chip);
+    });
+
+    var formats = $('spFormats');
+    formats.innerHTML = '';
+    FORMATS.forEach(function (value) {
+      var button = make('button', 'sp-chip sp-format' + (chosenFormat === value ? ' active' : ''), tx(FORMAT_KEYS[value]));
+      button.type = 'button';
+      button.addEventListener('click', function () { chosenFormat = value; renderSetup(); });
+      formats.appendChild(button);
+    });
+
+    renderStatus();
+  }
+
+  function renderStatus() {
+    var note = '';
+    if (status && status.enabled === false) note = tx('eDisabled');
+    else if (status && typeof status.remaining === 'number') note = tx('remaining', { n: status.remaining });
+    $('spStatus').textContent = note;
+    $('spStart').disabled = Boolean(status && (status.enabled === false || status.remaining === 0));
+  }
+
+  async function loadStatus() {
+    try {
+      var result = await api('/status');
+      if (result.ok) status = result.data;
+      else showError('spSetupError', errorText(result.data));
+    } catch (error) { /* le statut est facultatif */ }
+    renderStatus();
+  }
+
+  function setView(name) {
+    show('spSetup', name === 'setup');
+    show('spTest', name === 'test');
+    show('spLoading', name === 'loading');
+    show('spResult', name === 'result');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  async function startTest() {
+    if (busy) return;
+    var topic = $('spCustom').value.trim() || chosenTopic;
+    showError('spSetupError', '');
+    if (topic.length < 2) { showError('spSetupError', tx('eTopic')); return; }
+
+    busy = true;
+    $('spLoading').textContent = tx('preparing');
+    setView('loading');
+    try {
+      var result = await api('/start', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ topic: topic, part: chosenFormat, language: lang() })
+      });
+      if (!result.ok) throw result;
+      session = result.data;
+      status = Object.assign({}, status || {}, { enabled: true, remaining: result.data.remaining });
+      answers = {};
+      index = 0;
+      setView('test');
+      renderQuestion();
+    } catch (failure) {
+      setView('setup');
+      showError('spSetupError', failure && failure.data ? errorText(failure.data) : tx('eGeneric'));
+      loadStatus();
+    } finally {
+      busy = false;
+    }
+  }
+
+  // ----- Écran du test -----
+  function renderQuestion() {
+    var q = session.questions[index];
+    var total = session.questions.length;
+
+    endRecording();
+    clearInterval(prepTimer);
+    showError('spTestError', '');
+
+    $('spProgress').textContent = tx('part', { p: q.part }) + ' · ' + tx('question', { i: index + 1, n: total });
+
+    var card = $('spCard');
+    card.innerHTML = '';
+    if (q.bullets) {
+      card.appendChild(make('div', 'sp-card-label', tx('cardTitle')));
+      card.appendChild(make('div', 'sp-card-title', q.text));
+      var list = make('ul', '');
+      q.bullets.forEach(function (item) { list.appendChild(make('li', '', item)); });
+      card.appendChild(list);
+      card.appendChild(make('div', '', q.explain));
+    } else {
+      card.textContent = q.text;
+    }
+
+    $('spListen').textContent = tx('listen');
+    $('spTranscriptLabel').textContent = tx('transcript');
+    $('spTranscript').value = (answers[q.id] && answers[q.id].text) || '';
+    $('spNext').textContent = index === total - 1 ? tx('finish') : tx('next');
+    $('spMic').classList.toggle('hidden', !canRecognize());
+    if (!canRecognize()) $('spRecState').textContent = tx('noSpeech');
+    else updateMic();
+
+    var prep = $('spPrep');
+    if (q.part === 2) startPrep(prep); else show('spPrep', false);
+
+    speak(questionAloud(q));
+  }
+
+  function startPrep(prep) {
+    var remaining = 60;
+    show('spPrep', true);
+    prep.innerHTML = '';
+    var line = make('div', 'sp-prep-text', tx('prep', { s: remaining }));
+    var go = make('button', 'ghost-button', tx('prepGo'));
+    go.type = 'button';
+    prep.appendChild(line);
+    prep.appendChild(go);
+
+    function over() {
+      clearInterval(prepTimer);
+      line.textContent = tx('prepOver');
+      go.classList.add('hidden');
+    }
+    go.addEventListener('click', over);
+    prepTimer = setInterval(function () {
+      remaining -= 1;
+      if (remaining <= 0) over(); else line.textContent = tx('prep', { s: remaining });
+    }, 1000);
+  }
+
+  function saveAnswer() {
+    var q = session.questions[index];
+    endRecording();
+    answers[q.id] = answers[q.id] || { text: '', seconds: 0 };
+    answers[q.id].text = $('spTranscript').value.trim();
+  }
+
+  function next() {
+    saveAnswer();
+    if (index < session.questions.length - 1) {
+      index += 1;
+      renderQuestion();
+    } else {
+      evaluate();
+    }
+  }
+
+  // ----- Correction -----
+  async function evaluate() {
+    if (busy) return;
+    busy = true;
+    stopSpeaking();
+    $('spLoading').textContent = tx('evaluating');
+    setView('loading');
+
+    var payload = session.questions.map(function (q) {
+      var a = answers[q.id] || { text: '', seconds: 0 };
+      return { id: q.id, text: a.text, seconds: Math.round(a.seconds || 0) };
+    });
+
+    try {
+      var result = await api('/evaluate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ sessionId: session.sessionId, answers: payload, language: lang() })
+      });
+      if (!result.ok) throw result;
+      renderResult(result.data);
+      setView('result');
+    } catch (failure) {
+      var data = failure && failure.data ? failure.data : {};
+      renderFailure(errorText(data), data.code === 'speaking_session' || data.code === 'speaking_disabled');
+      setView('result');
+    } finally {
+      busy = false;
+    }
+  }
+
+  function renderFailure(message, final) {
+    var box = $('spResult');
+    box.innerHTML = '';
+    box.appendChild(make('div', 'error', message));
+    var actions = make('div', 'sp-actions');
+    if (!final) {
+      var retry = make('button', '', tx('retry'));
+      retry.type = 'button';
+      retry.addEventListener('click', evaluate);
+      actions.appendChild(retry);
+    }
+    var again = make('button', 'ghost-button', tx('again'));
+    again.type = 'button';
+    again.addEventListener('click', backToSetup);
+    actions.appendChild(again);
+    box.appendChild(actions);
+  }
+
+  function bandRow(label, band, comment) {
+    var row = make('div', 'sp-band');
+    var head = make('div', 'sp-band-head');
+    head.appendChild(make('span', '', label));
+    head.appendChild(make('strong', '', String(band)));
+    row.appendChild(head);
+    var bar = make('div', 'sp-bar');
+    var fill = make('span');
+    fill.style.width = Math.max(0, Math.min(100, (band / 9) * 100)) + '%';
+    bar.appendChild(fill);
+    row.appendChild(bar);
+    if (comment) row.appendChild(make('p', 'sp-comment', comment));
+    return row;
+  }
+
+  function listBlock(title, items) {
+    var block = make('div', 'sp-block');
+    block.appendChild(make('h3', '', title));
+    var list = make('ul', '');
+    items.forEach(function (item) { list.appendChild(make('li', '', item)); });
+    block.appendChild(list);
+    return block;
+  }
+
+  function renderResult(data) {
+    var box = $('spResult');
+    box.innerHTML = '';
+    box.appendChild(make('h2', 'section-title', tx('resultTitle')));
+
+    var top = make('div', 'sp-overall-box');
+    top.appendChild(make('div', 'sp-overall-label', tx('overall')));
+    top.appendChild(make('div', 'sp-overall', String(data.overall)));
+    top.appendChild(make('div', 'sp-note', data.topic));
+    box.appendChild(top);
+
+    box.appendChild(bandRow(tx('fluency'), data.fluency.band, data.fluency.comment));
+    box.appendChild(bandRow(tx('lexical'), data.lexical.band, data.lexical.comment));
+    box.appendChild(bandRow(tx('grammar'), data.grammar.band, data.grammar.comment));
+    if (data.pronunciation) {
+      var pron = make('div', 'sp-band');
+      pron.appendChild(make('strong', '', tx('pronunciation')));
+      pron.appendChild(make('p', 'sp-comment', data.pronunciation));
+      box.appendChild(pron);
+    }
+    box.appendChild(make('p', 'sp-note', tx('disclaimer')));
+
+    if (data.strengths.length) box.appendChild(listBlock(tx('strengths'), data.strengths));
+    if (data.priorities.length) box.appendChild(listBlock(tx('priorities'), data.priorities));
+
+    data.items.forEach(function (item) {
+      var details = make('details', 'sp-item');
+      var summary = make('summary', '', tx('part', { p: item.part }) + ' · ' + item.question);
+      summary.setAttribute('dir', 'ltr');
+      details.appendChild(summary);
+
+      var yours = make('div', 'sp-block');
+      yours.appendChild(make('h4', '', tx('yourAnswer')));
+      if (item.skipped && !item.answer) {
+        yours.appendChild(make('p', 'sp-note', tx('skipped')));
+      } else {
+        var answerText = make('p', 'sp-english', item.answer || '—');
+        answerText.setAttribute('dir', 'ltr');
+        yours.appendChild(answerText);
+        var meta = tx('words', { n: item.words }) + (item.wpm ? ' · ' + tx('rate', { n: item.wpm }) : '');
+        yours.appendChild(make('p', 'sp-note', meta));
+      }
+      details.appendChild(yours);
+
+      if (item.corrections.length) {
+        var fixes = make('div', 'sp-block');
+        fixes.appendChild(make('h4', '', tx('corrections')));
+        item.corrections.forEach(function (fix) {
+          var line = make('div', 'sp-fix');
+          var before = make('span', 'sp-before', fix.original);
+          var arrow = make('span', '', ' → ');
+          var after = make('span', 'sp-after', fix.corrected);
+          before.setAttribute('dir', 'ltr'); after.setAttribute('dir', 'ltr');
+          line.appendChild(before); line.appendChild(arrow); line.appendChild(after);
+          line.appendChild(make('div', 'sp-note', fix.why));
+          fixes.appendChild(line);
+        });
+        details.appendChild(fixes);
+      }
+
+      if (item.better) {
+        var model = make('div', 'sp-block');
+        model.appendChild(make('h4', '', tx('better')));
+        var modelText = make('p', 'sp-english', item.better);
+        modelText.setAttribute('dir', 'ltr');
+        model.appendChild(modelText);
+        var listen = make('button', 'ghost-button', tx('listen'));
+        listen.type = 'button';
+        listen.addEventListener('click', function () { speak(item.better); });
+        model.appendChild(listen);
+        details.appendChild(model);
+      }
+
+      if (item.tip) {
+        var tip = make('div', 'sp-block');
+        tip.appendChild(make('h4', '', tx('tip')));
+        tip.appendChild(make('p', '', item.tip));
+        details.appendChild(tip);
+      }
+
+      box.appendChild(details);
+    });
+
+    var actions = make('div', 'sp-actions');
+    var again = make('button', '', tx('again'));
+    again.type = 'button';
+    again.addEventListener('click', backToSetup);
+    var home = make('button', 'ghost-button', tx('home'));
+    home.type = 'button';
+    home.addEventListener('click', function () { cleanup(); showHome(); });
+    actions.appendChild(again);
+    actions.appendChild(home);
+    box.appendChild(actions);
+  }
+
+  function cleanup() {
+    endRecording();
+    clearInterval(prepTimer);
+    stopSpeaking();
+  }
+
+  function backToSetup() {
+    cleanup();
+    session = null;
+    setView('setup');
+    renderSetup();
+    loadStatus();
+  }
+
+  function back() {
+    var inTest = !$('spTest').classList.contains('hidden');
+    if (inTest && !confirm(tx('leave'))) return;
+    cleanup();
+    showHome();
+  }
+
+  function open() {
+    if (!requireLogin()) return;
+    cleanup();
+    showScreen('speaking');
+    showError('spSetupError', '');
+    session = null;
+    setView('setup');
+    renderSetup();
+    loadStatus();
+  }
+
+  function applyTexts() {
+    var footer = $('footerSpeakingLink');
+    if (footer) footer.textContent = tx('footer');
+    if (!$('speakingScreen').classList.contains('hidden') && !$('spSetup').classList.contains('hidden')) renderSetup();
+  }
+
+  $('spBack').addEventListener('click', back);
+  $('spStart').addEventListener('click', startTest);
+  $('spMic').addEventListener('click', toggleMic);
+  $('spListen').addEventListener('click', function () { speak(questionAloud(session.questions[index])); });
+  $('spNext').addEventListener('click', next);
+
+  window.openSpeaking = open;
+
+  // Le libellé du lien du pied de page suit la langue de l'interface
+  var originalApply = window.applyTranslations;
+  if (typeof originalApply === 'function') {
+    window.applyTranslations = function () {
+      originalApply.apply(this, arguments);
+      applyTexts();
+    };
+  }
+  applyTexts();
+})();
 
 </script>
 
