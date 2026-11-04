@@ -2088,6 +2088,7 @@
       blockedMsg:'Ton compte est bloqué. Contacte l’administrateur.',
       libraryEmpty:'Tu as déjà vu toutes les vidéos disponibles pour ce thème. Reviens bientôt : de nouvelles vidéos sont ajoutées régulièrement.',
       libraryNone:'Aucune vidéo n’est encore disponible pour ce thème. Reviens bientôt !',
+      libraryError:'Impossible de charger les vidéos pour le moment. Réessaie dans un instant.',
       methodOn:'Activé', methodOff:'Désactivé', noMethods:'Aucun moyen de paiement n’est disponible pour le moment. Réessaie plus tard.',
       rewardSoon:'Le mode récompense arrive bientôt : pour l’instant, tout le monde joue en jeu libre.',
       rewardSoonText:'Le mode récompense n’est pas encore ouvert. Pour l’instant, tout le monde joue en jeu libre, sans points ni cumul. Reviens bientôt !',
@@ -2140,6 +2141,7 @@
       blockedMsg:'Your account is blocked. Please contact the administrator.',
       libraryEmpty:'You have already seen all the videos available for this topic. Come back soon: new videos are added regularly.',
       libraryNone:'No video is available for this topic yet. Come back soon!',
+      libraryError:'Unable to load the videos right now. Please try again in a moment.',
       methodOn:'Enabled', methodOff:'Disabled', noMethods:'No payment method is available right now. Please try again later.',
       rewardSoon:'Reward mode is coming soon: for now everyone plays in free play.',
       rewardSoonText:'Reward mode is not open yet. For now everyone plays in free play, with no points or balance. Come back soon!',
@@ -2192,6 +2194,7 @@
       blockedMsg:'تم حظر حسابك. تواصل مع المشرف.',
       libraryEmpty:'لقد شاهدت كل الفيديوهات المتاحة لهذا الموضوع. عد قريبا: تتم إضافة فيديوهات جديدة بانتظام.',
       libraryNone:'لا توجد فيديوهات متاحة لهذا الموضوع بعد. عد قريبا!',
+      libraryError:'تعذر تحميل الفيديوهات حاليا. حاول مرة أخرى بعد قليل.',
       methodOn:'مفعّل', methodOff:'معطّل', noMethods:'لا توجد وسيلة دفع متاحة حاليا. حاول مرة أخرى لاحقا.',
       rewardSoon:'نمط المكافآت قادم قريبا: في الوقت الحالي يلعب الجميع في اللعب الحر.',
       rewardSoonText:'نمط المكافآت غير متاح بعد. في الوقت الحالي يلعب الجميع في اللعب الحر، بدون نقاط ولا رصيد. عد قريبا!',
@@ -3216,24 +3219,35 @@
   // Vidéo déjà validée par l'administrateur : aucun appel de recherche (économie d'API).
   // Renvoie la vidéo, 'none' (rien de neuf et la recherche en direct est fermée) ou null (continuer comme avant).
   async function fetchLibraryVideo() {
-    if (!rewardsState.me || !state.user) return null;
-
+    // Jeu général : seules les vidéos de la bibliothèque sont affichées. Aucun retour à la recherche
+    // en direct en cas d'erreur ou pour un visiteur non connecté : seul l'administrateur peut l'ouvrir.
     try {
       const exclude = Array.from(state.viewedVideos).slice(-100).join(',');
-      const result = await rewardsApi(
-        '/library/next?language=' + encodeURIComponent(state.language) +
+      const query =
+        '?language=' + encodeURIComponent(state.language) +
         '&category=' + encodeURIComponent(state.category || '') +
-        '&exclude=' + encodeURIComponent(exclude)
-      );
+        '&exclude=' + encodeURIComponent(exclude);
+      let data;
 
-      if (!result.ok) return null;
-      if (result.data.video) return result.data.video;
+      if (rewardsState.me && state.user) {
+        const result = await rewardsApi('/library/next' + query);
 
-      if (result.data.liveFallback !== false) return null;
+        if (!result.ok && result.data && result.data.code === 'account_blocked') return 'blocked';
+        if (!result.ok) return 'error';
+        data = result.data;
+      } else {
+        const response = await fetch(API_BASE + '/api/library/next' + query);
 
-      return result.data.total > 0 ? 'none' : 'nothing';
+        data = await response.json();
+        if (!response.ok || !data.ok) return 'error';
+      }
+
+      if (data.video) return data.video;
+      if (data.liveFallback === true) return null; // recherche en direct ouverte par l'administrateur
+
+      return data.total > 0 ? 'none' : 'nothing';
     } catch (error) {
-      return null;
+      return 'error';
     }
   }
 
@@ -3265,6 +3279,14 @@
 
       if (libraryVideo === 'nothing') {
         throw new Error(rt('libraryNone'));
+      }
+
+      if (libraryVideo === 'blocked') {
+        throw new Error(rt('blockedMsg'));
+      }
+
+      if (libraryVideo === 'error') {
+        throw new Error(rt('libraryError'));
       }
 
       if (libraryVideo) {
