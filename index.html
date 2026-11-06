@@ -4685,7 +4685,7 @@
       formatLabel: 'Format du test', fFull: 'Test complet (parties 1, 2 et 3)', fPart1: 'Partie 1 : questions personnelles', fPart2: 'Partie 2 : parler 1 à 2 minutes', fPart3: 'Partie 3 : discussion',
       start: 'Commencer le test', privacy: 'Ta voix est transformée en texte par le service de reconnaissance vocale de ton navigateur. Seul le texte de tes réponses est envoyé à notre serveur.',
       preparing: 'L’examinateur prépare ses questions…', part: 'Partie {p}', question: 'Question {i} sur {n}', cardTitle: 'Sujet de la partie 2',
-      listen: '🔊 Écouter', record: '🎤 Répondre à voix haute', stop: '⏹ Arrêter', recording: '● Enregistrement… parle maintenant',
+      listen: '🔊 Écouter', record: '🎤 Répondre à voix haute', stop: '⏹ Arrêter', recording: '● Enregistrement… parle maintenant', paused: '⏸ Pause détectée — reprends ta réponse : la transcription repartira toute seule', resume: '▶ Reprendre',
       transcript: 'Ta réponse (tu peux la corriger avant de continuer)', noSpeech: 'Ton navigateur ne reconnaît pas la voix : écris ta réponse.',
       micDenied: 'Micro refusé. Autorise le micro dans ton navigateur, ou écris ta réponse.', recoError: 'La reconnaissance vocale est indisponible. Écris ta réponse.',
       prep: 'Préparation : {s} s. Réfléchis à ce que tu vas dire.', prepGo: 'Je suis prêt(e)', prepOver: 'Parle pendant 1 à 2 minutes.',
@@ -4707,7 +4707,7 @@
       formatLabel: 'Test format', fFull: 'Full test (parts 1, 2 and 3)', fPart1: 'Part 1: personal questions', fPart2: 'Part 2: speak for 1 to 2 minutes', fPart3: 'Part 3: discussion',
       start: 'Start the test', privacy: 'Your voice is turned into text by your browser’s speech recognition service. Only the text of your answers is sent to our server.',
       preparing: 'The examiner is preparing the questions…', part: 'Part {p}', question: 'Question {i} of {n}', cardTitle: 'Part 2 topic',
-      listen: '🔊 Listen', record: '🎤 Answer aloud', stop: '⏹ Stop', recording: '● Recording… speak now',
+      listen: '🔊 Listen', record: '🎤 Answer aloud', stop: '⏹ Stop', recording: '● Recording… speak now', paused: '⏸ Pause detected — keep talking and the transcription will resume by itself', resume: '▶ Resume',
       transcript: 'Your answer (you can fix it before continuing)', noSpeech: 'Your browser cannot recognize speech: type your answer.',
       micDenied: 'Microphone denied. Allow the microphone in your browser, or type your answer.', recoError: 'Speech recognition is unavailable. Type your answer.',
       prep: 'Preparation: {s} s. Think about what you will say.', prepGo: 'I am ready', prepOver: 'Speak for 1 to 2 minutes.',
@@ -4729,7 +4729,7 @@
       formatLabel: 'شكل الاختبار', fFull: 'اختبار كامل (الأجزاء 1 و2 و3)', fPart1: 'الجزء 1: أسئلة شخصية', fPart2: 'الجزء 2: تحدث لمدة دقيقة إلى دقيقتين', fPart3: 'الجزء 3: نقاش',
       start: 'ابدأ الاختبار', privacy: 'يحول متصفحك صوتك إلى نص بخدمة التعرف على الكلام. لا يُرسل إلى خادمنا سوى نص إجاباتك.',
       preparing: 'الممتحن يحضر الأسئلة…', part: 'الجزء {p}', question: 'السؤال {i} من {n}', cardTitle: 'موضوع الجزء 2',
-      listen: '🔊 استمع', record: '🎤 أجب بصوت عال', stop: '⏹ إيقاف', recording: '● جار التسجيل… تحدث الآن',
+      listen: '🔊 استمع', record: '🎤 أجب بصوت عال', stop: '⏹ إيقاف', recording: '● جار التسجيل… تحدث الآن', paused: '⏸ تم رصد توقف — تابع كلامك وسيستأنف التفريغ تلقائيا', resume: '▶ استئناف',
       transcript: 'إجابتك (يمكنك تصحيحها قبل المتابعة)', noSpeech: 'متصفحك لا يتعرف على الكلام: اكتب إجابتك.',
       micDenied: 'تم رفض الميكروفون. اسمح به في المتصفح أو اكتب إجابتك.', recoError: 'التعرف على الكلام غير متاح. اكتب إجابتك.',
       prep: 'التحضير: {s} ثانية. فكر فيما ستقوله.', prepGo: 'أنا جاهز', prepOver: 'تحدث لمدة دقيقة إلى دقيقتين.',
@@ -4819,30 +4819,76 @@
   // ----- Voix : reconnaissance -----
   function canRecognize() { return Boolean(window.SpeechRecognition || window.webkitSpeechRecognition); }
 
-  function startRecording() {
-    var Recognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    if (!Recognition) { showError('spTestError', tx('noSpeech')); return; }
+  // Assemble les morceaux reconnus en supprimant les répétitions :
+  // - un morceau qui prolonge le précédent ("I work" puis "I work as a") le remplace ;
+  // - un morceau déjà contenu dans le précédent est ignoré ;
+  // - un chevauchement d'au moins 2 mots ("I work as a" puis "as a teacher") est fusionné.
+  function mergeRecognized(chunks) {
+    var parts = [];
+    chunks.forEach(function (raw) {
+      var chunk = String(raw || '').replace(/\s+/g, ' ').trim();
+      if (!chunk) return;
+      if (!parts.length) { parts.push(chunk); return; }
 
-    stopSpeaking();
-    showError('spTestError', '');
+      var last = parts[parts.length - 1];
+      var lastLow = last.toLowerCase();
+      var chunkLow = chunk.toLowerCase();
+
+      if (chunkLow.indexOf(lastLow) === 0) { parts[parts.length - 1] = chunk; return; }
+      if (lastLow.indexOf(chunkLow) === 0 || lastLow.slice(-chunkLow.length) === chunkLow) return;
+
+      var lastWords = last.split(' ');
+      var chunkWords = chunk.split(' ');
+      var max = Math.min(lastWords.length, chunkWords.length);
+      for (var k = max; k >= 2; k -= 1) {
+        if (lastWords.slice(-k).join(' ').toLowerCase() === chunkWords.slice(0, k).join(' ').toLowerCase()) {
+          parts[parts.length - 1] = last + ' ' + chunkWords.slice(k).join(' ');
+          return;
+        }
+      }
+      parts.push(chunk);
+    });
+    return parts.join(' ');
+  }
+
+  // Pause automatique : si l'élève se tait (hésitation) plus de SILENCE_MS, la transcription
+  // s'arrête et le temps de parole ne court plus. Dès qu'une voix est détectée (ou au clic
+  // sur « Reprendre »), la reconnaissance repart et le texte continue à la suite.
+  var SILENCE_MS = 3000;
+  var paused = false;
+  var lastActivity = 0;
+  var silenceTimer = null;
+  var vad = null;
+
+  function addActiveSeconds(until) {
+    var q = session.questions[index];
+    answers[q.id] = answers[q.id] || { text: '', seconds: 0 };
+    answers[q.id].seconds += Math.max(0, (until - recStart) / 1000);
+  }
+
+  function beginRecognition() {
+    var Recognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    var instance = new Recognition();
+    recog = instance;
     baseText = $('spTranscript').value.trim();
     finalText = '';
-    recog = new Recognition();
-    recog.lang = 'en-GB';
-    recog.continuous = true;
-    recog.interimResults = true;
+    instance.lang = 'en-GB';
+    instance.continuous = true;
+    instance.interimResults = true;
 
-    recog.onresult = function (event) {
-      var interim = '';
-      for (var i = event.resultIndex; i < event.results.length; i += 1) {
-        var result = event.results[i];
-        if (result.isFinal) finalText += result[0].transcript + ' ';
-        else interim += result[0].transcript;
-      }
-      $('spTranscript').value = (baseText + ' ' + finalText + interim).replace(/\s+/g, ' ').trim();
+    instance.onresult = function (event) {
+      if (instance !== recog) return;
+      lastActivity = Date.now();
+      // On reconstruit tout le texte de cette session à chaque événement (au lieu d'ajouter
+      // morceau par morceau) : sur mobile, Chrome renvoie des résultats cumulatifs
+      // ("I" / "I work" / "I work as"...) qui, ajoutés les uns aux autres, répétaient les mots.
+      var texts = [];
+      for (var i = 0; i < event.results.length; i += 1) texts.push(event.results[i][0].transcript);
+      $('spTranscript').value = (baseText + ' ' + mergeRecognized(texts)).replace(/\s+/g, ' ').trim();
     };
 
-    recog.onerror = function (event) {
+    instance.onerror = function (event) {
+      if (instance !== recog) return;
       if (event.error === 'not-allowed' || event.error === 'service-not-allowed') {
         showError('spTestError', tx('micDenied'));
         endRecording();
@@ -4852,18 +4898,121 @@
       }
     };
 
-    // Chrome coupe la reconnaissance après un silence : on relance tant que l'élève n'a pas arrêté
-    recog.onend = function () {
-      if (!recording) return;
-      baseText = $('spTranscript').value.trim();
-      finalText = '';
-      try { recog.start(); } catch (error) { endRecording(); }
+    // Chrome coupe la reconnaissance de lui-même (silence, durée). Si l'élève parlait encore,
+    // on relance tout de suite ; sinon c'est une pause : on attend qu'il reprenne.
+    instance.onend = function () {
+      if (instance !== recog || !recording || paused) return;
+      if (Date.now() - lastActivity < SILENCE_MS) {
+        baseText = $('spTranscript').value.trim();
+        finalText = '';
+        try { instance.start(); } catch (error) { endRecording(); }
+      } else {
+        enterPause();
+      }
     };
 
+    instance.start();
+  }
+
+  function checkSilence() {
+    if (recording && !paused && Date.now() - lastActivity > SILENCE_MS) enterPause();
+  }
+
+  function enterPause() {
+    if (!recording || paused) return;
+    // Le silence n'est pas compté dans le temps de parole
+    addActiveSeconds(Math.min(Date.now(), lastActivity + 500));
+    paused = true;
+    try { if (recog) recog.stop(); } catch (error) { /* déjà arrêtée */ }
+    updateMic();
+    startVoiceWatch();
+  }
+
+  function resumeRecording() {
+    if (!recording || !paused) return;
+    stopVoiceWatch(); // le micro doit être libéré avant de relancer la reconnaissance
+    paused = false;
+    recStart = Date.now();
+    lastActivity = recStart;
     try {
-      recog.start();
+      beginRecognition();
+    } catch (error) {
+      showError('spTestError', tx('recoError'));
+      endRecording();
+      return;
+    }
+    updateMic();
+  }
+
+  // Pendant la pause : écoute le niveau sonore du micro (sans rien enregistrer ni envoyer)
+  // pour relancer la transcription dès que l'élève reparle.
+  function startVoiceWatch() {
+    stopVoiceWatch();
+    var watch = { stopped: false, stream: null, ctx: null, timer: null };
+    vad = watch;
+
+    var AudioCtx = window.AudioContext || window.webkitAudioContext;
+    if (!AudioCtx || !navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) return;
+
+    navigator.mediaDevices.getUserMedia({ audio: true }).then(function (stream) {
+      if (watch.stopped) { stream.getTracks().forEach(function (track) { track.stop(); }); return; }
+
+      var ctx = new AudioCtx();
+      if (ctx.state === 'suspended' && ctx.resume) ctx.resume();
+      var analyser = ctx.createAnalyser();
+      analyser.fftSize = 1024;
+      ctx.createMediaStreamSource(stream).connect(analyser);
+      watch.stream = stream;
+      watch.ctx = ctx;
+
+      var data = new Uint8Array(analyser.fftSize);
+      var calibration = 0;
+      var calibrationCount = 0;
+      var loudFrames = 0;
+
+      watch.timer = setInterval(function () {
+        analyser.getByteTimeDomainData(data);
+        var sum = 0;
+        for (var i = 0; i < data.length; i += 1) {
+          var value = (data[i] - 128) / 128;
+          sum += value * value;
+        }
+        var level = Math.sqrt(sum / data.length);
+
+        // ~0,8 s pour mesurer le bruit ambiant avant de surveiller la voix
+        if (calibrationCount < 8) { calibration += level; calibrationCount += 1; return; }
+
+        var threshold = Math.max(0.03, (calibration / calibrationCount) * 3);
+        loudFrames = level > threshold ? loudFrames + 1 : 0;
+        if (loudFrames >= 3) resumeRecording();
+      }, 100);
+    }).catch(function () { /* micro indisponible : l'élève reprend avec le bouton « Reprendre » */ });
+  }
+
+  function stopVoiceWatch() {
+    var watch = vad;
+    vad = null;
+    if (!watch) return;
+    watch.stopped = true;
+    clearInterval(watch.timer);
+    try { if (watch.stream) watch.stream.getTracks().forEach(function (track) { track.stop(); }); } catch (error) { /* ignoré */ }
+    try { if (watch.ctx) watch.ctx.close(); } catch (error) { /* ignoré */ }
+  }
+
+  function startRecording() {
+    if (!canRecognize()) { showError('spTestError', tx('noSpeech')); return; }
+
+    stopSpeaking();
+    showError('spTestError', '');
+    paused = false;
+
+    try {
+      beginRecognition();
       recording = true;
       recStart = Date.now();
+      lastActivity = recStart;
+      clearInterval(silenceTimer);
+      silenceTimer = setInterval(checkSilence, 500);
       updateMic();
     } catch (error) {
       showError('spTestError', tx('recoError'));
@@ -4871,24 +5020,25 @@
   }
 
   function endRecording() {
-    if (recording) {
-      var q = session.questions[index];
-      answers[q.id] = answers[q.id] || { text: '', seconds: 0 };
-      answers[q.id].seconds += (Date.now() - recStart) / 1000;
-    }
+    if (recording && !paused) addActiveSeconds(Math.min(Date.now(), lastActivity + 1000));
     recording = false;
+    paused = false;
+    clearInterval(silenceTimer);
+    stopVoiceWatch();
     try { if (recog) recog.stop(); } catch (error) { /* déjà arrêtée */ }
     updateMic();
   }
 
   function updateMic() {
-    $('spMic').textContent = recording ? tx('stop') : tx('record');
-    $('spMic').classList.toggle('sp-live', recording);
-    $('spRecState').textContent = recording ? tx('recording') : '';
+    $('spMic').textContent = !recording ? tx('record') : (paused ? tx('resume') : tx('stop'));
+    $('spMic').classList.toggle('sp-live', recording && !paused);
+    $('spRecState').textContent = !recording ? '' : (paused ? tx('paused') : tx('recording'));
   }
 
   function toggleMic() {
-    if (recording) endRecording(); else startRecording();
+    if (recording && paused) resumeRecording();
+    else if (recording) endRecording();
+    else startRecording();
   }
 
   // ----- Écran de préparation -----
