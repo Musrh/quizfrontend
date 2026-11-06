@@ -59,6 +59,11 @@ h1 { margin: 0 0 10px; font-size: clamp(28px, 5vw, 40px); letter-spacing: -.6px;
 .info-block h3 { margin: 0 0 9px; font-size: 18px; color: var(--ink); }
 .info-block p { margin: 0; color: #475569; line-height: 1.7; }
 .info-block ul { margin: 8px 0 0; padding-left: 21px; color: #475569; line-height: 1.75; }
+a { color: var(--primary); font-weight: 600; }
+
+.info-block a { text-decoration: none; }
+.info-block a:hover { text-decoration: underline; }
+
 [dir="rtl"] .info-block ul { padding-left: 0; padding-right: 21px; }
 
 .legal-placeholder {

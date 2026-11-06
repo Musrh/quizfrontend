@@ -557,6 +557,22 @@
 
   function el(id) { return document.getElementById(id); }
 
+  var SUPPORT_LABEL = { fr: 'Adresses e-mail :', en: 'Email addresses:', ar: 'عناوين البريد الإلكتروني:' };
+
+  // Page Contact : les adresses viennent de contact.html (window.SUPPORT_EMAILS)
+  function contactBlocks(blocks) {
+    var emails = window.SUPPORT_EMAILS;
+    if (pageKey !== 'contact' || !Array.isArray(emails) || !emails.length) return blocks;
+
+    var links = emails.map(function (email) {
+      return '<bdi dir="ltr"><a href="mailto:' + email + '">' + email + '</a></bdi>';
+    }).join('<br>');
+
+    var copy = blocks.slice(0, -1); // le dernier bloc est le rappel « remplacer les champs entre crochets »
+    copy[0] = [copy[0][0], SUPPORT_LABEL[lang] + '<br>' + links];
+    return copy;
+  }
+
   function render() {
     var page = PAGES[lang][pageKey];
     var ui = UI[lang];
@@ -569,7 +585,7 @@
     el('kicker').textContent = page.kicker;
     el('title').textContent = page.title;
     el('lead').textContent = page.lead;
-    el('content').innerHTML = page.blocks.map(function (block) {
+    el('content').innerHTML = contactBlocks(page.blocks).map(function (block) {
       return '<article class="info-block"><h3>' + block[0] + '</h3><p>' + block[1] + '</p></article>';
     }).join('');
 
