@@ -4692,7 +4692,7 @@
       next: 'Question suivante', finish: 'Terminer et recevoir la correction', evaluating: 'Correction en cours… cela peut prendre jusqu’à une minute.',
       resultTitle: 'Ta correction', overall: 'Note globale indicative', fluency: 'Fluidité et cohérence', lexical: 'Vocabulaire', grammar: 'Grammaire',
       pronunciation: 'Prononciation', disclaimer: 'Estimation faite par une IA à partir du texte de tes réponses : ce n’est pas une note officielle IELTS. La prononciation n’est pas notée.',
-      strengths: 'Tes points forts', priorities: 'À améliorer en priorité', yourAnswer: 'Ta réponse', corrections: 'Corrections', better: 'Réponse modèle',
+      strengths: 'Tes points forts', priorities: 'À améliorer en priorité', yourAnswer: 'Ta réponse', corrections: 'Corrections', better: 'Réponse modèle', showModels: 'Afficher une proposition de réponses', hideModels: 'Masquer les propositions de réponses', modelsTitle: 'Propositions de réponses', noModels: 'Aucune proposition de réponse n’est disponible pour ce test.',
       tip: 'Conseil', skipped: 'Tu n’as pas répondu à cette question.', rate: 'Débit : {n} mots par minute', words: '{n} mots',
       again: 'Refaire un test', home: 'Retour à l’accueil', retry: 'Réessayer la correction', leave: 'Quitter le test ? Tes réponses seront perdues.',
       eDisabled: 'Le module Speaking n’est pas encore disponible.', eLimit: 'Tu as atteint ta limite de sessions Speaking pour aujourd’hui. Reviens demain.',
@@ -4714,7 +4714,7 @@
       next: 'Next question', finish: 'Finish and get my correction', evaluating: 'Correcting… this can take up to a minute.',
       resultTitle: 'Your correction', overall: 'Indicative overall band', fluency: 'Fluency and coherence', lexical: 'Vocabulary', grammar: 'Grammar',
       pronunciation: 'Pronunciation', disclaimer: 'Estimate made by an AI from the text of your answers: it is not an official IELTS score. Pronunciation is not scored.',
-      strengths: 'Your strengths', priorities: 'Main things to improve', yourAnswer: 'Your answer', corrections: 'Corrections', better: 'Model answer',
+      strengths: 'Your strengths', priorities: 'Main things to improve', yourAnswer: 'Your answer', corrections: 'Corrections', better: 'Model answer', showModels: 'Show suggested answers', hideModels: 'Hide suggested answers', modelsTitle: 'Suggested answers', noModels: 'No suggested answers are available for this test.',
       tip: 'Tip', skipped: 'You did not answer this question.', rate: 'Speed: {n} words per minute', words: '{n} words',
       again: 'Take another test', home: 'Back to home', retry: 'Retry the correction', leave: 'Leave the test? Your answers will be lost.',
       eDisabled: 'The Speaking module is not available yet.', eLimit: 'You have reached your Speaking session limit for today. Come back tomorrow.',
@@ -4736,7 +4736,7 @@
       next: 'السؤال التالي', finish: 'إنهاء والحصول على التصحيح', evaluating: 'جار التصحيح… قد يستغرق دقيقة.',
       resultTitle: 'تصحيحك', overall: 'الدرجة الإجمالية التقريبية', fluency: 'الطلاقة والتماسك', lexical: 'المفردات', grammar: 'القواعد',
       pronunciation: 'النطق', disclaimer: 'تقدير من الذكاء الاصطناعي اعتمادا على نص إجاباتك: ليست درجة رسمية في IELTS. النطق غير مُقيَّم.',
-      strengths: 'نقاط قوتك', priorities: 'أهم ما يجب تحسينه', yourAnswer: 'إجابتك', corrections: 'التصحيحات', better: 'إجابة نموذجية',
+      strengths: 'نقاط قوتك', priorities: 'أهم ما يجب تحسينه', yourAnswer: 'إجابتك', corrections: 'التصحيحات', better: 'إجابة نموذجية', showModels: 'عرض اقتراح للإجابات', hideModels: 'إخفاء الإجابات المقترحة', modelsTitle: 'إجابات مقترحة', noModels: 'لا توجد إجابات مقترحة لهذا الاختبار.',
       tip: 'نصيحة', skipped: 'لم تجب عن هذا السؤال.', rate: 'السرعة: {n} كلمة في الدقيقة', words: '{n} كلمة',
       again: 'اختبار جديد', home: 'العودة إلى الرئيسية', retry: 'أعد محاولة التصحيح', leave: 'مغادرة الاختبار؟ ستضيع إجاباتك.',
       eDisabled: 'وحدة Speaking غير متاحة بعد.', eLimit: 'بلغت حد جلسات Speaking لهذا اليوم. عد غدا.',
@@ -5189,19 +5189,6 @@
         details.appendChild(fixes);
       }
 
-      if (item.better) {
-        var model = make('div', 'sp-block');
-        model.appendChild(make('h4', '', tx('better')));
-        var modelText = make('p', 'sp-english', item.better);
-        modelText.setAttribute('dir', 'ltr');
-        model.appendChild(modelText);
-        var listen = make('button', 'ghost-button', tx('listen'));
-        listen.type = 'button';
-        listen.addEventListener('click', function () { speak(item.better); });
-        model.appendChild(listen);
-        details.appendChild(model);
-      }
-
       if (item.tip) {
         var tip = make('div', 'sp-block');
         tip.appendChild(make('h4', '', tx('tip')));
@@ -5211,6 +5198,45 @@
 
       box.appendChild(details);
     });
+
+    // Propositions de réponses : cachées jusqu'au clic, affichées après la correction
+    var withModels = data.items.filter(function (item) { return item.better; });
+    var modelsWrap = make('div', 'sp-block');
+    var modelsButton = make('button', 'ghost-button', tx('showModels'));
+    modelsButton.type = 'button';
+    var modelsBox = make('div', 'sp-block hidden');
+    modelsBox.appendChild(make('h3', '', tx('modelsTitle')));
+
+    if (!withModels.length) {
+      modelsBox.appendChild(make('p', 'sp-note', tx('noModels')));
+    }
+
+    withModels.forEach(function (item) {
+      var entry = make('details', 'sp-item');
+      var title = make('summary', '', tx('part', { p: item.part }) + ' · ' + item.question);
+      title.setAttribute('dir', 'ltr');
+      entry.appendChild(title);
+      var modelText = make('p', 'sp-english', item.better);
+      modelText.setAttribute('dir', 'ltr');
+      entry.appendChild(modelText);
+      var listen = make('button', 'ghost-button', tx('listen'));
+      listen.type = 'button';
+      listen.addEventListener('click', function () { speak(item.better); });
+      entry.appendChild(listen);
+      modelsBox.appendChild(entry);
+    });
+
+    modelsButton.addEventListener('click', function () {
+      var opening = modelsBox.classList.contains('hidden');
+      modelsBox.classList.toggle('hidden', !opening);
+      modelsButton.textContent = tx(opening ? 'hideModels' : 'showModels');
+      if (!opening) stopSpeaking();
+      if (opening) modelsBox.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+
+    modelsWrap.appendChild(modelsButton);
+    modelsWrap.appendChild(modelsBox);
+    box.appendChild(modelsWrap);
 
     var actions = make('div', 'sp-actions');
     var again = make('button', '', tx('again'));
