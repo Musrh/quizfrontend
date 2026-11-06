@@ -1122,8 +1122,7 @@
       <div class="sp-actions">
         <button id="spListen" type="button" class="ghost-button"></button>
         <button id="spMic" type="button"></button>
-        <button id="spResume" type="button" class="hidden"></button>
-        <button id="spStop" type="button" class="sp-live hidden"></button>
+        <button id="spStop" type="button"></button>
       </div>
       <div id="spRecState" class="sp-note"></div>
       <div id="spTranscriptLabel" class="sp-label"></div>
@@ -4854,8 +4853,8 @@
     return parts.join(' ');
   }
 
-  // Deux boutons pendant l'enregistrement :
-  // - « Reprendre » : actif seulement pendant une pause (hésitation, réflexion), grisé pendant la parole ;
+  // Deux boutons toujours visibles :
+  // - « Répondre » puis « Reprendre » : actif au début et pendant une pause (hésitation, réflexion), grisé pendant la parole ;
   // - « Arrêter » : toujours actif, l'élève termine sa réponse quand il veut.
   // La pause se déclenche d'elle-même quand l'élève se tait plus de SILENCE_MS : la transcription
   // s'arrête et le temps de parole ne court plus, jusqu'au clic sur « Reprendre ».
@@ -4979,16 +4978,25 @@
 
   function updateMic() {
     var supported = canRecognize();
-    $('spMic').textContent = tx('record');
-    $('spResume').textContent = tx('resume');
+    var started = recording || $('spTranscript').value.trim().length > 0;
+
+    // Les deux boutons sont toujours visibles :
+    // 1) « Répondre » (début) puis « Reprendre » : actif au début, pendant une pause ou après
+    //    un arrêt ; grisé pendant la parole ;
+    // 2) « Arrêter » : toujours actif, l'élève termine quand il veut.
+    $('spMic').textContent = started ? tx('resume') : tx('record');
     $('spStop').textContent = tx('stop');
-    // Avant l'enregistrement : « Répondre ». Pendant : « Reprendre » + « Arrêter ».
-    $('spMic').classList.toggle('hidden', !supported || recording);
-    $('spResume').classList.toggle('hidden', !supported || !recording);
-    $('spStop').classList.toggle('hidden', !supported || !recording);
-    $('spResume').disabled = !(recording && paused);   // actif seulement pendant la pause
-    $('spStop').disabled = false;                      // toujours actif
+    $('spMic').classList.toggle('hidden', !supported);
+    $('spStop').classList.toggle('hidden', !supported);
+    $('spMic').disabled = recording && !paused;
+    $('spStop').disabled = false;
+    $('spStop').classList.toggle('sp-live', recording && !paused);
     $('spRecState').textContent = !recording ? '' : (paused ? tx('paused') : tx('recording'));
+  }
+
+  function micClick() {
+    if (recording && paused) resumeRecording();
+    else if (!recording) startRecording();
   }
 
   // ----- Écran de préparation -----
@@ -5107,9 +5115,8 @@
     $('spTranscriptLabel').textContent = tx('transcript');
     $('spTranscript').value = (answers[q.id] && answers[q.id].text) || '';
     $('spNext').textContent = index === total - 1 ? tx('finish') : tx('next');
-    $('spMic').classList.toggle('hidden', !canRecognize());
+    updateMic();
     if (!canRecognize()) $('spRecState').textContent = tx('noSpeech');
-    else updateMic();
 
     var prep = $('spPrep');
     if (q.part === 2) startPrep(prep); else show('spPrep', false);
@@ -5390,8 +5397,7 @@
 
   $('spBack').addEventListener('click', back);
   $('spStart').addEventListener('click', startTest);
-  $('spMic').addEventListener('click', startRecording);
-  $('spResume').addEventListener('click', resumeRecording);
+  $('spMic').addEventListener('click', micClick);
   $('spStop').addEventListener('click', endRecording);
   $('spListen').addEventListener('click', function () { speak(questionAloud(session.questions[index])); });
   $('spNext').addEventListener('click', next);
