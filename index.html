@@ -3758,6 +3758,13 @@
 
   function renderQuiz() {
 
+    // Nouveau quiz : on remet le bouton "Valider" dans son état initial
+    const submitBtn = document.getElementById('submitQuizButton');
+    if (submitBtn) {
+      submitBtn.disabled = false;
+      submitBtn.classList.remove('hidden');
+    }
+
     questionsContainer.innerHTML =
       '';
 
