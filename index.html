@@ -1104,6 +1104,8 @@
     <div id="spSetup">
       <h2 id="spTitle" class="section-title"></h2>
       <p id="spLead" class="section-subtitle"></p>
+      <div id="spUnavailable" class="sp-note hidden"></div>
+      <div id="spSetupBody">
       <div id="spStatus" class="sp-note"></div>
       <div id="spTopicLabel" class="sp-label"></div>
       <div id="spTopics" class="sp-chips"></div>
@@ -1113,6 +1115,7 @@
       <div id="spSetupError" class="error hidden"></div>
       <button id="spStart" type="button"></button>
       <p id="spPrivacy" class="sp-note"></p>
+      </div>
     </div>
 
     <div id="spTest" class="hidden">
@@ -4697,7 +4700,7 @@
       strengths: 'Tes points forts', priorities: 'À améliorer en priorité', yourAnswer: 'Ta réponse', corrections: 'Corrections', better: 'Réponse modèle', showModels: 'Afficher une proposition de réponses', hideModels: 'Masquer les propositions de réponses', modelsTitle: 'Propositions de réponses', noModels: 'Aucune proposition de réponse n’est disponible pour ce test.',
       tip: 'Conseil', skipped: 'Tu n’as pas répondu à cette question.', rate: 'Débit : {n} mots par minute', words: '{n} mots',
       again: 'Refaire un test', home: 'Retour à l’accueil', retry: 'Réessayer la correction', leave: 'Quitter le test ? Tes réponses seront perdues.',
-      eDisabled: 'Le module Speaking n’est pas encore disponible.', eLimit: 'Tu as atteint ta limite de sessions Speaking pour aujourd’hui. Reviens demain.',
+      eDisabled: 'La préparation IELTS Speaking est indisponible temporairement.', eLimit: 'Tu as atteint ta limite de sessions Speaking pour aujourd’hui. Reviens demain.',
       eBusy: 'Le module Speaking est très demandé aujourd’hui. Réessaie demain.', eGeneric: 'Une erreur est survenue. Réessaie dans un instant.',
       eExpired: 'La session a expiré. Recommence un test.', eTopic: 'Choisis ou écris un thème.', eEmpty: 'Réponds à au moins une question avant la correction.',
       t: ['Travail', 'Études', 'Ville natale', 'Famille', 'Cuisine', 'Voyages', 'Technologie', 'Santé', 'Environnement', 'Temps libre', 'Culture', 'Shopping']
@@ -4719,7 +4722,7 @@
       strengths: 'Your strengths', priorities: 'Main things to improve', yourAnswer: 'Your answer', corrections: 'Corrections', better: 'Model answer', showModels: 'Show suggested answers', hideModels: 'Hide suggested answers', modelsTitle: 'Suggested answers', noModels: 'No suggested answers are available for this test.',
       tip: 'Tip', skipped: 'You did not answer this question.', rate: 'Speed: {n} words per minute', words: '{n} words',
       again: 'Take another test', home: 'Back to home', retry: 'Retry the correction', leave: 'Leave the test? Your answers will be lost.',
-      eDisabled: 'The Speaking module is not available yet.', eLimit: 'You have reached your Speaking session limit for today. Come back tomorrow.',
+      eDisabled: 'IELTS Speaking preparation is temporarily unavailable.', eLimit: 'You have reached your Speaking session limit for today. Come back tomorrow.',
       eBusy: 'The Speaking module is very busy today. Try again tomorrow.', eGeneric: 'Something went wrong. Please try again in a moment.',
       eExpired: 'The session has expired. Start a new test.', eTopic: 'Choose or write a topic.', eEmpty: 'Answer at least one question before the correction.',
       t: ['Work', 'Studies', 'Hometown', 'Family', 'Food', 'Travel', 'Technology', 'Health', 'Environment', 'Free time', 'Culture', 'Shopping']
@@ -4741,7 +4744,7 @@
       strengths: 'نقاط قوتك', priorities: 'أهم ما يجب تحسينه', yourAnswer: 'إجابتك', corrections: 'التصحيحات', better: 'إجابة نموذجية', showModels: 'عرض اقتراح للإجابات', hideModels: 'إخفاء الإجابات المقترحة', modelsTitle: 'إجابات مقترحة', noModels: 'لا توجد إجابات مقترحة لهذا الاختبار.',
       tip: 'نصيحة', skipped: 'لم تجب عن هذا السؤال.', rate: 'السرعة: {n} كلمة في الدقيقة', words: '{n} كلمة',
       again: 'اختبار جديد', home: 'العودة إلى الرئيسية', retry: 'أعد محاولة التصحيح', leave: 'مغادرة الاختبار؟ ستضيع إجاباتك.',
-      eDisabled: 'وحدة Speaking غير متاحة بعد.', eLimit: 'بلغت حد جلسات Speaking لهذا اليوم. عد غدا.',
+      eDisabled: 'التحضير لاختبار IELTS Speaking غير متاح مؤقتا.', eLimit: 'بلغت حد جلسات Speaking لهذا اليوم. عد غدا.',
       eBusy: 'وحدة Speaking عليها إقبال كبير اليوم. حاول غدا.', eGeneric: 'حدث خطأ. حاول مجددا بعد قليل.',
       eExpired: 'انتهت الجلسة. ابدأ اختبارا جديدا.', eTopic: 'اختر موضوعا أو اكتبه.', eEmpty: 'أجب عن سؤال واحد على الأقل قبل التصحيح.',
       t: ['العمل', 'الدراسة', 'مسقط الرأس', 'العائلة', 'الطعام', 'السفر', 'التكنولوجيا', 'الصحة', 'البيئة', 'وقت الفراغ', 'الثقافة', 'التسوق']
@@ -5031,12 +5034,22 @@
     renderStatus();
   }
 
+  var statusChecked = false;
+
   function renderStatus() {
+    var disabled = Boolean(status && status.enabled === false);
+
+    // Module désactivé dans /admin : on n'affiche que le message (l'en-tête, la barre de
+    // compte et le bouton Accueil restent visibles). Tant que l'état n'est pas connu,
+    // on garde la préparation cachée pour éviter qu'elle clignote.
+    $('spUnavailable').textContent = disabled ? tx('eDisabled') : '';
+    show('spUnavailable', disabled);
+    show('spSetupBody', statusChecked && !disabled);
+
     var note = '';
-    if (status && status.enabled === false) note = tx('eDisabled');
-    else if (status && typeof status.remaining === 'number') note = tx('remaining', { n: status.remaining });
+    if (!disabled && status && typeof status.remaining === 'number') note = tx('remaining', { n: status.remaining });
     $('spStatus').textContent = note;
-    $('spStart').disabled = Boolean(status && (status.enabled === false || status.remaining === 0));
+    $('spStart').disabled = Boolean(status && (disabled || status.remaining === 0));
   }
 
   async function loadStatus() {
@@ -5045,6 +5058,7 @@
       if (result.ok) status = result.data;
       else showError('spSetupError', errorText(result.data));
     } catch (error) { /* le statut est facultatif */ }
+    statusChecked = true;
     renderStatus();
   }
 
@@ -5080,7 +5094,9 @@
       renderQuestion();
     } catch (failure) {
       setView('setup');
-      showError('spSetupError', failure && failure.data ? errorText(failure.data) : tx('eGeneric'));
+      if (!(failure && failure.data && failure.data.code === 'speaking_disabled')) {
+        showError('spSetupError', failure && failure.data ? errorText(failure.data) : tx('eGeneric'));
+      }
       loadStatus();
     } finally {
       busy = false;
@@ -5384,6 +5400,7 @@
     showScreen('speaking');
     showError('spSetupError', '');
     session = null;
+    statusChecked = false;
     setView('setup');
     renderSetup();
     loadStatus();
