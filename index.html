@@ -182,6 +182,7 @@
       <div id="spStatus" class="sp-note"></div>
       <div id="spTopicLabel" class="sp-label"></div>
       <div id="spTopics" class="sp-chips"></div>
+      <div id="spLibSummary" class="sp-note"></div>
       <input id="spCustom" type="text" maxlength="60" autocomplete="off">
       <div id="spFormatLabel" class="sp-label"></div>
       <div id="spFormats" class="sp-formats"></div>
@@ -3654,7 +3655,7 @@
     fr: {
       footer: 'IELTS Speaking (IA)', back: '← Accueil', title: 'IELTS Speaking avec un examinateur IA',
       lead: 'Choisis un thème : l’examinateur IA te pose des questions comme à l’examen. Tu réponds à voix haute, puis tu reçois une correction et des réponses modèles pour progresser.',
-      remaining: 'Sessions restantes aujourd’hui : {n}', topicLabel: 'Choisis un thème', customTopic: 'Ou écris ton propre thème',
+      libSummary: 'Séries prêtes pour ce format : {n} · Thèmes concernés : {t}', remaining: 'Sessions restantes aujourd’hui : {n}', topicLabel: 'Choisis un thème', customTopic: 'Ou écris ton propre thème',
       formatLabel: 'Format du test', fFull: 'Test complet (parties 1, 2 et 3)', fPart1: 'Partie 1 : questions personnelles', fPart2: 'Partie 2 : parler 1 à 2 minutes', fPart3: 'Partie 3 : discussion',
       start: 'Commencer le test', privacy: 'Ta voix est transformée en texte par le service de reconnaissance vocale de ton navigateur. Seul le texte de tes réponses est envoyé à notre serveur.',
       preparing: 'L’examinateur prépare ses questions…', part: 'Partie {p}', question: 'Question {i} sur {n}', cardTitle: 'Sujet de la partie 2',
@@ -3676,7 +3677,7 @@
     en: {
       footer: 'IELTS Speaking (AI)', back: '← Home', title: 'IELTS Speaking with an AI examiner',
       lead: 'Choose a topic: the AI examiner asks you questions as in the real exam. You answer aloud, then you get a correction and model answers to improve.',
-      remaining: 'Sessions left today: {n}', topicLabel: 'Choose a topic', customTopic: 'Or write your own topic',
+      libSummary: 'Ready-made sets for this format: {n} · Topics covered: {t}', remaining: 'Sessions left today: {n}', topicLabel: 'Choose a topic', customTopic: 'Or write your own topic',
       formatLabel: 'Test format', fFull: 'Full test (parts 1, 2 and 3)', fPart1: 'Part 1: personal questions', fPart2: 'Part 2: speak for 1 to 2 minutes', fPart3: 'Part 3: discussion',
       start: 'Start the test', privacy: 'Your voice is turned into text by your browser’s speech recognition service. Only the text of your answers is sent to our server.',
       preparing: 'The examiner is preparing the questions…', part: 'Part {p}', question: 'Question {i} of {n}', cardTitle: 'Part 2 topic',
@@ -3698,7 +3699,7 @@
     ar: {
       footer: 'IELTS Speaking (ذكاء اصطناعي)', back: '← الرئيسية', title: 'IELTS Speaking مع ممتحن بالذكاء الاصطناعي',
       lead: 'اختر موضوعا: يطرح عليك الممتحن الذكي أسئلة كما في الامتحان. تجيب بصوت عال، ثم تحصل على تصحيح وإجابات نموذجية لتتحسن.',
-      remaining: 'الجلسات المتبقية اليوم: {n}', topicLabel: 'اختر موضوعا', customTopic: 'أو اكتب موضوعك الخاص',
+      libSummary: 'المجموعات الجاهزة لهذا النوع: {n} · المواضيع المشمولة: {t}', remaining: 'الجلسات المتبقية اليوم: {n}', topicLabel: 'اختر موضوعا', customTopic: 'أو اكتب موضوعك الخاص',
       formatLabel: 'شكل الاختبار', fFull: 'اختبار كامل (الأجزاء 1 و2 و3)', fPart1: 'الجزء 1: أسئلة شخصية', fPart2: 'الجزء 2: تحدث لمدة دقيقة إلى دقيقتين', fPart3: 'الجزء 3: نقاش',
       start: 'ابدأ الاختبار', privacy: 'يحول متصفحك صوتك إلى نص بخدمة التعرف على الكلام. لا يُرسل إلى خادمنا سوى نص إجاباتك.',
       preparing: 'الممتحن يحضر الأسئلة…', part: 'الجزء {p}', question: 'السؤال {i} من {n}', cardTitle: 'موضوع الجزء 2',
@@ -3983,12 +3984,24 @@
 
     var chips = $('spTopics');
     chips.innerHTML = '';
+    var library = (status && status.library) || null;
+    var totalSets = 0, themesWithSets = 0;
     TOPICS.forEach(function (value, i) {
       var chip = make('button', 'sp-chip' + (chosenTopic === value ? ' active' : ''), TEXT[lang()].t[i]);
+      if (library) {
+        // Juste le nombre de séries prêtes pour ce thème, dans le format choisi
+        var entry = library[value.toLowerCase()];
+        var count = entry && typeof entry[chosenFormat] === 'number' ? entry[chosenFormat] : 0;
+        totalSets += count;
+        if (count > 0) themesWithSets += 1;
+        chip.appendChild(make('span', 'sp-count', String(count)));
+      }
       chip.type = 'button';
       chip.addEventListener('click', function () { chosenTopic = value; $('spCustom').value = ''; renderSetup(); });
       chips.appendChild(chip);
     });
+
+    $('spLibSummary').textContent = library ? tx('libSummary', { n: totalSets, t: themesWithSets }) : '';
 
     var formats = $('spFormats');
     formats.innerHTML = '';
@@ -4027,7 +4040,7 @@
       else showError('spSetupError', errorText(result.data));
     } catch (error) { /* le statut est facultatif */ }
     statusChecked = true;
-    renderStatus();
+    renderSetup();
   }
 
   function setView(name) {
