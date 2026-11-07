@@ -116,10 +116,6 @@
                 [
                     "Videos",
                     "Les videos sont diffusees depuis YouTube au moyen de son lecteur integre. AI Video Quiz ne revendique pas la propriete des videos diffusees par des tiers."
-                ],
-                [
-                    "Important",
-                    "Les champs entre crochets doivent etre remplaces par les informations exactes de l editeur et adaptes aux exigences legales du pays ou le service est exploite."
                 ]
             ]
         },
@@ -166,10 +162,6 @@
                 [
                     "Demande relative aux donnees",
                     "Pour demander une information, une correction ou la suppression de donnees associees a votre compte, utilisez l adresse de contact officielle du service."
-                ],
-                [
-                    "Informations a renseigner",
-                    "Avant publication, remplacez les champs entre crochets par les coordonnees reelles de l editeur."
                 ]
             ]
         }
@@ -285,10 +277,6 @@
                 [
                     "Videos",
                     "Videos are displayed through the embedded YouTube player. AI Video Quiz does not claim ownership of third-party videos."
-                ],
-                [
-                    "Important",
-                    "Replace bracketed fields with the publisher s exact information and adapt this page to the legal requirements of the country where the service operates."
                 ]
             ]
         },
@@ -335,10 +323,6 @@
                 [
                     "Data request",
                     "To request information, correction or deletion of data associated with your account, use the official contact address."
-                ],
-                [
-                    "Before publication",
-                    "Replace the bracketed fields with the real publisher contact details."
                 ]
             ]
         }
@@ -454,10 +438,6 @@
                 [
                     "الفيديوهات",
                     "يتم عرض الفيديوهات عبر مشغل YouTube المدمج. لا يدعي AI Video Quiz ملكية فيديوهات الجهات الأخرى."
-                ],
-                [
-                    "مهم",
-                    "استبدل الحقول بين الأقواس بالمعلومات الدقيقة للناشر وكيّف هذه الصفحة مع المتطلبات القانونية في البلد الذي تعمل فيه الخدمة."
                 ]
             ]
         },
@@ -504,10 +484,6 @@
                 [
                     "طلب متعلق بالبيانات",
                     "لطلب معلومات أو تصحيح أو حذف بيانات مرتبطة بحسابك، استخدم عنوان الاتصال الرسمي."
-                ],
-                [
-                    "قبل النشر",
-                    "استبدل الحقول الموجودة بين الأقواس ببيانات الاتصال الحقيقية للناشر."
                 ]
             ]
         }
@@ -568,7 +544,7 @@
       return '<bdi dir="ltr"><a href="mailto:' + email + '">' + email + '</a></bdi>';
     }).join('<br>');
 
-    var copy = blocks.slice(0, -1); // le dernier bloc est le rappel « remplacer les champs entre crochets »
+    var copy = blocks.slice();
     copy[0] = [copy[0][0], SUPPORT_LABEL[lang] + '<br>' + links];
     return copy;
   }
